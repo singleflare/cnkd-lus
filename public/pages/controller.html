@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controller</title>
+</head>
+
+<body>
+  <style>
+    body {
+      background-color: black;
+      aspect-ratio: 16/9;
+      margin: 0;
+    }
+
+    * {
+      font-size: 20pt;
+    }
+
+    span {
+      font-family: 'Myriad Pro';
+      color: white;
+    }
+
+    button {
+      font-family: 'Myriad Pro';
+      background-color: black;
+      color: white;
+      border: 1px solid white;
+    }
+
+    button:hover {
+      background-color: white;
+      color: black;
+    }
+
+    #controlLetters {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(14, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      width: 100%;
+    }
+
+    .letterBtn {
+      background-color: black;
+      color: white;
+      height: 50px;
+      font-size: 30pt;
+    }
+
+    .letterBtn:hover {
+      background-color: white !important;
+      color: black !important;
+    }
+
+    .letterBtn:disabled {
+      opacity: 0.2;
+    }
+
+    .puzzleInput {
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      width: 0px;
+      gap: 5px;
+    }
+
+    .letterInput {
+      width: 25px;
+      height: 50px;
+      text-align: center;
+    }
+
+    .flexContainer {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .flexContainer>* {
+      width: 100%;
+    }
+
+    #scoreboard {
+      display: inline-block;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .column {
+      position: absolute;
+      width: 640px;
+      height: 100%;
+    }
+  </style>
+  <div class='column' style='left:0'>
+    <div style='height:360px'>
+      <iframe src='./puzzle.html' id='puzzleWeb'
+        style='aspect-ratio: 16/9;transform-origin: top left;scale: 0.33;width: 1920px;'></iframe>
+    </div>
+    <div id="controlLetters">
+    </div>
+    <span>Đề</span>
+    <input type="file" id="fileInput" accept='.xlsx' style='display: inline;' /><br>
+    <button id="prevRoundBtn">Ô chữ trước</button>
+    <button id="nextRoundBtn">Ô chữ sau</button>
+    <hr>
+    <span>Ô chữ</span>
+    <button id="showPuzzle">Hiện</button>
+    <button id="solvePuzzle">Giải</button>
+    <button id="puzzleMode">Chế độ:</button>
+    <button id='finalSpinMode'>VQCC:</button>
+    <button id="openRandomTossup1">ĐN nhạc toss up 1</button>
+    <button id="openRandomTossup2">ĐN nhạc toss up 2</button>
+    <button id="openRandomTossup3">ĐN nhạc toss up 3</button>
+    <button id="openRandomTossupWithTime">ĐN tính giờ</button>
+    <button id="stopOpenRandomTossup">Dừng ĐN</button>
+    <button id="continueOpenRandomTossup">Tiếp tục ĐN</button>
+    <button id='playFinalSpinBed'>Nhạc VQCC</button>
+    <button id="deletePuzzle">Xóa ô chữ</button>
+    <hr></span>
+    <span>VĐB luật mới</span>
+    <button id='setBounsTime'>Đặt thời gian</button>
+    <button id='startTossUpBonus'>Mở chữ N,H,A và chữ ngẫu nhiên</button>
+    <button id="stopOpenRandomTossup">Dừng ĐN</button>
+    <button id="continueOpenRandomTossup">Tiếp tục ĐN</button>
+    <button id="solvePuzzleNoSound">Giải (không tiếng)</button>
+    <span id='time'>Thời gian: 0</span>
+  </div>
+  <div class='column' style='left:640px'>
+    <div style='height:360px'>
+      <iframe src='./wheel.html' id='wheelWeb'
+        style='aspect-ratio: 16/9;transform-origin: top left;scale: 0.33;width: 1920px;'></iframe>
+    </div>
+    <span>Nón</span>
+    <button id='spinWheel' style='width: 90%;'>Quay nón</button>
+    <button id='showWheel1'>Hiện nón v1</button>
+    <button id='showWheel2'>Hiện nón v2</button>
+    <button id='showWheel3'>Hiện nón v3</button>
+    <button id='showWheel4'>Hiện nón v4</button>
+    <hr>
+    <span>Thẻ/Ô trên nón</span>
+    <button id='toggleBm300'>BM 300</button>
+    <button id='toggleBm500'>BM 500</button>
+    <button id='toggleHalf250'>1/2 250</button>
+    <button id='toggleHalf300'>1/2 300</button>
+    <button id='toggleNd'>Nhân đôi</button>
+    <button id='toggleCh'>Cơ hội</button>
+    <button id='togglePt'>Phần thưởng</button>
+    <button id='toggle1mil'>1M</button>
+  </div>
+  <div class='column' style='left:1280px'>
+    <div id='scoreboard'>
+      <div>
+        <input id='p1Name' placeholder='Tên NC1' style='width: 200px;'>
+        <input type="number" id="p1ScoreInput" style='width: 75px;' placeholder='Điểm' />
+        <button class='set' id='p1Set'>Set</button>
+        <button class='plus' id='p1Plus'>+</button>
+        <button class='minus' id='p1Minus'>-</button>
+        <button class='double' id='p1Double'>x2</button>
+        <button class='half' id='p1Half'>/2</button>
+        <button class='clear' id='p1Clear'>MĐ</button>
+        <span id='p1Score'></span>
+        <input type='number' id='p1TotalInput' style='width:75px' placeholder='Tổng' />
+        <button class='totalSet' id='p1SetTotal'>Set</button>
+        <button class='totalAdd' id='p1AddTotal'>+</button>
+        <span id='p1Total'></span>
+      </div>
+      <div>
+        <input id='p2Name' placeholder='Tên NC2' style='width: 200px;'>
+        <input type="number" id="p2ScoreInput" style='width: 75px;' placeholder='Điểm' />
+        <button class='set' id='p2Set'>Set</button>
+        <button class='plus' id='p2Plus'>+</button>
+        <button class='minus' id='p2Minus'>-</button>
+        <button class='double' id='p2Double'>x2</button>
+        <button class='half' id='p2Half'>/2</button>
+        <button class='clear' id='p2Clear'>MĐ</button>
+        <span id='p2Score'></span>
+        <input type='number' id='p2TotalInput' style='width:75px' placeholder='Tổng' />
+        <button class='totalSet' id='p2SetTotal'>Set</button>
+        <button class='totalAdd' id='p2AddTotal'>+</button>
+        <span id='p2Total'></span>
+      </div>
+      <div>
+        <input id='p3Name' placeholder='Tên NC3' style='width: 200px;'>
+        <input type="number" id="p3ScoreInput" style='width: 75px;' placeholder='Điểm' />
+        <button class='set' id='p3Set'>Set</button>
+        <button class='plus' id='p3Plus'>+</button>
+        <button class='minus' id='p3Minus'>-</button>
+        <button class='double' id='p3Double'>x2</button>
+        <button class='half' id='p3Half'>/2</button>
+        <button class='clear' id='p3Clear'>MĐ</button>
+        <span id='p3Score'></span>
+        <input type='number' id='p3TotalInput' style='width:75px' placeholder='Tổng' />
+        <button class='totalSet' id='p3SetTotal'>Set</button>
+        <button class='totalAdd' id='p3AddTotal'>+</button>
+        <span id='p3Total'></span>
+      </div>
+      <div>
+        <span>Âm thanh</span>
+        <button id="bmBtn">Bí mật</button>
+        <button id="cdBtn">Chia đôi</button>
+        <button id="chBtn">Cơ hội</button>
+        <button id="ddBtn">Độc đắc</button>
+        <button id="mdBtn">Mất điểm</button>
+        <button id="mlBtn">Mất lượt</button>
+        <button id='halfBtn'>1/2</button>
+        <button id='ndBtn'>Nhân đôi</button>
+        <button id="ptBtn">Phần thưởng</button>
+        <button id='stBtn'>Siêu tốc</button>
+        <button id="tlmmBtn">Thêm lượt/May mắn</button>
+        <button id="saiBtn">Sai</button>
+        <br>
+        <button id="playSpinBonusBed">Quay nón đặc biệt</button>
+        <button id="playGALUletters">GALU</button>
+        <button id='playOtherLetters'>Chữ khác</button>
+        <button id="playBonus">10s</button>
+        <button id="stopBtn">Dừng hết tất cả âm thanh</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+    integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+    integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+  <script>
+    const socket = io();
+    socket.on('buzzed', (data) => {
+      console.log('Player ' + data + ' buzzed!');
+    })
+    $(() => {
+      for (let i = 0; i <= 55; i++) {
+        $('#controlLetters').append('<button class="letterBtn" id="letterBtn' + i + '"></button>');
+        $('#letterBtn' + i).click(() => {
+          socket.emit('reveal', i)
+        })
+      }
+    })
+
+    let puzzles = [];
+    let solvedPuzzles = [];
+    let questions = []
+    let explains = []
+    let puzzleNumber = 0
+    let onetwothree = [1, 2, 3]
+
+    $('#fileInput').on('change', async (e) => {
+      const file = e.target.files[0]
+      const data = await file.arrayBuffer()
+      const workbook = XLSX.read(data)
+      const sheet = workbook.Sheets[workbook.SheetNames[0]]
+      // Helper function to safely get cell 
+      const getCellValue = (sheet, col, row) => {
+        const cell = sheet[XLSX.utils.encode_cell({ c: col, r: row })]
+        return cell ? cell.v : ''
+      }
+      let puzzle = []
+      let solvedPuzzle = []
+      for (let r = 1; r <= 100; r++) {
+        for (let c = 0; c < 14; c++) {
+          puzzle.push(getCellValue(sheet, c, r))
+        }
+        for (let c = 15; c < 29; c++) {
+          solvedPuzzle.push(getCellValue(sheet, c, r))
+        }
+        if (r % 5 == 4) {
+          puzzles.push(puzzle)
+          solvedPuzzles.push(solvedPuzzle)
+          puzzle = []
+          solvedPuzzle = []
+          r++
+        }
+      }
+      console.log(puzzles, solvedPuzzles)
+    })
+
+    function countLetters(puzzleArray) {
+      let letters = ['A', 'Ă', 'Â', 'B', 'C', 'D', 'Đ', 'E', 'Ê', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'Ô', 'Ơ', 'P', 'Q', 'R', 'S', 'T', 'U', 'Ư', 'V', 'X', 'Y']
+      let numberOfLetters = []
+      let totalNumOfLetters = 0
+      letters.forEach(letter => {
+        let letterCount = 0
+        puzzles.forEach(puzzleLetter => {
+          if (puzzleLetter == letter) letterCount++
+        })
+        numberOfLetters.push(letterCount)
+        totalNumOfLetters += letterCount
+      })
+      console.log(totalNumOfLetters)
+      return [numberOfLetters, totalNumOfLetters]
+    }
+
+    function resetControlLetters() {
+      for (let i = 0; i <= 55; i++) {
+        $('#letterBtn' + i).text('')
+        $('#letterBtn' + i).css('background-color', 'black')
+        $('#letterBtn' + i).css('color', 'white')
+        $('#letterBtn' + i).hover(() => {
+          $('#letterBtn' + i).css('background-color', 'white')
+          $('#letterBtn' + i).css('color', 'black')
+        })
+        $('#letterBtn' + i).mouseleave(() => {
+          $('#letterBtn' + i).css('background-color', 'black')
+          $('#letterBtn' + i).css('color', 'white')
+        })
+      }
+    }
+
+    $('#prevRoundBtn').click(() => {
+      $('#scoreboard div').css('background-color', 'black')
+      socket.emit('resetBuzzers')
+      if (puzzleNumber > 0) {
+        puzzleNumber--
+        for (let i = 0; i <= 55; i++) {
+          $('#letterBtn' + i).prop('disabled', true)
+          $('#letterBtn' + i).text('')
+          $('#letterBtn' + i).prop('disabled', false)
+          puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
+        }
+        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber] })
+      }
+    })
+    $('#nextRoundBtn').click(() => {
+      $('#scoreboard div').css('background-color', 'black')
+      socket.emit('resetBuzzers')
+      if (puzzleNumber < puzzles.length - 1) {
+        puzzleNumber++
+        for (let i = 0; i <= 55; i++) {
+          $('#letterBtn' + i).prop('disabled', true)
+          $('#letterBtn' + i).text('')
+          $('#letterBtn' + i).prop('disabled', false)
+          puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
+        }
+        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber] })
+      }
+    })
+    $('#showPuzzle').click(() => {
+      socket.emit('playSound', '../sounds/hienochu.mp3')
+      socket.emit('revealPuzzle')
+    })
+    $('#solvePuzzle').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/chinhxac.mp3')
+      socket.emit('solvePuzzle')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#puzzleMode').click(() => {
+      socket.emit('togglePuzzleMode')
+    })
+    socket.on('puzzleMode', mode => {
+      if (mode == 1) {
+        $('#puzzleMode').text('Chế độ: Vòng thường')
+      }
+      else {
+        $('#puzzleMode').text('Chế độ: Đoán nhanh')
+      }
+    })
+    $('#finalSpinMode').click(() => {
+      socket.emit('toggleFinalSpinMode')
+    })
+    socket.on('finalSpinMode', mode => {
+      if (mode == 1) {
+        $('#finalSpinMode').text('VQCC: ON')
+      }
+      else {
+        $('#finalSpinMode').text('VQCC: OFF')
+      }
+    })
+
+    $('#ptBtn').click(() => {
+      socket.emit('playSound', '../sounds/phanthuong.wav')
+    })
+    $('#bmBtn').click(() => {
+      socket.emit('playSound', '../sounds/bimat.mp3')
+    })
+    $('#tlmmBtn').click(() => {
+      socket.emit('playSound', '../sounds/themluotvamayman.wav')
+    })
+    $('#cdBtn').click(() => {
+      socket.emit('playSound', '../sounds/chiadoi.wav')
+    })
+    $('#mdBtn').click(() => {
+      socket.emit('playSound', '../sounds/matdiem.mp3')
+    })
+    $('#mlBtn').click(() => {
+      socket.emit('playSound', '../sounds/matluot.wav')
+    })
+    $('#saiBtn').click(() => {
+      socket.emit('playSound', '../sounds/sai.mp3')
+    })
+    $('#ddBtn').click(() => {
+      socket.emit('playSound', '../sounds/docdac.mp3')
+    })
+    $('#chBtn').click(() => {
+      socket.emit('playSound', '../sounds/cohoi.mp3')
+    })
+    $('#halfBtn').click(() => {
+      socket.emit('playSound', '../sounds/motphanhai.mp3')
+    })
+    $('#ndBtn').click(() => {
+      socket.emit('playSound', '../sounds/nhandoi.mp3')
+    })
+    $('#stBtn').click(() => {
+      socket.emit('playSound', '../sounds/sieutoc.mp3')
+    })
+    $('#stopBtn').click(() => {
+      socket.emit('stopAllSounds')
+    })
+    $('#playFinalSpinBed').click(() => {
+      socket.emit('playSound', '../sounds/speed up.mp3')
+    })
+    $('#playSpinBonusBed').click(() => {
+      socket.emit('playSound', '../sounds/nhacquaynondacbiet.m4a')
+    })
+    $('#playGALUletters').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/nhacmochucaiGALU.mp3')
+    })
+    $('#playOtherLetters').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/3c1v.mp3')
+    })
+    $('#playBonus').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/bonus.mp3')
+    })
+
+    $('#openRandomTossup1').click(() => {
+      socket.emit('openRandomTossup')
+      socket.emit('playSound', '../sounds/toss up 1.mp3')
+    })
+    $('#openRandomTossup2').click(() => {
+      socket.emit('openRandomTossup')
+      socket.emit('playSound', '../sounds/toss up 2.mp3')
+    })
+    $('#openRandomTossup3').click(() => {
+      socket.emit('openRandomTossup')
+      socket.emit('playSound', '../sounds/toss up 3.mp3')
+    })
+    $('#openRandomTossupWithTime').click(() => {
+      socket.emit('openRandomTossupWithTime')
+    })
+    $('#stopOpenRandomTossup').click(() => {
+      socket.emit('stopOpenRandomTossup')
+    })
+    $('#continueOpenRandomTossup').click(() => {
+      socket.emit('continueOpenRandomTossup')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#startTossUpBonus').click(() => {
+      socket.emit('startTossUpBonus')
+    })
+    $('#setBounsTime').click(() => {
+      let time = prompt('Nhập thời gian cho vòng đặc biệt')
+      if (time) {
+        socket.emit('setBonusTime', parseInt(time))
+      }
+    })
+    $('#solvePuzzleNoSound').click(() => {
+      socket.emit('solvePuzzleNoSound')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+
+    let p1Score = 0, p2Score = 0, p3Score = 0, p1Total = 0, p2Total = 0, p3Total = 0
+
+    function plus(player, score) {
+      if (player == 1) {
+        p1Score += score
+        $('#p1Score').text(p1Score)
+      }
+      else if (player == 2) {
+        p2Score += score
+        $('#p2Score').text(p2Score)
+      }
+      else if (player == 3) {
+        p3Score += score
+        $('#p3Score').text(p3Score)
+      }
+    }
+    function minus(player, score) {
+      if (player == 1) {
+        p1Score -= score
+        $('#p1Score').text(p1Score)
+      }
+      else if (player == 2) {
+        p2Score -= score
+        $('#p2Score').text(p2Score)
+      }
+      else if (player == 3) {
+        p3Score -= score
+        $('#p3Score').text(p3Score)
+      }
+    }
+    function double(player) {
+      if (player == 1) {
+        p1Score *= 2
+        $('#p1Score').text(p1Score)
+      }
+      else if (player == 2) {
+        p2Score *= 2
+        $('#p2Score').text(p2Score)
+      }
+      else if (player == 3) {
+        p3Score *= 2
+        $('#p3Score').text(p3Score)
+      }
+    }
+    function half(player) {
+      if (player == 1) {
+        p1Score /= 2
+        $('#p1Score').text(p1Score)
+      }
+      else if (player == 2) {
+        p2Score /= 2
+        $('#p2Score').text(p2Score)
+      }
+      else if (player == 3) {
+        p3Score /= 2
+        $('#p3Score').text(p3Score)
+      }
+    }
+    function addTotal(player, score) {
+      if (player == 1) {
+        p1Total += score
+        $('#p1Total').text(p1Total)
+      }
+      if (player == 2) {
+        p2Total += score
+        $('#p2Total').text(p2Total)
+      }
+      if (player == 3) {
+        p3Total += score
+        $('#p3Total').text(p3Total)
+      }
+    }
+
+    function updateHostScoreboard() {
+      let p1Name = $('#p1Name').val()
+      let p2Name = $('#p2Name').val()
+      let p3Name = $('#p3Name').val()
+      socket.emit('scoreboard', { p1Name, p2Name, p3Name, p1Score, p2Score, p3Score, p1Total, p2Total, p3Total })
+    }
+
+    $('#p1Set').click(() => {
+      p1Score = parseInt($('#p1ScoreInput').val())
+      $('#p1Score').text(p1Score)
+      updateHostScoreboard()
+    })
+    $('#p1Plus').click(() => {
+      let scoreToChange = $('#p1ScoreInput').val()
+      plus(1, parseInt(scoreToChange))
+      updateHostScoreboard()
+    })
+    $('#p1Minus').click(() => {
+      let scoreToChange = $('#p1ScoreInput').val()
+      minus(1, parseInt(scoreToChange))
+      updateHostScoreboard()
+    })
+    $('#p1Double').click(() => {
+      double(1)
+      updateHostScoreboard()
+    })
+    $('#p1Half').click(() => {
+      half(1)
+      updateHostScoreboard()
+    })
+    $('#p1Clear').click(() => {
+      p1Score = 0
+      $('#p1Score').text(p1Score)
+      updateHostScoreboard()
+    })
+    $('#p1SetTotal').click(() => {
+      p1Total = parseInt($('#p1TotalInput').val())
+      $('#p1Total').text(p1Total)
+      updateHostScoreboard()
+    })
+    $('#p1AddTotal').click(() => {
+      p1Total += parseInt($('#p1TotalInput').val())
+      $('#p1Total').text(p1Total)
+      updateHostScoreboard()
+    })
+    $('#p2Set').click(() => {
+      p2Score = parseInt($('#p2ScoreInput').val())
+      $('#p2Score').text(p2Score)
+      updateHostScoreboard()
+    })
+    $('#p2Plus').click(() => {
+      let scoreToChange = $('#p2ScoreInput').val()
+      plus(2, parseInt(scoreToChange))
+      updateHostScoreboard()
+    })
+    $('#p2Minus').click(() => {
+      let scoreToChange = $('#p2ScoreInput').val()
+      minus(2, parseInt(scoreToChange))
+      updateHostScoreboard()
+    })
+    $('#p2Double').click(() => {
+      double(2)
+      updateHostScoreboard()
+    })
+    $('#p2Half').click(() => {
+      half(2)
+      updateHostScoreboard()
+    })
+    $('#p2Clear').click(() => {
+      p2Score = 0
+      $('#p2Score').text(p2Score)
+      updateHostScoreboard()
+    })
+    $('#p2SetTotal').click(() => {
+      p2Total = parseInt($('#p2TotalInput').val())
+      $('#p2Total').text(p2Total)
+      updateHostScoreboard()
+    })
+    $('#p2AddTotal').click(() => {
+      p2Total += parseInt($('#p2TotalInput').val())
+      $('#p2Total').text(p2Total)
+      updateHostScoreboard()
+    })
+    $('#p3Set').click(() => {
+      p3Score = parseInt($('#p3ScoreInput').val())
+      $('#p3Score').text(p3Score)
+      updateHostScoreboard()
+    })
+    $('#p3Plus').click(() => {
+      let scoreToChange = $('#p3ScoreInput').val()
+      plus(3, parseInt(scoreToChange))
+      updateHostScoreboard()
+    })
+    $('#p3Minus').click(() => {
+      let scoreToChange = $('#p3ScoreInput').val()
+      minus(3, parseInt(scoreToChange))
+      updateHostScoreboard()
+    })
+    $('#p3Double').click(() => {
+      double(3)
+      updateHostScoreboard()
+    })
+    $('#p3Half').click(() => {
+      half(3)
+      updateHostScoreboard()
+    })
+    $('#p3Clear').click(() => {
+      p3Score = 0
+      $('#p3Score').text(p3Score)
+      updateHostScoreboard()
+    })
+    $('#p3SetTotal').click(() => {
+      p3Total = parseInt($('#p3TotalInput').val())
+      $('#p3Total').text(p3Total)
+      updateHostScoreboard()
+    })
+    $('#p3AddTotal').click(() => {
+      p3Total += parseInt($('#p3TotalInput').val())
+      $('#p3Total').text(p3Total)
+      updateHostScoreboard()
+    })
+
+    $('#spinWheel').click(() => {
+      socket.emit('spinWheel')
+    })
+    $('#indicatePlayer0').click(() => {
+      socket.emit('indicatePlayer', 0)
+    })
+    $('#indicatePlayer1').click(() => {
+      socket.emit('indicatePlayer', 1)
+    })
+    $('#indicatePlayer2').click(() => {
+      socket.emit('indicatePlayer', 2)
+    })
+    $('#indicatePlayer3').click(() => {
+      socket.emit('indicatePlayer', 3)
+    })
+    $('#showWheel1').click(() => {
+      socket.emit('showWheel', 1)
+    })
+    $('#showWheel2').click(() => {
+      socket.emit('showWheel', 2)
+    })
+    $('#showWheel3').click(() => {
+      socket.emit('showWheel', 3)
+    })
+    $('#showWheel4').click(() => {
+      socket.emit('showWheel', 4)
+    })
+
+    $('#toggleBm300').click(() => {
+      socket.emit('toggleWedge', 'obm300')
+    })
+    $('#toggleBm500').click(() => {
+      socket.emit('toggleWedge', 'obm500')
+    })
+    $('#toggleHalf250').click(() => {
+      socket.emit('toggleWedge', '12gl250')
+    })
+    $('#toggleHalf300').click(() => {
+      socket.emit('toggleWedge', '12gl300')
+    })
+    $('#toggleNd').click(() => {
+      socket.emit('toggleWedge', 'nhandoi')
+    })
+    $('#toggleCh').click(() => {
+      socket.emit('toggleWedge', 'cohoi')
+    })
+    $('#togglePt').click(() => {
+      socket.emit('toggleWedge', 'phanthuong')
+    })
+    $('#toggle1mil').click(() => {
+      socket.emit('toggleWedge', 'gl1million')
+    })
+
+    socket.on('disableLetterBtn', letterNumber => {
+      $('#letterBtn' + letterNumber).prop('disabled', true)
+    })
+    socket.on('buzzed', player => {
+      $('#scoreboard div:nth-child(' + player + ')').css('background-color', 'white')
+    })
+    socket.on('bonusTime', time => {
+      $('#time').text('Thời gian: ' + time)
+    })
+  </script>
+</body>
+
+</html>

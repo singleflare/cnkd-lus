@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzle full screen</title>
+</head>
+
+<body>
+  <style>
+    * {
+      -webkit-user-select: none;
+      /* Safari */
+      -ms-user-select: none;
+      /* IE 10 and IE 11 */
+      user-select: none;
+      /* Standard syntax */
+      pointer-events: none;
+    }
+
+    @font-face {
+      font-family: helve;
+      src: url("../gpx/helveticaneuecondensedblack.ttf");
+    }
+
+    body {
+      background-color: white;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    p {
+      font-family: 'helve';
+      font-size: 65pt;
+      text-align: center;
+      margin: 12px 0px;
+    }
+
+    #board {
+      position: absolute;
+      display: grid;
+      grid-template-columns: repeat(14, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      left: 151px;
+      top: 253px;
+      gap: 8px;
+    }
+
+    .letter {
+      background-image: url('../gpx/ô chữ.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 108.1px;
+      height: 129px;
+    }
+
+    .letter.hasLetter {
+      background-image: url('../gpx/ô chữ hiện.png');
+    }
+
+    .letter.waitToOpen {
+      background-image: url('../gpx/chữ cái được gọi.png');
+    }
+
+    #p1Score,
+    #p2Score,
+    #p3Score {
+      font-size: 60pt;
+      color: white;
+      text-shadow: 2px 2px black;
+    }
+
+    #p1Name,
+    #p2Name,
+    #p3Name {
+      font-size: 20pt;
+      color: white;
+      text-shadow: 2px 2px black;
+    }
+
+    .flexcon {
+      display: flex;
+      width: 1920px;
+      position: relative;
+    }
+
+    .flexcon>* {
+      width: 100%;
+      text-align: center;
+    }
+  </style>
+  <video id='showPuzzleVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
+    src='../gpx/Ô chữ hiện.mp4'></video>
+  <video id='solvePuzzleVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
+    src='../gpx/Đúng ô chữ.mp4'></video>
+  <img src='../gpx/Bìa ô chữ (trống).png' id='boardBg' style='width: 1920px;left:2px;top:2px;position: absolute;'>
+  <div id="board"></div>
+  <!-- <img src="scoreboard2.png" style="position:absolute;width:1920px;display: none;"> -->
+  <div class='flexcon'>
+    <div id="p1Name"></div>
+    <div id="p2Name"></div>
+    <div id="p3Name"></div>
+  </div>
+  <div class='flexcon'>
+    <div id="p1Score"></div>
+    <div id="p2Score"></div>
+    <div id="p3Score"></div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src='disableDevTools.js'></script>
+  <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+    integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+    integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    const socket = io();
+    $(function () {
+      for (let i = 0; i <= 55; i++) {
+        if (i == 0 || i == 13 || i == 42 || i == 55) $('#board').append('<div class="letter" id="letter' + i + '" style="opacity:0;"><p></p></div>');
+        else {
+          $('#board').append('<div class="letter" id="letter' + i + '"><p></p></div>');
+        }
+      }
+    })
+
+    function playSound(url) {
+      const sound = new Howl({
+        src: [url]
+      });
+      sounds.push(sound)
+      sound.play();
+    }
+    function stopAllSounds() {
+      for (let sound of sounds) {
+        sound.stop()
+      }
+      sounds = []
+    }
+    let sounds = []
+    socket.on('playSound', url => {
+      playSound(url)
+    })
+    socket.on('stopAllSounds', () => {
+      stopAllSounds()
+    })
+
+    document.getElementById('showPuzzleVid').addEventListener('play', () => {
+      document.getElementById('showPuzzleVid').currentTime = 1
+      document.getElementById('showPuzzleVid').style.opacity = 1
+      $('#boardBg').css('opacity', 0)
+    })
+    document.getElementById('solvePuzzleVid').addEventListener('play', () => {
+      document.getElementById('solvePuzzleVid').currentTime = 1
+      document.getElementById('solvePuzzleVid').style.opacity = 1
+      $('#boardBg').css('opacity', 0)
+    })
+    document.getElementById('showPuzzleVid').addEventListener('ended', () => {
+      document.getElementById('showPuzzleVid').style.opacity = 0
+      document.getElementById('showPuzzleVid').currentTime = 1
+      $('#boardBg').css('opacity', 1)
+    })
+    document.getElementById('solvePuzzleVid').addEventListener('ended', () => {
+      document.getElementById('solvePuzzleVid').style.opacity = 0
+      document.getElementById('solvePuzzleVid').currentTime = 1
+      $('#boardBg').css('opacity', 1)
+    })
+    function playShowPuzzleVid() {
+      document.getElementById('showPuzzleVid').play()
+    }
+    function playSolvePuzzleVid() {
+      document.getElementById('solvePuzzleVid').play()
+    }
+
+    function reveal(index, letter, state) {
+      if (state == 0) {
+        $('#letter' + index).removeClass('waitToOpen hasLetter')
+      }
+      else if (state == 1) {
+        $('#letter' + index).addClass('hasLetter')
+      }
+      else if (state == 2) {
+        $('#letter' + index).addClass('waitToOpen')
+      }
+      else if (state == 3) {
+        $('#letter' + index).addClass('hasLetter').removeClass('waitToOpen');
+        $('#letter' + index + ' p').text(letter);
+      }
+    }
+
+    function revealPuzzle(puzzle) {
+      playShowPuzzleVid()
+      console.log(puzzle)
+      let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
+      let i = 0
+      let interval = setInterval(() => {
+        if (puzzle[openSequence[i]] != '') {
+          $('#letter' + openSequence[i]).addClass('hasLetter');
+        }
+        if (puzzle[openSequence[i]] == '?' || puzzle[openSequence[i]] == '-' || puzzle[openSequence[i]] == '!' || puzzle[openSequence[i]] == '.' || puzzle[openSequence[i]] == ',' || puzzle[openSequence[i]] == "&" || puzzle[openSequence[i]] == '/') {
+          $('#letter' + openSequence[i]).addClass('hasLetter').removeClass('waitToOpen');
+          $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
+        }
+        i++
+        if (i >= openSequence.length) clearInterval(interval)
+      }, 25)
+    }
+
+    function solvePuzzle(puzzle) {
+      playSolvePuzzleVid()
+      console.log(puzzle)
+      let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
+      let i = 0
+      let interval = setInterval(() => {
+        console.log(i, openSequence[i], puzzle[openSequence[i]])
+        $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
+        i++
+        if (i >= openSequence.length) clearInterval(interval)
+      }, 10)
+    }
+
+    socket.on('revealPuzzle', puzzle => revealPuzzle(puzzle))
+    socket.on('reveal', (data) => reveal(data.index, data.letter, data.state))
+
+    socket.on('solvePuzzle', puzzle => solvePuzzle(puzzle))
+    socket.on('resetPuzzle', () => {
+      for (let i = 0; i <= 55; i++) {
+        $('#letter' + i).removeClass('waitToOpen hasLetter');
+        $('#letter' + i + ' p').text('');
+      }
+    })
+  </script>
+</body>
+
+</html>

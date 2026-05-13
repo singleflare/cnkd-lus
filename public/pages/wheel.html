@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wheel</title>
+</head>
+
+<body style='overflow: hidden;background:black;'>
+  <style>
+    #wheelContainer {
+      transition: transform 8s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    #redPlayer,
+    #yellowPlayer,
+    #bluePlayer {
+      position: absolute;
+      width: 1080px;
+      left: 360px;
+      top: 58px;
+      opacity: 0;
+      height: 352.986px;
+    }
+  </style>
+  <img src='../gpx/Sân khấu.png' style='position: absolute;
+    width: 1920px;
+    left: 0;
+    top:0;'>
+  <div id='wheelContainer' style='position: absolute;
+    width: 804.297px;
+    height:804.297px;
+    left: 557.5px;
+    top: 241.594px;'>
+    <img id='wheel1' src='../gpx/Vòng 1.png' style='width: 100%;height: 100%;opacity: 1;position: absolute;top:0;'>
+    <img id='wheel2' src='../gpx/Vòng 2.png' style='width: 100%;height: 100%;opacity: 0;position: absolute;top:0;'>
+    <img id='wheel3' src='../gpx/Vòng 3.png' style='width: 100%;height: 100%;opacity: 0;position: absolute;top:0;'>
+    <img id='wheel4' src='../gpx/Vòng 4.png' style='width: 100%;height: 100%;opacity: 0;position: absolute;top:0;'>
+    <img src='../gpx/Cơ Hội.png' id='cohoi' style='position: absolute;opacity: 0;
+    top: 37px;
+    left: 455px;
+    width: 65px;
+    transform: rotate(15deg);'>
+    <img src='../gpx/1_2 GL.png' id='12gl250' style='position: absolute;opacity: 0;
+    top: 377px;
+    left: 667px;
+    width: 100px;
+    transform: rotate(90deg);'>
+    <img src='../gpx/1_2 GL.png' id='12gl300' style='position: absolute;opacity: 0;
+    top: 680px;
+    left: 434px;
+    width: 100px;
+    transform: rotate(165deg);'>
+    <img src='../gpx/Nhân đôi.png' id='nhandoi' style='position: absolute;opacity: 0;
+    top: 553px;
+    left: 280px;
+    width: 105px;
+    transform: rotate(195deg);'>
+    <img src='../gpx/Phần thưởng.png' id='phanthuong' style='position: absolute;opacity: 0;
+    top: 221px;
+    left: 83px;
+    width: 110px;
+    transform: rotate(285deg);'>
+    <img src='../gpx/GL 1 Million.png' id='gl1million' style='position: absolute;opacity: 0;
+    top: 428px;
+    left: 588px;
+    width: 99px;
+    transform: rotate(120deg);'>
+    <img src='../gpx/Ô bí mật.png' id='obm500' style='position: absolute;opacity: 0;
+    top: 154px;
+    left: 587px;
+    width: 101px;
+    transform: rotate(60.5deg);'>
+    <img src='../gpx/Ô bí mật.png' id='obm300' style='position: absolute;opacity: 0;
+    top: 425px;
+    left: 115px;
+    width: 101px;
+    transform: rotate(240deg);'>
+  </div>
+  <img src='../gpx/3 Kim.png' id='kims' style='position: absolute;
+    width: 1080px;
+    left: 360px;
+    top: 58px;
+    height:352.986px;'>
+  <img src='../gpx/Lượt quay.png' id='currentSpin' style='position: absolute;
+    width: 200px;
+    left: 860px;
+    top: 0px;'>
+  <img src='../gpx/bàn sân khấu.png' id='table' style='position: absolute;
+    width: 1530px;
+    left: 107px;
+    top: -214px;'>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src='disableDevTools.js'></script>
+  <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+    integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+    integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    const socket = io()
+    // function playSound(url) {
+    //   const sound = new Howl({
+    //     src: [url]
+    //   });
+    //   sounds.push(sound)
+    //   sound.play();
+    // }
+
+    function spin(deg, time) {
+      document.getElementById('wheelContainer').style.transition = 'transform ' + time + 's cubic-bezier(0.2, 0, 0, 1)'
+      document.getElementById('wheelContainer').style.transform = 'rotate(' + deg + 'deg)';
+    }
+
+    socket.on('spinWheel', (deg, time) => {
+      spin(deg, time)
+    })
+    socket.on('indicatePlayer', (player) => {
+      indicatePlayer(player)
+    })
+    socket.on('showWheel', round => {
+      $(`#wheel1, #wheel2, #wheel3, #wheel4`).css('opacity', '0')
+      $(`#wheel${round}`).css('opacity', '1')
+    })
+
+    socket.on('toggleWedge', (wedge, status) => {
+      if (status) {
+        $('#' + wedge).css('opacity', '1')
+      }
+      else {
+        $('#' + wedge).css('opacity', '0')
+      }
+    })
+  </script>
+</body>
+
+</html>

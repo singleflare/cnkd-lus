@@ -24,6 +24,11 @@
       src: url("../gpx/helveticaneuecondensedblack.ttf");
     }
 
+    @font-face {
+      font-family: lufga;
+      src: url("../gpx/Fz\ Lufga\ Bold.ttf");
+    }
+
     body {
       background-color: white;
       margin: 0;
@@ -90,14 +95,52 @@
       text-align: center;
     }
   </style>
+  <video id='tossupVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
+    src='../gpx/Đoán nhanh (full).mp4'></video>
+  <video id='solveTossupPuzzleVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
+    src='../gpx/Đúng ô chữ (đoán nhanh).mp4'></video>
   <video id='showPuzzleVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Ô chữ hiện.mp4'></video>
   <video id='solvePuzzleVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đúng ô chữ.mp4'></video>
-  <img src='../gpx/Bìa ô chữ (trống).png' id='boardBg' style='width: 1920px;left:2px;top:2px;position: absolute;'>
+  <img src='../gpx/Bìa ô chữ (trống).png' id='boardBg' style='width: 1920px;position: absolute;'>
+  <div id='catContainer' style='position: absolute;top:230px;opacity: 0;'>
+    <img src='../gpx/gợi ý.png' style='position: absolute;
+    left: 417px;
+    top: 835px;
+    width: 200px;'>
+    <img src='../gpx/giải mã.png' style='position: absolute;
+    left: 417px;
+    top: 835px;
+    width: 200px;'>
+    <img src='../gpx/tunghoanh.png' style='position: absolute;
+    left: 417px;
+    top: 835px;
+    width: 200px;'>
+    <img src='../gpx/thanhchude.png' style='position: absolute;
+      left: 360px;
+      top: 850px;
+      width: 1200px;'>
+    <img src='../gpx/tiasang.png' id='uplight' style='position: absolute;
+    left: 393px;
+    top: 859px;
+    width: 200px;'>
+    <img src='../gpx/tiasang.png' id='downlight' style='position: absolute;
+    left: 1353px;
+    top: 956px;
+    width: 200px;'>
+    <div id='catText' style='position: absolute;
+    left: 400px;
+    top: 884px;
+    width: 1120px;
+    font-family: "lufga";
+    font-size: 45pt;
+    color: white;
+    text-align: center;'>CHỦ ĐỀ</div>
+  </div>
   <div id="board"></div>
   <!-- <img src="scoreboard2.png" style="position:absolute;width:1920px;display: none;"> -->
-  <div class='flexcon'>
+  <div class=' flexcon'>
     <div id="p1Name"></div>
     <div id="p2Name"></div>
     <div id="p3Name"></div>
@@ -149,11 +192,22 @@
     document.getElementById('showPuzzleVid').addEventListener('play', () => {
       document.getElementById('showPuzzleVid').currentTime = 1
       document.getElementById('showPuzzleVid').style.opacity = 1
+
       $('#boardBg').css('opacity', 0)
     })
     document.getElementById('solvePuzzleVid').addEventListener('play', () => {
       document.getElementById('solvePuzzleVid').currentTime = 1
       document.getElementById('solvePuzzleVid').style.opacity = 1
+      $('#boardBg').css('opacity', 0)
+    })
+    document.getElementById('tossupVid').addEventListener('play', () => {
+      document.getElementById('tossupVid').currentTime = 1
+      document.getElementById('tossupVid').style.opacity = 1
+      $('#boardBg').css('opacity', 0)
+    })
+    document.getElementById('solveTossupPuzzleVid').addEventListener('play', () => {
+      document.getElementById('solveTossupPuzzleVid').currentTime = 1
+      document.getElementById('solveTossupPuzzleVid').style.opacity = 1
       $('#boardBg').css('opacity', 0)
     })
     document.getElementById('showPuzzleVid').addEventListener('ended', () => {
@@ -166,11 +220,39 @@
       document.getElementById('solvePuzzleVid').currentTime = 1
       $('#boardBg').css('opacity', 1)
     })
+    document.getElementById('tossupVid').addEventListener('ended', () => {
+      document.getElementById('tossupVid').style.opacity = 0
+      document.getElementById('tossupVid').currentTime = 1
+      $('#boardBg').css('opacity', 1)
+    })
+    document.getElementById('solveTossupPuzzleVid').addEventListener('ended', () => {
+      document.getElementById('solveTossupPuzzleVid').style.opacity = 0
+      document.getElementById('solveTossupPuzzleVid').currentTime = 1
+      $('#boardBg').css('opacity', 1)
+    })
     function playShowPuzzleVid() {
       document.getElementById('showPuzzleVid').play()
     }
     function playSolvePuzzleVid() {
       document.getElementById('solvePuzzleVid').play()
+    }
+    function playTossupVid() {
+      document.getElementById('tossupVid').play()
+    }
+    function playSolveTossupPuzzleVid() {
+      document.getElementById('solveTossupPuzzleVid').play()
+    }
+
+    function showCategory() {
+      $('#catContainer').animate({
+        top: '0px'
+      }, 1000)
+      $('#uplight').animate({
+        'opacity': 0, 'left': '1353px'
+      }, 60000, 'linear')
+      $('#downlight').animate({
+        'opacity': 0, 'left': '393px'
+      }, 60000, 'linear')
     }
 
     function reveal(index, letter, state) {
@@ -207,8 +289,9 @@
       }, 25)
     }
 
-    function solvePuzzle(puzzle) {
-      playSolvePuzzleVid()
+    function solvePuzzle(puzzle, mode) {
+      if (mode == 'normal') playSolvePuzzleVid()
+      else if (mode == 'tossup') playSolveTossupPuzzleVid()
       console.log(puzzle)
       let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
       let i = 0
@@ -223,12 +306,18 @@
     socket.on('revealPuzzle', puzzle => revealPuzzle(puzzle))
     socket.on('reveal', (data) => reveal(data.index, data.letter, data.state))
 
-    socket.on('solvePuzzle', puzzle => solvePuzzle(puzzle))
+    socket.on('solvePuzzle', (data) => {
+      solvePuzzle(data.solvedPuzzle, data.mode);
+    });
     socket.on('resetPuzzle', () => {
       for (let i = 0; i <= 55; i++) {
         $('#letter' + i).removeClass('waitToOpen hasLetter');
         $('#letter' + i + ' p').text('');
       }
+    })
+
+    socket.on('openRandomTossup', () => {
+      playTossupVid()
     })
   </script>
 </body>

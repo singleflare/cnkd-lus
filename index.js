@@ -37,9 +37,26 @@ function shuffleArray(array) {
   }
 }
 
+let score={
+  p1:{
+    name:'',
+    score:0,
+    total:0
+  },
+  p2:{
+    name:'',
+    score:0,
+    total:0
+  },
+  p3:{
+    name:'',
+    score:0,
+    total:0
+  }
+}
+
 io.on('connection',(socket)=>{
   socket.emit('puzzleMode',puzzleMode)
-  socket.emit('scoreboard',{})
   socket.emit('finalSpinMode',isFinalSpin)
   socket.on('buzz',(data)=>{
     buzzed.push(data)
@@ -75,6 +92,12 @@ io.on('connection',(socket)=>{
     io.emit('playSound', '../sounds/chuong finalspin.mp3')
   })
 
+  socket.on('scoreboard',(data)=>{
+    score=data
+    console.log(score)
+    io.emit('scoreboard',data)
+  })
+
   socket.on('revealPuzzle',()=>{
     io.emit('revealPuzzle',puzzle)
   })
@@ -100,9 +123,8 @@ io.on('connection',(socket)=>{
     console.log(idx, puzzleState[idx], puzzle[idx])
     io.emit('reveal',{index:idx,state:puzzleState[idx],letter:puzzle[idx]})
   })
-  socket.on('solvePuzzle',()=>{
+  socket.on('solvePuzzle',(mode)=>{ 
     socket.emit('stopAllSounds')
-    socket.emit('playSound', '../sounds/chinhxac.mp3')
     console.log(solvedPuzzle)
     buzzed=[]
     io.emit('buzzersReset')
@@ -111,7 +133,7 @@ io.on('connection',(socket)=>{
       if(puzzleState[i]==1) puzzleState[i]=3
       if(puzzleState[i]==3) idxToOpen.push(i)
     }
-    io.emit('solvePuzzle',solvedPuzzle)
+    io.emit('solvePuzzle', { solvedPuzzle, mode })
   })
   socket.on('solvePuzzleNoSound',()=>{
     buzzed=[]
@@ -121,7 +143,7 @@ io.on('connection',(socket)=>{
       if(puzzleState[i]==1) puzzleState[i]=3
       if(puzzleState[i]==3) idxToOpen.push(i)
     }
-    io.emit('solvePuzzle',solvedPuzzle)
+    io.emit('solvePuzzle', { solvedPuzzle, mode: 'normal' })
   })
   socket.on('resetPuzzle',()=>{
     puzzle=[]
@@ -133,6 +155,7 @@ io.on('connection',(socket)=>{
     puzzleMode=data
   })
   socket.on('openRandomTossup',()=>{
+    io.emit('openRandomTossup')
     buzzed=[]
     io.emit('buzzersReset')
     io.emit('enableBuzzers')

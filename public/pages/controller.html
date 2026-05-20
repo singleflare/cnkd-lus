@@ -20,12 +20,12 @@
     }
 
     span {
-      font-family: 'Myriad Pro';
+      font-family: 'Arial';
       color: white;
     }
 
     button {
-      font-family: 'Myriad Pro';
+      font-family: 'Arial';
       background-color: black;
       color: white;
       border: 1px solid white;
@@ -113,16 +113,27 @@
     <hr>
     <span>Ô chữ</span>
     <button id="showPuzzle">Hiện</button>
-    <button id="solvePuzzle">Giải</button>
     <button id="puzzleMode">Chế độ:</button>
-    <button id='finalSpinMode'>VQCC:</button>
-    <button id="openRandomTossup1">ĐN nhạc toss up 1</button>
-    <button id="openRandomTossup2">ĐN nhạc toss up 2</button>
-    <button id="openRandomTossup3">ĐN nhạc toss up 3</button>
-    <button id="openRandomTossupWithTime">ĐN tính giờ</button>
+    <br>
+    <span>Đoán nhanh nhạc</span>
+    <button id="openRandomTossup1">1</button>
+    <button id="openRandomTossup2">2</button>
+    <button id="openRandomTossup3">3</button>
+    <br>
+    <span>Đoán nhanh</span>
     <button id="stopOpenRandomTossup">Dừng ĐN</button>
     <button id="continueOpenRandomTossup">Tiếp tục ĐN</button>
+    <button disabled id="openRandomTossupWithTime">ĐN tính giờ</button>
+    <br>
+    <span>Giải ô chữ</span>
+    <button id="solvePuzzleNormal">Thường</button>
+    <button id="solvePuzzleTossup">Đoán nhanh</button>
+    <button id="solvePuzzleTTU">ĐNLH</button>
+    <br>
+    <span>VQCC</span>
+    <button id='finalSpinMode'>VQCC:</button>
     <button id='playFinalSpinBed'>Nhạc VQCC</button>
+    <br>
     <button id="deletePuzzle">Xóa ô chữ</button>
     <hr></span>
     <span>VĐB luật mới</span>
@@ -140,20 +151,29 @@
     </div>
     <span>Nón</span>
     <button id='spinWheel' style='width: 90%;'>Quay nón</button>
-    <button id='showWheel1'>Hiện nón v1</button>
-    <button id='showWheel2'>Hiện nón v2</button>
-    <button id='showWheel3'>Hiện nón v3</button>
-    <button id='showWheel4'>Hiện nón v4</button>
+    <span>Nón vòng</span>
+    <button id='showWheel1'>1</button>
+    <button id='showWheel2'>2</button>
+    <button id='showWheel3'>3</button>
+    <button id='showWheel4'>4</button>
+    <br>
+    <span>Đèn kim</span>
+    <button id='indicatePlayer0'>Tắt</button>
+    <button id='indicatePlayer1'>1</button>
+    <button id='indicatePlayer2'>2</button>
+    <button id='indicatePlayer3'>3</button>
     <hr>
     <span>Thẻ/Ô trên nón</span>
-    <button id='toggleBm300'>BM 300</button>
-    <button id='toggleBm500'>BM 500</button>
-    <button id='toggleHalf250'>1/2 250</button>
-    <button id='toggleHalf300'>1/2 300</button>
+    <button id='toggleBm300'>BM 700</button>
+    <button id='toggleBm500'>BM 300</button>
+    <button id='toggleHalf250'>1/2 500</button>
+    <button id='toggleHalf300'>1/2 500</button>
     <button id='toggleNd'>Nhân đôi</button>
     <button id='toggleCh'>Cơ hội</button>
     <button id='togglePt'>Phần thưởng</button>
     <button id='toggle1mil'>1M</button>
+    <button id='toggleTl'>Thêm lượt</button>
+    <button id='toggleMm'>May mắn</button>
   </div>
   <div class='column' style='left:1280px'>
     <div id='scoreboard'>
@@ -204,6 +224,10 @@
       </div>
       <div>
         <span>Âm thanh</span>
+        <button id='introBtn'>Intro</button>
+        <button id='hostBtn'>Host entrance</button>
+        <button id='breakBtn'>Nghỉ giải lao</button>
+        <br>
         <button id="bmBtn">Bí mật</button>
         <button id="cdBtn">Chia đôi</button>
         <button id="chBtn">Cơ hội</button>
@@ -214,13 +238,14 @@
         <button id='ndBtn'>Nhân đôi</button>
         <button id="ptBtn">Phần thưởng</button>
         <button id='stBtn'>Siêu tốc</button>
-        <button id="tlmmBtn">Thêm lượt/May mắn</button>
+        <button id="tlmmBtn">Thêm lượt/May mắn/Nhân đôi</button>
         <button id="saiBtn">Sai</button>
         <br>
         <button id="playSpinBonusBed">Quay nón đặc biệt</button>
-        <button id="playGALUletters">GALU</button>
+        <button id="playGALUletters">NGHIA</button>
         <button id='playOtherLetters'>Chữ khác</button>
-        <button id="playBonus">10s</button>
+        <button id="playBonusThink">10s suy nghĩ</button>
+        <button id="playBonus">10s trả lời</button>
         <button id="stopBtn">Dừng hết tất cả âm thanh</button>
       </div>
     </div>
@@ -346,10 +371,26 @@
       socket.emit('playSound', '../sounds/hienochu.mp3')
       socket.emit('revealPuzzle')
     })
-    $('#solvePuzzle').click(() => {
+    $('#solvePuzzleNormal').click(() => {
       socket.emit('stopAllSounds')
-      socket.emit('playSound', '../sounds/chinhxac.mp3')
-      socket.emit('solvePuzzle')
+      socket.emit('playSound', '../sounds/mainsolve.m4a')
+      socket.emit('solvePuzzle', 'normal')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#solvePuzzleTossup').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/tossupsolve.mp3')
+      socket.emit('solvePuzzle', 'tossup')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#solvePuzzleTTU').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/ttusolve.mp3')
+      socket.emit('solvePuzzle', 'tossup')
       onetwothree.forEach(player => {
         $('#scoreboard div').css('background-color', 'black')
       })
@@ -430,9 +471,25 @@
       socket.emit('stopAllSounds')
       socket.emit('playSound', '../sounds/3c1v.mp3')
     })
+    $('#playBonusThink').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/10s suy nghĩ (VĐB).m4a')
+    })
     $('#playBonus').click(() => {
       socket.emit('stopAllSounds')
       socket.emit('playSound', '../sounds/bonus.mp3')
+    })
+    $('#introBtn').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/intro.m4a')
+    })
+    $('#hostBtn').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/Host entrance.m4a')
+    })
+    $('#breakBtn').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/mainsolve.m4a')
     })
 
     $('#openRandomTossup1').click(() => {
@@ -552,7 +609,11 @@
       let p1Name = $('#p1Name').val()
       let p2Name = $('#p2Name').val()
       let p3Name = $('#p3Name').val()
-      socket.emit('scoreboard', { p1Name, p2Name, p3Name, p1Score, p2Score, p3Score, p1Total, p2Total, p3Total })
+      socket.emit('scoreboard', {
+        p1: { name: p1Name, score: p1Score, total: p1Total },
+        p2: { name: p2Name, score: p2Score, total: p2Total },
+        p3: { name: p3Name, score: p3Score, total: p3Total }
+      })
     }
 
     $('#p1Set').click(() => {
@@ -721,6 +782,12 @@
     })
     $('#toggle1mil').click(() => {
       socket.emit('toggleWedge', 'gl1million')
+    })
+    $('#toggleTl').click(() => {
+      socket.emit('toggleWedge', 'themluot')
+    })
+    $('#toggleMm').click(() => {
+      socket.emit('toggleWedge', 'mayman')
     })
 
     socket.on('disableLetterBtn', letterNumber => {

@@ -25,12 +25,12 @@ socket.on('buzzed', (data) => {
   }
 })
 socket.on('scoreboard', (data) => {
-  $('#p1Slot p:nth-child(1)').text(data.p1Name);
-  $('#p2Slot p:nth-child(1)').text(data.p2Name);
-  $('#p3Slot p:nth-child(1)').text(data.p3Name);
-  $('#p1Slot p:nth-child(2)').text(data.p1Score);
-  $('#p2Slot p:nth-child(2)').text(data.p2Score);
-  $('#p3Slot p:nth-child(2)').text(data.p3Score);
+  $('#p1Slot p:nth-child(1)').text(data.p1.name);
+  $('#p2Slot p:nth-child(1)').text(data.p2.name);
+  $('#p3Slot p:nth-child(1)').text(data.p3.name);
+  $('#p1Slot p:nth-child(2)').text(data.p1.score);
+  $('#p2Slot p:nth-child(2)').text(data.p2.score);
+  $('#p3Slot p:nth-child(2)').text(data.p3.score);
 });
 
 $('#p1Name').hover(() => {

@@ -11,6 +11,8 @@ app.use(express.static('public'))
 
 let puzzle=[]
 let solvedPuzzle=[]
+let question=''
+let explain=''
 let puzzleState=[] // 0: empty, 1: has letter, 2: selected, 3: revealed
 let buzzed=[]
 let puzzleMode=1
@@ -18,15 +20,20 @@ let isFinalSpin=false
 let tossupInterval=null
 let bonusTimeInterval=null
 let bonusTime=0
+let currentRotation=0
+let currentBonusRotation=0
 
 let wedgesStatus=new Map()
-wedgesStatus.set('obm500', 0)
-wedgesStatus.set('12gl250', 0)
-wedgesStatus.set('12gl300', 0)
+wedgesStatus.set('obm700', 0)
+wedgesStatus.set('obm300', 0)
+wedgesStatus.set('gl12500450300', 0)
+wedgesStatus.set('gl12500350900', 0)
 wedgesStatus.set('nhandoi', 0)
 wedgesStatus.set('cohoi', 0)
 wedgesStatus.set('phanthuong', 0)
 wedgesStatus.set('gl1million', 0)
+wedgesStatus.set('themluot', 0)
+wedgesStatus.set('mayman', 0)
 
 function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
@@ -41,23 +48,67 @@ let score={
   p1:{
     name:'',
     score:0,
-    total:0
+    total:0,
+    wedges:{
+      'themluot': false,
+      'cohoi': false,
+      'nhandoi': false,
+      'phanthuong': false,
+      'mayman': false,
+      '1mgl': false,
+      'gl12500450300': false,
+      'gl12500350900': false,
+    }
   },
   p2:{
     name:'',
     score:0,
-    total:0
+    total:0,
+    wedges:{
+      'themluot': false,
+      'cohoi': false,
+      'nhandoi': false,
+      'phanthuong': false,
+      'mayman': false,
+      '1mgl': false,
+      'gl12500450300': false,
+      'gl12500350900': false,
+    }
   },
   p3:{
     name:'',
     score:0,
-    total:0
+    total:0,
+    wedges:{
+      'themluot': false,
+      'cohoi': false,
+      'nhandoi': false,
+      'phanthuong': false,
+      'mayman': false,
+      '1mgl': false,
+      'gl12500450300': false,
+      'gl12500350900': false,
+    }
+  },
+  ks:{
+    score:0,
+    wedges:{
+      'themluot': false,
+      'cohoi': false,
+      'nhandoi': false,
+      'phanthuong': false,
+      'mayman': false,
+      '1mgl': false,
+      'gl12500450300': false,
+      'gl12500350900': false,
+    }
   }
 }
 
 io.on('connection',(socket)=>{
   socket.emit('puzzleMode',puzzleMode)
   socket.emit('finalSpinMode',isFinalSpin)
+  socket.emit('data', { score,currentRotation,wedgesStatus:Object.fromEntries(wedgesStatus) })
   socket.on('buzz',(data)=>{
     buzzed.push(data)
     if(buzzed.length==1){
@@ -76,11 +127,16 @@ io.on('connection',(socket)=>{
     io.emit('resetPuzzle')
     puzzle=data.puzzle
     solvedPuzzle=data.solved
+    question=data.question
+    explain=data.explain
     for(let i=0;i<56;i++){
       if(puzzle[i]=='') puzzleState[i]=0
       else if(puzzle[i]=='?'||puzzle[i]=='-'||puzzle[i]=='!'||puzzle[i]=='.'||puzzle[i]==','||puzzle[i]=="&"||puzzle[i]=='/') puzzleState[i]=3
       else puzzleState[i]=1
     }
+  })
+  socket.on('puzzleType',(type)=>{
+    io.emit('puzzleType',type,question)
   })
   socket.on('togglePuzzleMode',()=>{
     puzzleMode=1-puzzleMode
@@ -290,7 +346,6 @@ io.on('connection',(socket)=>{
     io.emit('stopAllSounds')
   })
 
-  let currentRotation=0
   function getRandomInt(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
@@ -307,16 +362,51 @@ io.on('connection',(socket)=>{
       io.emit('spinWheel', currentRotation,8)
     }
   })
+  socket.on('spinBonusWheel',()=>{
+    currentBonusRotation += getRandomInt(1080, 1440)
+    io.emit('playSound', '../sounds/nhacquaynondacbiet.m4a')
+    io.emit('spinBonusWheel', currentBonusRotation,15)
+  })
   socket.on('indicatePlayer', (player) => {
     io.emit('indicatePlayer', player)
   })
   socket.on('showWheel', round => {
-    io.emit('showWheel', round)
+    if(round=='bonus') io.emit('showWheel', 'bonus')
+    else io.emit('showWheel', round)
   })
 
+  socket.on('togglePlayerWedge', (player, wedge) => {
+    console.log('togglePlayerWedge', player, wedge,score.p1.wedges[wedge], score.p2.wedges[wedge], score.p3.wedges[wedge])
+    if(player==1){
+      score.p1.wedges[wedge]=!score.p1.wedges[wedge]
+      io.emit('togglePlayerWedge', player, score.p1.wedges[wedge], wedge)
+    }
+    else if(player==2){
+      score.p2.wedges[wedge]=!score.p2.wedges[wedge]
+      io.emit('togglePlayerWedge', player, score.p2.wedges[wedge], wedge)
+    }
+    else if(player==3){
+      score.p3.wedges[wedge]=!score.p3.wedges[wedge]
+      io.emit('togglePlayerWedge', player, score.p3.wedges[wedge], wedge)
+    }
+    else if(player=='ks'){
+      score.ks.wedges[wedge]=!score.ks.wedges[wedge]
+      io.emit('togglePlayerWedge', player, score.ks.wedges[wedge], wedge)
+    }
+  })
   socket.on('toggleWedge', (wedge) => {
     const currentStatus = wedgesStatus.get(wedge)
     wedgesStatus.set(wedge, !currentStatus)
     io.emit('toggleWedge', wedge, !currentStatus)
+  })
+  socket.on('showKs', () => {
+    io.emit('showKs')
+  })
+  socket.on('hideKs', () => {
+    io.emit('hideKs')
+  })
+  socket.on('setKsScore', (score) => {
+    score.ks.score=score
+    io.emit('setKsScore', score)
   })
 })

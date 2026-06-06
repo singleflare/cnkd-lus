@@ -9,8 +9,8 @@
 
 <body style='overflow: hidden;background:black;'>
   <style>
-    #wheelContainer {
-      transition: transform 8s cubic-bezier(0.2, 0, 0, 1);
+    #bonusWheel {
+      transition: transform 15s cubic-bezier(0.2, 0, 0, 1);
     }
   </style>
   <img src='../gpx/Sân khấu.png' style='position: absolute;
@@ -31,13 +31,13 @@
     left: 455px;
     width: 65px;
     transform: rotate(15deg);'>
-    <img src='../gpx/1_2 GL.png' id='12gl250' style='position: absolute;
+    <img src='../gpx/1_2 GL.png' id='gl12500450300' style='position: absolute;
     opacity: 0;
     top: 156px;
     left: 130px;
     width: 100px;
     transform: rotate(315deg);'>
-    <img src='../gpx/1_2 GL.png' id='12gl300' style='position: absolute;opacity: 0;
+    <img src='../gpx/1_2 GL.png' id='gl12500350900' style='position: absolute;opacity: 0;
     top: 680px;
     left: 434px;
     width: 100px;
@@ -70,12 +70,12 @@
     left: 588px;
     width: 99px;
     transform: rotate(120deg);'>
-    <img src='../gpx/Ô bí mật.png' id='obm500' style='position: absolute;opacity: 0;
+    <img src='../gpx/Ô bí mật.png' id='obm300' style='position: absolute;opacity: 0;
     top: 154px;
     left: 587px;
     width: 101px;
     transform: rotate(60.5deg);'>
-    <img src='../gpx/Ô bí mật.png' id='obm300' style='position: absolute;opacity: 0;
+    <img src='../gpx/Ô bí mật.png' id='obm700' style='position: absolute;opacity: 0;
     top: 425px;
     left: 115px;
     width: 101px;
@@ -100,6 +100,21 @@
     left: 164px;
     top: -180px;
     opacity: 0;'>
+  <div id='bonusContainer' style='opacity: 0;'>
+    <img src='../gpx/stagedb.png' style='position: absolute;
+    width: 1920px;
+    left: 0;
+    top:0;'>
+    <img id='bonusWheel' src='../gpx/Nón Đặc Biệt.png' style='position: absolute;
+    width: 804.297px;
+    height:804.297px;
+    left: 557.5px;
+    top: 241.594px;'>
+    <img src='../gpx/kim_vdb.png' style='position: absolute;
+    width: 300px;
+    left: 812px;
+    top: 149px;'>
+  </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src='disableDevTools.js'></script>
   <script src="https://code.jquery.com/jquery-4.0.0.min.js"
@@ -109,17 +124,28 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     const socket = io()
-    // function playSound(url) {
-    //   const sound = new Howl({
-    //     src: [url]
-    //   });
-    //   sounds.push(sound)
-    //   sound.play();
-    // }
-
-    function spin(deg, time) {
-      document.getElementById('wheelContainer').style.transition = 'transform ' + time + 's cubic-bezier(0.2, 0, 0, 1)'
-      document.getElementById('wheelContainer').style.transform = 'rotate(' + deg + 'deg)';
+    socket.on('data', data => {
+      console.log(data)
+      document.getElementById('wheelContainer').style.transform = 'rotate(' + data.currentRotation + 'deg)';
+      data.wedgesStatus && Object.entries(data.wedgesStatus).forEach(([wedge, status]) => {
+        if (status) {
+          $('#' + wedge).css('opacity', '1')
+        }
+        else {
+          $('#' + wedge).css('opacity', '0')
+        }
+      })
+    })
+    function spin(deg, time, wheel) {
+      if (wheel == 'bonus') {
+        document.getElementById('bonusWheel').style.transition = 'transform ' + time + 's cubic-bezier(0.2, 0, 0, 1)'
+        document.getElementById('bonusWheel').style.transform = 'rotate(' + deg + 'deg)';
+        return
+      }
+      else {
+        document.getElementById('wheelContainer').style.transition = 'transform ' + time + 's cubic-bezier(0.2, 0, 0, 1)'
+        document.getElementById('wheelContainer').style.transform = 'rotate(' + deg + 'deg)';
+      }
     }
 
     let indicatePlayerInterval
@@ -165,14 +191,20 @@
     }
 
     socket.on('spinWheel', (deg, time) => {
-      spin(deg, time)
+      spin(deg, time, 'main')
+    })
+    socket.on('spinBonusWheel', (deg, time) => {
+      spin(deg, time, 'bonus')
     })
     socket.on('indicatePlayer', (player) => {
       indicatePlayer(player)
     })
     socket.on('showWheel', round => {
-      $(`#wheel1, #wheel2, #wheel3, #wheel4`).css('opacity', '0')
-      $(`#wheel${round}`).css('opacity', '1')
+      $(`#wheel1, #wheel2, #wheel3, #wheel4, #bonusContainer`).css('opacity', '0')
+      if (round == 'bonus') {
+        $(`#bonusContainer`).css('opacity', '1')
+      }
+      else $(`#wheel${round}`).css('opacity', '1')
     })
 
     socket.on('toggleWedge', (wedge, status) => {

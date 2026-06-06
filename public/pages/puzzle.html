@@ -104,20 +104,20 @@
   <video id='solvePuzzleVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đúng ô chữ.mp4'></video>
   <img src='../gpx/Bìa ô chữ (trống).png' id='boardBg' style='width: 1920px;position: absolute;'>
-  <div id='catContainer' style='position: absolute;top:230px;opacity: 0;'>
-    <img src='../gpx/gợi ý.png' style='position: absolute;
+  <div id='catContainer' style='position: absolute;top:240px;'>
+    <img src='../gpx/gợi ý.png' id='normal' style='position: absolute;opacity: 0;
     left: 417px;
-    top: 835px;
-    width: 200px;'>
-    <img src='../gpx/giải mã.png' style='position: absolute;
+    top: 816px;
+    width: 300px;'>
+    <img src='../gpx/giải mã.png' id='giaima' style='position: absolute;opacity: 0;
     left: 417px;
-    top: 835px;
-    width: 200px;'>
-    <img src='../gpx/tunghoanh.png' style='position: absolute;
+    top: 816px;
+    width: 300px;'>
+    <img src='../gpx/tunghoanh.png' id='tunghoanh' style='position: absolute;opacity: 0;
     left: 417px;
-    top: 835px;
-    width: 200px;'>
-    <img src='../gpx/thanhchude.png' style='position: absolute;
+    top: 816px;
+    width: 300px;'>
+    <img src='../gpx/thanhchude.png' id='thanhchude' style='position: absolute;
       left: 360px;
       top: 850px;
       width: 1200px;'>
@@ -136,20 +136,76 @@
     font-family: "lufga";
     font-size: 45pt;
     color: white;
-    text-align: center;'>CHỦ ĐỀ</div>
+    text-align: center;'></div>
+  </div>
+  <div id='scoreContainer'>
+    <div id='ksContainer' style='position: absolute;left: -500px;top: 10px;'>
+      <img src='../gpx/ketsat.png' style='position: absolute;width: 500px;'>
+      <div id='ksScore'
+        style='font-family: Lufga;position: absolute;left: 50px;top: 80px;width: 360px;text-align: center;font-size: 30pt;color:white'>
+        1,000 GL</div>
+      <img src='../gpx/Cơ Hội.png' id='kscohoi' style='position: absolute;left: 105px;top: 135px;width: 30px;'>
+      <img src='../gpx/1_2 GL.png' id='ksgl12500450300' style='position: absolute;left: 150px;top: 135px;width: 30px;'>
+      <img src='../gpx/1_2 GL.png' id='ksgl12500350900' style='position: absolute;left: 150px;top: 158px;width: 30px;'>
+      <img src='../gpx/thêm lượt.png' id='ksthemluot' style='position: absolute;left: 190px;top: 135px;width: 40px;'>
+      <img src='../gpx/may mắn.png' id='ksmayman' style='position: absolute;left: 235px;top: 135px;width: 75px;'>
+      <img src='../gpx/GL 1 Million (Mặt sau).png' id='ks1mgl'
+        style='position: absolute;left: 315px;top: 135px;width: 18px;'>
+      <img src='../gpx/Nhân đôi.png' id='ksnhandoi' style='position: absolute;left: 345px;top: 135px;width: 18px;'>
+    </div>
+    <div id='p1ScoreContainer' style='position: absolute;left: 310px;top:15px;'>
+      <img src='../gpx/thanhdiemdo.png' style='position: absolute;width: 450px;'>
+      <div id='p1Name'
+        style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
+      </div>
+      <div id='p1Score'
+        style='font-family: Lufga;position: absolute;left: 50px;top: 60px;width: 350px;text-align: center;font-size: 35pt; '>
+      </div>
+      <img src='../gpx/Cơ Hội.png' id='p1cohoi' style='position: absolute;left: 80px;top: 115px;width: 30px;'>
+      <img src='../gpx/1_2 GL.png' id='p1gl12500450300' style='position: absolute;left: 125px;top: 115px;width: 30px;'>
+      <img src='../gpx/1_2 GL.png' id='p1gl12500350900' style='position: absolute;left: 125px;top: 138px;width: 30px;'>
+      <img src='../gpx/thêm lượt.png' id='p1themluot' style='position: absolute;left: 165px;top: 115px;width: 40px;'>
+      <img src='../gpx/may mắn.png' id='p1mayman' style='position: absolute;left: 215px;top: 115px;width: 75px;'>
+      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p11mgl'
+        style='position: absolute;left: 305px;top: 115px;width: 18px;'>
+      <img src='../gpx/Nhân đôi.png' id='p1nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
+    </div>
+    <div id='p2ScoreContainer' style='position: absolute;left: 740px;top:15px;'>
+      <img src='../gpx/thanhdiemvang.png' style='position: absolute;width: 450px;'>
+      <div id='p2Name'
+        style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
+      </div>
+      <div id='p2Score'
+        style='font-family: Lufga;position: absolute;left: 50px;top: 60px;width: 350px;text-align: center;font-size: 35pt; '>
+      </div>
+      <img src='../gpx/Cơ Hội.png' id='p2cohoi' style='position: absolute;left: 80px;top: 115px;width: 30px;'>
+      <img src='../gpx/1_2 GL.png' id='p2gl12500450300' style='position: absolute;left: 125px;top: 115px;width: 30px;'>
+      <img src='../gpx/1_2 GL.png' id='p2gl12500350900' style='position: absolute;left: 125px;top: 138px;width: 30px;'>
+      <img src='../gpx/thêm lượt.png' id='p2themluot' style='position: absolute;left: 165px;top: 115px;width: 40px;'>
+      <img src='../gpx/may mắn.png' id='p2mayman' style='position: absolute;left: 215px;top: 115px;width: 75px;'>
+      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p21mgl'
+        style='position: absolute;left: 305px;top: 115px;width: 18px;'>
+      <img src='../gpx/Nhân đôi.png' id='p2nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
+    </div>
+    <div id='p3ScoreContainer' style='position: absolute;left: 1170px;top:15px;'>
+      <img src='../gpx/thanhdiemxanh.png' style='position: absolute;width: 450px;'>
+      <div id='p3Name'
+        style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
+      </div>
+      <div id='p3Score'
+        style='font-family: Lufga;position: absolute;left: 50px;top: 60px;width: 350px;text-align: center;font-size: 35pt; '>
+      </div>
+      <img src='../gpx/Cơ Hội.png' id='p3cohoi' style='position: absolute;left: 80px;top: 115px;width: 30px;'>
+      <img src='../gpx/1_2 GL.png' id='p3gl12500450300' style='position: absolute;left: 125px;top: 115px;width: 30px;'>
+      <img src='../gpx/1_2 GL.png' id='p3gl12500350900' style='position: absolute;left: 125px;top: 138px;width: 30px;'>
+      <img src='../gpx/thêm lượt.png' id='p3themluot' style='position: absolute;left: 165px;top: 115px;width: 40px;'>
+      <img src='../gpx/may mắn.png' id='p3mayman' style='position: absolute;left: 215px;top: 115px;width: 75px;'>
+      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p31mgl'
+        style='position: absolute;left: 305px;top: 115px;width: 18px;'>
+      <img src='../gpx/Nhân đôi.png' id='p3nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
+    </div>
   </div>
   <div id="board"></div>
-  <!-- <img src="scoreboard2.png" style="position:absolute;width:1920px;display: none;"> -->
-  <div class=' flexcon'>
-    <div id="p1Name"></div>
-    <div id="p2Name"></div>
-    <div id="p3Name"></div>
-  </div>
-  <div class='flexcon'>
-    <div id="p1Score"></div>
-    <div id="p2Score"></div>
-    <div id="p3Score"></div>
-  </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src='disableDevTools.js'></script>
   <script src="https://code.jquery.com/jquery-4.0.0.min.js"
@@ -159,6 +215,47 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     const socket = io();
+    socket.on('data', data => {
+      console.log(data)
+      $('#p1Score').text(data.score.p1.score)
+      $('#p2Score').text(data.score.p2.score)
+      $('#p3Score').text(data.score.p3.score)
+      $('#p1Name').text(data.score.p1.name)
+      $('#p2Name').text(data.score.p2.name)
+      $('#p3Name').text(data.score.p3.name)
+      $('#p1cohoi').css('opacity', data.score.p1.wedges.cohoi ? '1' : '0.1')
+      $('#p2cohoi').css('opacity', data.score.p2.wedges.cohoi ? '1' : '0.1')
+      $('#p3cohoi').css('opacity', data.score.p3.wedges.cohoi ? '1' : '0.1')
+      $('#p1themluot').css('opacity', data.score.p1.wedges.themluot ? '1' : '0.1')
+      $('#p2themluot').css('opacity', data.score.p2.wedges.themluot ? '1' : '0.1')
+      $('#p3themluot').css('opacity', data.score.p3.wedges.themluot ? '1' : '0.1')
+      $('#p1mayman').css('opacity', data.score.p1.wedges.mayman ? '1' : '0.1')
+      $('#p2mayman').css('opacity', data.score.p2.wedges.mayman ? '1' : '0.1')
+      $('#p3mayman').css('opacity', data.score.p3.wedges.mayman ? '1' : '0.1')
+      $('#p1nhandoi').css('opacity', data.score.p1.wedges.nhandoi ? '1' : '0.1')
+      $('#p2nhandoi').css('opacity', data.score.p2.wedges.nhandoi ? '1' : '0.1')
+      $('#p3nhandoi').css('opacity', data.score.p3.wedges.nhandoi ? '1' : '0.1')
+      $('#p1phanthuong').css('opacity', data.score.p1.wedges.phanthuong ? '1' : '0.1')
+      $('#p2phanthuong').css('opacity', data.score.p2.wedges.phanthuong ? '1' : '0.1')
+      $('#p3phanthuong').css('opacity', data.score.p3.wedges.phanthuong ? '1' : '0.1')
+      $('#p1gl12500450300').css('opacity', data.score.p1.wedges.gl12500450300 ? '1' : '0.1')
+      $('#p1gl12500350900').css('opacity', data.score.p1.wedges.gl12500350900 ? '1' : '0.1')
+      $('#p2gl12500450300').css('opacity', data.score.p2.wedges.gl12500450300 ? '1' : '0.1')
+      $('#p2gl12500350900').css('opacity', data.score.p2.wedges.gl12500350900 ? '1' : '0.1')
+      $('#p3gl12500450300').css('opacity', data.score.p3.wedges.gl12500450300 ? '1' : '0.1')
+      $('#p3gl12500350900').css('opacity', data.score.p3.wedges.gl12500350900 ? '1' : '0.1')
+      $('#p11mgl').css('opacity', data.score.p1.wedges.gl1m ? '1' : '0.1')
+      $('#p21mgl').css('opacity', data.score.p2.wedges.gl1m ? '1' : '0.1')
+      $('#p31mgl').css('opacity', data.score.p3.wedges.gl1m ? '1' : '0.1')
+      $('#ksScore').text(data.score.ks.score)
+      $('#kscohoi').css('opacity', data.score.ks.wedges.cohoi ? '1' : '0.1')
+      $('#ksthemluot').css('opacity', data.score.ks.wedges.themluot ? '1' : '0.1')
+      $('#ksmayman').css('opacity', data.score.ks.wedges.mayman ? '1' : '0.1')
+      $('#ksnhandoi').css('opacity', data.score.ks.wedges.nhandoi ? '1' : '0.1')
+      $('#ks1mgl').css('opacity', data.score.ks.wedges.gl1m ? '1' : '0.1')
+      $('#ksgl12500450300').css('opacity', data.score.ks.wedges.gl12500450300 ? '1' : '0.1')
+      $('#ksgl12500350900').css('opacity', data.score.ks.wedges.gl12500350900 ? '1' : '0.1')
+    })
     $(function () {
       for (let i = 0; i <= 55; i++) {
         if (i == 0 || i == 13 || i == 42 || i == 55) $('#board').append('<div class="letter" id="letter' + i + '" style="opacity:0;"><p></p></div>');
@@ -168,9 +265,11 @@
       }
     })
 
-    function playSound(url) {
+    let vol = .25
+    function playSound(url, vol) {
       const sound = new Howl({
-        src: [url]
+        src: [url],
+        volume: vol
       });
       sounds.push(sound)
       sound.play();
@@ -183,16 +282,25 @@
     }
     let sounds = []
     socket.on('playSound', url => {
-      playSound(url)
+      playSound(url, vol)
     })
     socket.on('stopAllSounds', () => {
       stopAllSounds()
     })
 
+    function digitGroup(dInput) {
+      let output = "";
+      for (let i = String(dInput).length - 1; i > -1; i--) {
+        output = String(dInput).charAt(i) + output;
+        let cnt = String(dInput).length - i;
+        if (cnt % 3 === 0 && i !== 0) output = "." + output;
+      }
+      return output;
+    }
+
     document.getElementById('showPuzzleVid').addEventListener('play', () => {
       document.getElementById('showPuzzleVid').currentTime = 1
       document.getElementById('showPuzzleVid').style.opacity = 1
-
       $('#boardBg').css('opacity', 0)
     })
     document.getElementById('solvePuzzleVid').addEventListener('play', () => {
@@ -243,16 +351,46 @@
       document.getElementById('solveTossupPuzzleVid').play()
     }
 
-    function showCategory() {
-      $('#catContainer').animate({
-        top: '0px'
-      }, 1000)
-      $('#uplight').animate({
-        'opacity': 0, 'left': '1353px'
-      }, 60000, 'linear')
-      $('#downlight').animate({
-        'opacity': 0, 'left': '393px'
-      }, 60000, 'linear')
+    function showCategory(catType, category) {
+      console.log(catType, category)
+      if (catType == 'hide') {
+        $('#catContainer').animate({
+          top: '240px'
+        }, 500, 'linear')
+        $('#uplight').stop().css({
+          'opacity': 1, 'left': '393px'
+        })
+        $('#downlight').stop().css({
+          'opacity': 1, 'left': '1353px'
+        })
+      }
+      else {
+        if (catType == 'normal') {
+          $('#normal').css('opacity', '0')
+          $('#giaima').css('opacity', '0')
+          $('#tunghoanh').css('opacity', '0')
+        }
+        else if (catType == 'giaima') {
+          $('#giaima').css('opacity', '1')
+          $('#normal').css('opacity', '0')
+          $('#tunghoanh').css('opacity', '0')
+        }
+        else if (catType == 'tunghoanh') {
+          $('#tunghoanh').css('opacity', '1')
+          $('#normal').css('opacity', '0')
+          $('#giaima').css('opacity', '0')
+        }
+        $('#catText').text(category)
+        $('#catContainer').animate({
+          top: '0px'
+        }, 500, 'linear')
+        $('#uplight').animate({
+          'opacity': 0, 'left': '1353px'
+        }, 60000, 'linear')
+        $('#downlight').animate({
+          'opacity': 0, 'left': '393px'
+        }, 60000, 'linear')
+      }
     }
 
     function reveal(index, letter, state) {
@@ -316,8 +454,51 @@
       }
     })
 
+    socket.on('puzzleType', (type, category) => {
+      showCategory(type, category)
+    })
+    socket.on('showKs', () => {
+      $('#ksContainer').animate({
+        'left': '40px'
+      }, 500, 'linear')
+      $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
+        'left': '+=270px'
+      }, 500, 'linear')
+    })
+    socket.on('hideKs', () => {
+      $('#ksContainer').animate({
+        'left': '-500px'
+      }, 500, 'linear')
+      $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
+        'left': '-=270px'
+      }, 500, 'linear')
+    })
+
     socket.on('openRandomTossup', () => {
       playTossupVid()
+    })
+    socket.on('scoreboard', (data) => {
+      $('#p1Name').text(data.p1.name);
+      $('#p2Name').text(data.p2.name);
+      $('#p3Name').text(data.p3.name);
+      $('#p1Score').text(digitGroup(data.p1.score) + ' GL');
+      $('#p2Score').text(digitGroup(data.p2.score) + ' GL');
+      $('#p3Score').text(digitGroup(data.p3.score) + ' GL');
+    });
+
+    socket.on('togglePlayerWedge', (player, status, wedge) => {
+      if (status) {
+        if (player == 'ks') $('#ks' + wedge).css('opacity', '1')
+        else $('#p' + player + wedge).css('opacity', '1')
+      }
+      else {
+        if (player == 'ks') $('#ks' + wedge).css('opacity', '0.1')
+        else $('#p' + player + wedge).css('opacity', '0.1')
+      }
+    })
+
+    socket.on('setKsScore', score => {
+      $('#ksScore').text(digitGroup(score) + ' GL')
     })
   </script>
 </body>

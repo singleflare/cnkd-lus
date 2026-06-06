@@ -405,8 +405,9 @@ io.on('connection',(socket)=>{
   socket.on('hideKs', () => {
     io.emit('hideKs')
   })
-  socket.on('setKsScore', (score) => {
-    score.ks.score=score
-    io.emit('setKsScore', score)
+  socket.on('setKsScore', (ksScore) => {
+    score.ks.score=ksScore
+    console.log('setKsScore', ksScore)
+    io.emit('setKsScore', ksScore)
   })
 })

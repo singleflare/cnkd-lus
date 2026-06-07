@@ -26,6 +26,7 @@
     <img id='wheel2' src='../gpx/Vòng 2.png' style='width: 100%;height: 100%;opacity: 0;position: absolute;top:0;'>
     <img id='wheel3' src='../gpx/Vòng 3.png' style='width: 100%;height: 100%;opacity: 0;position: absolute;top:0;'>
     <img id='wheel4' src='../gpx/Vòng 4.png' style='width: 100%;height: 100%;opacity: 0;position: absolute;top:0;'>
+    <img id='wheel5' src='../gpx/Vòng 5.png' style='width: 100%;height: 100%;opacity: 0;position: absolute;top:0;'>
     <img src='../gpx/Cơ Hội.png' id='cohoi' style='position: absolute;opacity: 0;
     top: 37px;
     left: 455px;
@@ -200,7 +201,7 @@
       indicatePlayer(player)
     })
     socket.on('showWheel', round => {
-      $(`#wheel1, #wheel2, #wheel3, #wheel4, #bonusContainer`).css('opacity', '0')
+      $(`#wheel1, #wheel2, #wheel3, #wheel4, #wheel5, #bonusContainer`).css('opacity', '0')
       if (round == 'bonus') {
         $(`#bonusContainer`).css('opacity', '1')
       }

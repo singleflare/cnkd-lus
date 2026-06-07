@@ -157,6 +157,114 @@
       <button id="solvePuzzleNoSound">Giải (không tiếng)</button>
       <span id='time'>Thời gian: 0</span>
     </div>
+    <hr>
+    <span>VĐB</span>
+    <button id='randomizeBonus'>Random</button>
+    <div id='bonusBoard'
+      style='display:grid;grid-template-columns: repeat(24,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white'>
+      <div>C</div>
+      <div>H</div>
+      <div>I</div>
+      <div>Ế</div>
+      <div>C</div>
+      <div>*</div>
+      <div>N</div>
+      <div>Ó</div>
+      <div>N</div>
+      <div>**</div>
+      <div>K</div>
+      <div>Ỳ</div>
+      <div>***</div>
+      <div>D</div>
+      <div>I</div>
+      <div>Ệ</div>
+      <div>U</div>
+      <div>*****</div>
+      <div>B</div>
+      <div>O</div>
+      <div>N</div>
+      <div>U</div>
+      <div>S</div>
+      <div>*****</div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <span>Phần thưởng</span>
+    <button id='randomizePrize'>Random</button>
+    <div id='prizeBoard'
+      style='display:grid;grid-template-columns: repeat(20,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white'>
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div>5</div>
+      <div>6</div>
+      <div>7</div>
+      <div>8</div>
+      <div>9</div>
+      <div>10</div>
+      <div>11</div>
+      <div>12</div>
+      <div>13</div>
+      <div>14</div>
+      <div>15</div>
+      <div>16</div>
+      <div>17</div>
+      <div>18</div>
+      <div>19</div>
+      <div>20</div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <span>Bí mật</span>
+    <button id='randomizeMystery'>Random</button>
+    <div id='mysteryBoard'
+      style='display:grid;grid-template-columns: repeat(2,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white'>
+      <div>BM 700</div>
+      <div>BM 300</div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
   <div class='column' style='left:960px'>
     <div style='height:360px'>
@@ -173,6 +281,7 @@
       <button id='showWheel2'>2</button>
       <button id='showWheel3'>3</button>
       <button id='showWheel4'>4</button>
+      <button id='showWheel5'>5</button>
       <button id='showWheelBonus'>Đặc biệt</button>
       <span>Đèn kim</span>
       <button id='indicatePlayer0'>Tắt</button>
@@ -207,10 +316,11 @@
           <button class='half' id='p1Half'>/2</button>
           <button class='clear' id='p1Clear'>MĐ</button>
           <span id='p1Score'></span>
-          <input type='number' id='p1TotalInput' style='width:60px' placeholder='Tổng' />
+          <!-- <input type='number' id='p1TotalInput' style='width:60px' placeholder='Tổng' />
           <button class='totalSet' id='p1SetTotal'>Set</button>
           <button class='totalAdd' id='p1AddTotal'>+</button>
-          <span id='p1Total'></span>
+          <span id='p1Total'></span> -->
+          <button id='p1Qualify'>LOẠI</button>
           <br>
           <button class='togglePlayerCohoi' id='togglePlayer1cohoi'>Cơ hội</button>
           <button class='togglePlayergl12500450300' id='togglePlayer1gl12500450300'>1/2 500 giữa 450 & 300</button>
@@ -231,10 +341,11 @@
           <button class='half' id='p2Half'>/2</button>
           <button class='clear' id='p2Clear'>MĐ</button>
           <span id='p2Score'></span>
-          <input type='number' id='p2TotalInput' style='width:60px' placeholder='Tổng' />
+          <!-- <input type='number' id='p2TotalInput' style='width:60px' placeholder='Tổng' />
           <button class='totalSet' id='p2SetTotal'>Set</button>
           <button class='totalAdd' id='p2AddTotal'>+</button>
-          <span id='p2Total'></span>
+          <span id='p2Total'></span> -->
+          <button id='p2Qualify'>LOẠI</button>
           <br>
           <button class='togglePlayerCohoi' id='togglePlayer2cohoi'>Cơ hội</button>
           <button class='togglePlayergl12500450300' id='togglePlayer2gl12500450300'>1/2 500 giữa 450 & 300</button>
@@ -255,10 +366,11 @@
           <button class='half' id='p3Half'>/2</button>
           <button class='clear' id='p3Clear'>MĐ</button>
           <span id='p3Score'></span>
-          <input type='number' id='p3TotalInput' style='width:60px' placeholder='Tổng' />
+          <!-- <input type='number' id='p3TotalInput' style='width:60px' placeholder='Tổng' />
           <button class='totalSet' id='p3SetTotal'>Set</button>
           <button class='totalAdd' id='p3AddTotal'>+</button>
-          <span id='p3Total'></span>
+          <span id='p3Total'></span> -->
+          <button id='p3Qualify'>LOẠI</button>
           <br>
           <button class='togglePlayerCohoi' id='togglePlayer3cohoi'>Cơ hội</button>
           <button class='togglePlayergl12500450300' id='togglePlayer3gl12500450300'>1/2 500 giữa 450 & 300</button>
@@ -286,13 +398,13 @@
         </div>
         <hr>
         <div>
-          <div style='display: flex;align-items: center;'>
+          <!-- <div style='display: flex;align-items: center;'>
             <span style='vertical-align: middle;height:100%;'>Âm lượng</span>
             <div style='display:inline-block;width: 100px;'>
               <input type='range' id='volumeControl' min='0' max='1' step='0.1' value='1' style='width: 100px;'>
               <span style='text-align:center;width: 100%;display: block;'>Tổng</span>
             </div>
-          </div>
+          </div> -->
           <span>Âm thanh</span>
           <button id='introBtn'>Intro</button>
           <button id='hostBtn'>Host entrance</button>
@@ -351,6 +463,22 @@
     let explains = []
     let puzzleNumber = 0
     let onetwothree = [1, 2, 3]
+    let bonusPrizes = [40, 40, 40, 40, 40, 40, 45, 45, 45, 45, 45, 50, 50, 50, 50, 55, 55, 55, 60, 60, 65, 65, 75, 100]
+    let prizePrizes = ['1.5x', '2x', 'KMĐ', '0', '50', '100', '150', '200', '250', '300', '400', '500', '600', '700', '750', '800', '900', '1k', '1.5k', '2k']
+    let mysteryPrizes = ['10k', 'MĐ']
+
+    function shuffle(array) {
+      let currentIndex = array.length;
+      // While there remain elements to shuffle...
+      while (currentIndex != 0) {
+        // Pick a remaining element...
+        let randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+    }
 
     $('#fileInput').on('change', async (e) => {
       const file = e.target.files[0]
@@ -658,7 +786,7 @@
       })
     })
 
-    let p1Score = 0, p2Score = 0, p3Score = 0, p1Total = 0, p2Total = 0, p3Total = 0
+    let p1Score = 0, p2Score = 0, p3Score = 0, p1Total = 0, p2Total = 0, p3Total = 0, ksScore = 0
 
     function plus(player, score) {
       if (player == 1) {
@@ -672,6 +800,10 @@
       else if (player == 3) {
         p3Score += score
         $('#p3Score').text(p3Score)
+      }
+      else if (player == 'ks') {
+        ksScore += score
+        $('#ksScore').text(ksScore)
       }
     }
     function minus(player, score) {
@@ -738,7 +870,8 @@
       socket.emit('scoreboard', {
         p1: { name: p1Name, score: p1Score, total: p1Total },
         p2: { name: p2Name, score: p2Score, total: p2Total },
-        p3: { name: p3Name, score: p3Score, total: p3Total }
+        p3: { name: p3Name, score: p3Score, total: p3Total },
+        ksScore: ksScore
       })
     }
 
@@ -857,11 +990,17 @@
       updateHostScoreboard()
     })
     $('#ksSet').click(() => {
-      let ksScore = parseInt($('#ksScoreInput').val())
+      ksScore = parseInt($('#ksScoreInput').val())
+      socket.emit('setKsScore', ksScore)
+    })
+    $('#ksPlus').click(() => {
+      let scoreToChange = $('#ksScoreInput').val()
+      plus('ks', parseInt(scoreToChange))
       socket.emit('setKsScore', ksScore)
     })
     $('#ksClear').click(() => {
-      socket.emit('setKsScore', 0)
+      ksScore = 0
+      socket.emit('setKsScore', ksScore)
       $('#ksScore').text(0)
     })
 
@@ -894,6 +1033,9 @@
     })
     $('#showWheel4').click(() => {
       socket.emit('showWheel', 4)
+    })
+    $('#showWheel5').click(() => {
+      socket.emit('showWheel', 5)
     })
     $('#showWheelBonus').click(() => {
       socket.emit('showWheel', 'bonus')
@@ -1019,6 +1161,34 @@
     })
     $('#hideKs').click(() => {
       socket.emit('hideKs')
+    })
+    $('#p1Qualify').click(() => {
+      socket.emit('setPlayerQualify', 1)
+    })
+    $('#p2Qualify').click(() => {
+      socket.emit('setPlayerQualify', 2)
+    })
+    $('#p3Qualify').click(() => {
+      socket.emit('setPlayerQualify', 3)
+    })
+
+    $('#randomizeBonus').click(() => {
+      shuffle(bonusPrizes)
+      for (let i = 0; i < bonusPrizes.length; i++) {
+        $('#bonusBoard div:nth-child(' + (25 + i) + ')').text(bonusPrizes[i])
+      }
+    })
+    $('#randomizePrize').click(() => {
+      shuffle(prizePrizes)
+      for (let i = 0; i < prizePrizes.length; i++) {
+        $('#prizeBoard div:nth-child(' + (21 + i) + ')').text(prizePrizes[i])
+      }
+    })
+    $('#randomizeMystery').click(() => {
+      shuffle(mysteryPrizes)
+      for (let i = 0; i < mysteryPrizes.length; i++) {
+        $('#mysteryBoard div:nth-child(' + (3 + i) + ')').text(mysteryPrizes[i])
+      }
     })
 
     socket.on('disableLetterBtn', letterNumber => {

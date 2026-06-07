@@ -58,7 +58,8 @@ let score={
       'gl1m': false,
       'gl12500450300': false,
       'gl12500350900': false,
-    }
+    },
+    qualify:false
   },
   p2:{
     name:'',
@@ -73,7 +74,8 @@ let score={
       'gl1m': false,
       'gl12500450300': false,
       'gl12500350900': false,
-    }
+    },
+    qualify:false
   },
   p3:{
     name:'',
@@ -88,7 +90,8 @@ let score={
       'gl1m': false,
       'gl12500450300': false,
       'gl12500350900': false,
-    }
+    },
+    qualify:false
   },
   ks:{
     score:0,
@@ -149,8 +152,16 @@ io.on('connection',(socket)=>{
   })
 
   socket.on('scoreboard',(data)=>{
-    score=data
-    console.log(score)
+    console.log(data,score)
+    score.p1.name=data.p1.name
+    score.p1.score=data.p1.score
+    score.p1.total=data.p1.total
+    score.p2.name=data.p2.name
+    score.p2.score=data.p2.score
+    score.p2.total=data.p2.total
+    score.p3.name=data.p3.name
+    score.p3.score=data.p3.score
+    score.p3.total=data.p3.total
     io.emit('scoreboard',data)
   })
 
@@ -409,5 +420,20 @@ io.on('connection',(socket)=>{
     score.ks.score=ksScore
     console.log('setKsScore', ksScore)
     io.emit('setKsScore', ksScore)
+  })
+  socket.on('setPlayerQualify', (player) => {
+    if(player==1){
+      score.p1.qualify=!score.p1.qualify
+      io.emit('setPlayerQualify', player, score.p1.qualify)
+    }
+    else if(player==2){
+      score.p2.qualify=!score.p2.qualify
+      io.emit('setPlayerQualify', player, score.p2.qualify)
+    }
+    else if(player==3){
+      score.p3.qualify=!score.p3.qualify
+      io.emit('setPlayerQualify', player, score.p3.qualify)
+    }
+    console.log(score.p1.qualify, score.p2.qualify, score.p3.qualify)
   })
 })

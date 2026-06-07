@@ -154,7 +154,8 @@
       <img src='../gpx/Nhân đôi.png' id='ksnhandoi' style='position: absolute;left: 345px;top: 135px;width: 18px;'>
     </div>
     <div id='p1ScoreContainer' style='position: absolute;left: 310px;top:15px;'>
-      <img src='../gpx/Thanhdiemdo.png' style='position: absolute;width: 450px;'>
+      <img src='../gpx/Thanhdiemdo.png' class='color' style='position: absolute;width: 450px;'>
+      <img src='../gpx/thanhdiemxam.png' class='gray' style='position: absolute;width: 450px;opacity: 0;'>
       <div id='p1Name'
         style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
       </div>
@@ -171,7 +172,8 @@
       <img src='../gpx/Nhân đôi.png' id='p1nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
     </div>
     <div id='p2ScoreContainer' style='position: absolute;left: 740px;top:15px;'>
-      <img src='../gpx/thanhdiemvang.png' style='position: absolute;width: 450px;'>
+      <img src='../gpx/thanhdiemvang.png' class='color' style='position: absolute;width: 450px;'>
+      <img src='../gpx/thanhdiemxam.png' class='gray' style='position: absolute;width: 450px;opacity: 0;'>
       <div id='p2Name'
         style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
       </div>
@@ -188,7 +190,8 @@
       <img src='../gpx/Nhân đôi.png' id='p2nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
     </div>
     <div id='p3ScoreContainer' style='position: absolute;left: 1170px;top:15px;'>
-      <img src='../gpx/thanhdiemxanh.png' style='position: absolute;width: 450px;'>
+      <img src='../gpx/thanhdiemxanh.png' class='color' style='position: absolute;width: 450px;'>
+      <img src='../gpx/thanhdiemxam.png' class='gray' style='position: absolute;width: 450px;opacity: 0;'>
       <div id='p3Name'
         style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
       </div>
@@ -217,9 +220,9 @@
     const socket = io();
     socket.on('data', data => {
       console.log(data)
-      $('#p1Score').text(data.score.p1.score)
-      $('#p2Score').text(data.score.p2.score)
-      $('#p3Score').text(data.score.p3.score)
+      $('#p1Score').text(digitGroup(data.score.p1.score) + ' GL')
+      $('#p2Score').text(digitGroup(data.score.p2.score) + ' GL')
+      $('#p3Score').text(digitGroup(data.score.p3.score) + ' GL')
       $('#p1Name').text(data.score.p1.name)
       $('#p2Name').text(data.score.p2.name)
       $('#p3Name').text(data.score.p3.name)
@@ -247,7 +250,7 @@
       $('#p1gl1m').css('opacity', data.score.p1.wedges.gl1m ? '1' : '0.1')
       $('#p2gl1m').css('opacity', data.score.p2.wedges.gl1m ? '1' : '0.1')
       $('#p3gl1m').css('opacity', data.score.p3.wedges.gl1m ? '1' : '0.1')
-      $('#ksScore').text(data.score.ks.score)
+      $('#ksScore').text(digitGroup(data.score.ks.score) + ' GL')
       $('#kscohoi').css('opacity', data.score.ks.wedges.cohoi ? '1' : '0.1')
       $('#ksthemluot').css('opacity', data.score.ks.wedges.themluot ? '1' : '0.1')
       $('#ksmayman').css('opacity', data.score.ks.wedges.mayman ? '1' : '0.1')
@@ -356,7 +359,7 @@
       if (catType == 'hide') {
         $('#catContainer').animate({
           top: '240px'
-        }, 500, 'linear')
+        }, 500, 'swing')
         $('#uplight').stop().css({
           'opacity': 1, 'left': '393px'
         })
@@ -383,7 +386,7 @@
         $('#catText').text(category)
         $('#catContainer').animate({
           top: '0px'
-        }, 500, 'linear')
+        }, 500, 'swing')
         $('#uplight').animate({
           'opacity': 0, 'left': '1353px'
         }, 60000, 'linear')
@@ -460,18 +463,18 @@
     socket.on('showKs', () => {
       $('#ksContainer').animate({
         'left': '40px'
-      }, 500, 'linear')
+      }, 500, 'swing')
       $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
         'left': '+=270px'
-      }, 500, 'linear')
+      }, 500, 'swing')
     })
     socket.on('hideKs', () => {
       $('#ksContainer').animate({
         'left': '-500px'
-      }, 500, 'linear')
+      }, 500, 'swing')
       $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
         'left': '-=270px'
-      }, 500, 'linear')
+      }, 500, 'swing')
     })
 
     socket.on('openRandomTossup', () => {
@@ -499,6 +502,11 @@
 
     socket.on('setKsScore', score => {
       $('#ksScore').text(digitGroup(score) + ' GL')
+    })
+    socket.on('setPlayerQualify', (player, state) => {
+      console.log(player, state)
+      $('#p' + player + 'ScoreContainer .color,#p' + player + 'ScoreContainer .gray').css('opacity', 0)
+      $('#p' + player + 'ScoreContainer .' + (state ? 'gray' : 'color')).css('opacity', 1)
     })
   </script>
 </body>

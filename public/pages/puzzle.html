@@ -166,7 +166,7 @@
       <img src='../gpx/1_2 GL.png' id='p1gl12500350900' style='position: absolute;left: 125px;top: 138px;width: 30px;'>
       <img src='../gpx/thêm lượt.png' id='p1themluot' style='position: absolute;left: 165px;top: 115px;width: 40px;'>
       <img src='../gpx/may mắn.png' id='p1mayman' style='position: absolute;left: 215px;top: 115px;width: 75px;'>
-      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p11mgl'
+      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p1gl1m'
         style='position: absolute;left: 305px;top: 115px;width: 18px;'>
       <img src='../gpx/Nhân đôi.png' id='p1nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
     </div>
@@ -183,7 +183,7 @@
       <img src='../gpx/1_2 GL.png' id='p2gl12500350900' style='position: absolute;left: 125px;top: 138px;width: 30px;'>
       <img src='../gpx/thêm lượt.png' id='p2themluot' style='position: absolute;left: 165px;top: 115px;width: 40px;'>
       <img src='../gpx/may mắn.png' id='p2mayman' style='position: absolute;left: 215px;top: 115px;width: 75px;'>
-      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p21mgl'
+      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p2gl1m'
         style='position: absolute;left: 305px;top: 115px;width: 18px;'>
       <img src='../gpx/Nhân đôi.png' id='p2nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
     </div>
@@ -200,7 +200,7 @@
       <img src='../gpx/1_2 GL.png' id='p3gl12500350900' style='position: absolute;left: 125px;top: 138px;width: 30px;'>
       <img src='../gpx/thêm lượt.png' id='p3themluot' style='position: absolute;left: 165px;top: 115px;width: 40px;'>
       <img src='../gpx/may mắn.png' id='p3mayman' style='position: absolute;left: 215px;top: 115px;width: 75px;'>
-      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p31mgl'
+      <img src='../gpx/GL 1 Million (Mặt sau).png' id='p3gl1m'
         style='position: absolute;left: 305px;top: 115px;width: 18px;'>
       <img src='../gpx/Nhân đôi.png' id='p3nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
     </div>
@@ -244,15 +244,15 @@
       $('#p2gl12500350900').css('opacity', data.score.p2.wedges.gl12500350900 ? '1' : '0.1')
       $('#p3gl12500450300').css('opacity', data.score.p3.wedges.gl12500450300 ? '1' : '0.1')
       $('#p3gl12500350900').css('opacity', data.score.p3.wedges.gl12500350900 ? '1' : '0.1')
-      $('#p11mgl').css('opacity', data.score.p1.wedges.gl1m ? '1' : '0.1')
-      $('#p21mgl').css('opacity', data.score.p2.wedges.gl1m ? '1' : '0.1')
-      $('#p31mgl').css('opacity', data.score.p3.wedges.gl1m ? '1' : '0.1')
+      $('#p1gl1m').css('opacity', data.score.p1.wedges.gl1m ? '1' : '0.1')
+      $('#p2gl1m').css('opacity', data.score.p2.wedges.gl1m ? '1' : '0.1')
+      $('#p3gl1m').css('opacity', data.score.p3.wedges.gl1m ? '1' : '0.1')
       $('#ksScore').text(data.score.ks.score)
       $('#kscohoi').css('opacity', data.score.ks.wedges.cohoi ? '1' : '0.1')
       $('#ksthemluot').css('opacity', data.score.ks.wedges.themluot ? '1' : '0.1')
       $('#ksmayman').css('opacity', data.score.ks.wedges.mayman ? '1' : '0.1')
       $('#ksnhandoi').css('opacity', data.score.ks.wedges.nhandoi ? '1' : '0.1')
-      $('#ks1mgl').css('opacity', data.score.ks.wedges.gl1m ? '1' : '0.1')
+      $('#ksgl1m').css('opacity', data.score.ks.wedges.gl1m ? '1' : '0.1')
       $('#ksgl12500450300').css('opacity', data.score.ks.wedges.gl12500450300 ? '1' : '0.1')
       $('#ksgl12500350900').css('opacity', data.score.ks.wedges.gl12500350900 ? '1' : '0.1')
     })
@@ -265,7 +265,7 @@
       }
     })
 
-    let vol = .25
+    let vol = .1
     function playSound(url, vol) {
       const sound = new Howl({
         src: [url],

@@ -55,7 +55,7 @@ let score={
       'nhandoi': false,
       'phanthuong': false,
       'mayman': false,
-      '1mgl': false,
+      'gl1m': false,
       'gl12500450300': false,
       'gl12500350900': false,
     }
@@ -70,7 +70,7 @@ let score={
       'nhandoi': false,
       'phanthuong': false,
       'mayman': false,
-      '1mgl': false,
+      'gl1m': false,
       'gl12500450300': false,
       'gl12500350900': false,
     }
@@ -85,7 +85,7 @@ let score={
       'nhandoi': false,
       'phanthuong': false,
       'mayman': false,
-      '1mgl': false,
+      'gl1m': false,
       'gl12500450300': false,
       'gl12500350900': false,
     }
@@ -98,7 +98,7 @@ let score={
       'nhandoi': false,
       'phanthuong': false,
       'mayman': false,
-      '1mgl': false,
+      'gl1m': false,
       'gl12500450300': false,
       'gl12500350900': false,
     }

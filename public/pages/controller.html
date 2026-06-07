@@ -139,6 +139,8 @@
       <button id="solvePuzzleNormal">Thường</button>
       <button id="solvePuzzleTossup">Đoán nhanh</button>
       <button id="solvePuzzleTTU">ĐNLH</button>
+      <button id="solvePuzzleLose">Thua</button>
+      <button id="solvePuzzleWin">Thắng</button>
       <br>
       <span>VQCC</span>
       <button id='finalSpinMode'>VQCC:</button>
@@ -465,6 +467,22 @@
     $('#solvePuzzleTTU').click(() => {
       socket.emit('stopAllSounds')
       socket.emit('playSound', '../sounds/ttusolve.mp3')
+      socket.emit('solvePuzzle', 'tossup')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#solvePuzzleLose').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/bonusLose.mp3')
+      socket.emit('solvePuzzle', 'tossup')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#solvePuzzleLWin').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/bonusWin.mp3')
       socket.emit('solvePuzzle', 'tossup')
       onetwothree.forEach(player => {
         $('#scoreboard div').css('background-color', 'black')
@@ -910,7 +928,7 @@
       socket.emit('togglePlayerWedge', 1, 'gl12500350900')
     })
     $('#togglePlayer11mgl').click(() => {
-      socket.emit('togglePlayerWedge', 1, '1mgl')
+      socket.emit('togglePlayerWedge', 1, 'gl1m')
     })
     $('#togglePlayer2cohoi').click(() => {
       socket.emit('togglePlayerWedge', 2, 'cohoi')
@@ -931,7 +949,7 @@
       socket.emit('togglePlayerWedge', 2, 'gl12500350900')
     })
     $('#togglePlayer21mgl').click(() => {
-      socket.emit('togglePlayerWedge', 2, '1mgl')
+      socket.emit('togglePlayerWedge', 2, 'gl1m')
     })
     $('#togglePlayer3cohoi').click(() => {
       socket.emit('togglePlayerWedge', 3, 'cohoi')
@@ -952,7 +970,7 @@
       socket.emit('togglePlayerWedge', 3, 'gl12500350900')
     })
     $('#togglePlayer31mgl').click(() => {
-      socket.emit('togglePlayerWedge', 3, '1mgl')
+      socket.emit('togglePlayerWedge', 3, 'gl1m')
     })
     $('#toggleKscohoi').click(() => {
       socket.emit('togglePlayerWedge', 'ks', 'cohoi')
@@ -973,7 +991,7 @@
       socket.emit('togglePlayerWedge', 'ks', 'gl12500350900')
     })
     $('#toggleKs1mgl').click(() => {
-      socket.emit('togglePlayerWedge', 'ks', '1mgl')
+      socket.emit('togglePlayerWedge', 'ks', 'gl1m')
     })
     $('#showKs').click(() => {
       socket.emit('showKs')

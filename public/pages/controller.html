@@ -141,6 +141,7 @@
       <button id="solvePuzzleTTU">ĐNLH</button>
       <button id="solvePuzzleLose">Thua</button>
       <button id="solvePuzzleWin">Thắng</button>
+      <button id="solvePuzzleNoSound">Không tiếng</button>
       <br>
       <span>VQCC</span>
       <button id='finalSpinMode'>VQCC:</button>
@@ -317,6 +318,7 @@
           <button id='playOtherLetters'>Chữ khác</button>
           <button id="playBonusThink">10s suy nghĩ</button>
           <button id="playBonus">10s trả lời</button>
+          <button id='mainTheme'>Kết thúc chương trình</button>
           <br>
           <button id="stopBtn">Dừng hết tất cả âm thanh</button>
         </div>
@@ -474,15 +476,34 @@
     })
     $('#solvePuzzleLose').click(() => {
       socket.emit('stopAllSounds')
-      socket.emit('playSound', '../sounds/bonusLose.mp3')
+      socket.emit('playSound', '../sounds/lose bonus.mp3')
       socket.emit('solvePuzzle', 'tossup')
       onetwothree.forEach(player => {
         $('#scoreboard div').css('background-color', 'black')
       })
     })
+    $('#solvePuzzleWin').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/win bonus.mp3')
+      socket.emit('solvePuzzle', 'tossup')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#solvePuzzleNoSound').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('solvePuzzle', 'tossup')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#mainTheme').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/main theme.mp3')
+    })
     $('#solvePuzzleLWin').click(() => {
       socket.emit('stopAllSounds')
-      socket.emit('playSound', '../sounds/bonusWin.mp3')
+      socket.emit('playSound', '../sounds/win bonus.mp3')
       socket.emit('solvePuzzle', 'tossup')
       onetwothree.forEach(player => {
         $('#scoreboard div').css('background-color', 'black')

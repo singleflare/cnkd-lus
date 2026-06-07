@@ -312,6 +312,7 @@
           <button class='set' id='p1Set'>Set</button>
           <button class='plus' id='p1Plus'>+</button>
           <button class='minus' id='p1Minus'>-</button>
+          <button class='double' id='p1OneHalf'>x1.5</button>
           <button class='double' id='p1Double'>x2</button>
           <button class='half' id='p1Half'>/2</button>
           <button class='clear' id='p1Clear'>MĐ</button>
@@ -337,6 +338,7 @@
           <button class='set' id='p2Set'>Set</button>
           <button class='plus' id='p2Plus'>+</button>
           <button class='minus' id='p2Minus'>-</button>
+          <button class='double' id='p2OneHalf'>x1.5</button>
           <button class='double' id='p2Double'>x2</button>
           <button class='half' id='p2Half'>/2</button>
           <button class='clear' id='p2Clear'>MĐ</button>
@@ -362,6 +364,7 @@
           <button class='set' id='p3Set'>Set</button>
           <button class='plus' id='p3Plus'>+</button>
           <button class='minus' id='p3Minus'>-</button>
+          <button class='double' id='p3OneHalf'>x1.5</button>
           <button class='double' id='p3Double'>x2</button>
           <button class='half' id='p3Half'>/2</button>
           <button class='clear' id='p3Clear'>MĐ</button>
@@ -834,6 +837,20 @@
         $('#p3Score').text(p3Score)
       }
     }
+    function oneHalf(player) {
+      if (player == 1) {
+        p1Score *= 1.5
+        $('#p1Score').text(p1Score)
+      }
+      else if (player == 2) {
+        p2Score *= 1.5
+        $('#p2Score').text(p2Score)
+      }
+      else if (player == 3) {
+        p3Score *= 1.5
+        $('#p3Score').text(p3Score)
+      }
+    }
     function half(player) {
       if (player == 1) {
         p1Score /= 2
@@ -894,6 +911,10 @@
       double(1)
       updateHostScoreboard()
     })
+    $('#p1OneHalf').click(() => {
+      oneHalf(1)
+      updateHostScoreboard()
+    })
     $('#p1Half').click(() => {
       half(1)
       updateHostScoreboard()
@@ -930,6 +951,10 @@
     })
     $('#p2Double').click(() => {
       double(2)
+      updateHostScoreboard()
+    })
+    $('#p2OneHalf').click(() => {
+      oneHalf(2)
       updateHostScoreboard()
     })
     $('#p2Half').click(() => {
@@ -970,8 +995,8 @@
       double(3)
       updateHostScoreboard()
     })
-    $('#p3Half').click(() => {
-      half(3)
+    $('#p3OneHalf').click(() => {
+      oneHalf(3)
       updateHostScoreboard()
     })
     $('#p3Clear').click(() => {

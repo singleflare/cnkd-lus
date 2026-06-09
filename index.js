@@ -7,6 +7,60 @@ const io=new Server(server)
 server.listen(3000)
 const { join } = require('node:path');
 
+// Password protection - controller sets these
+let pagePasswords = {
+  p1: '1441',
+  p2: '2002',
+  p3: '5555'
+};
+
+app.use(express.json());
+
+// Controller sets passwords for pages
+app.post('/api/set-passwords', (req, res) => {
+  const { p1, p2, p3 } = req.body;
+  if (p1) pagePasswords.p1 = p1;
+  if (p2) pagePasswords.p2 = p2;
+  if (p3) pagePasswords.p3 = p3;
+  res.json({ message: 'Passwords updated', pagePasswords });
+});
+
+// Validate password and return token
+app.post('/api/validate-password', (req, res) => {
+  const { page, password } = req.body;
+  
+  if (!page || !password) return res.status(400).json({ error: 'Page and password required' });
+  if (!pagePasswords[page] || pagePasswords[page] !== password) return res.status(403).json({ error: 'Invalid password' });
+  // Valid password - return token
+  const token = Buffer.from(`${page}:${password}:${Date.now()}`).toString('base64');
+  res.json({ token, page });
+});
+
+// Protect pages - check token in query string
+app.get(/^\/pages\/(p1|p2|p3)\.html$/, (req, res, next) => {
+  const token = req.query.token;
+  const pageMatch = req.path.match(/\/pages\/(p1|p2|p3)\.html/);
+  const page = pageMatch[1];
+  
+  if (!token) {
+    return res.status(403).send('Access Denied: No token provided. Use the login page.');
+  }
+  
+  try {
+    const decoded = Buffer.from(token, 'base64').toString();
+    const [tokenPage] = decoded.split(':');
+    
+    if (tokenPage !== page) {
+      return res.status(403).send('Access Denied: Invalid token');
+    }
+    
+    // Valid token, serve the page
+    res.sendFile(join(__dirname, 'public', req.path));
+  } catch (error) {
+    return res.status(403).send('Access Denied: Invalid token');
+  }
+});
+
 app.use(express.static('public'))
 
 let puzzle=[]
@@ -363,7 +417,7 @@ io.on('connection',(socket)=>{
     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
   }
   socket.on('spinWheel',()=>{
-    currentRotation += getRandomInt(1080, 1440)
+    currentRotation += getRandomInt(1440, 1800)
     if(isFinalSpin){
       io.emit('playSound', '../sounds/finalspin.mp3')
       io.emit('spinWheel', currentRotation,5)

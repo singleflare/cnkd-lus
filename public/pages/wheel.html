@@ -10,7 +10,7 @@
 <body style='overflow: hidden;background:black;'>
   <style>
     #bonusWheel {
-      transition: transform 15s cubic-bezier(0.2, 0, 0, 1);
+      transition: transform 15s cubic-bezier(1, 0, 0, 1);
     }
   </style>
   <img src='../gpx/Sân khấu.png' style='position: absolute;
@@ -144,7 +144,7 @@
         return
       }
       else {
-        document.getElementById('wheelContainer').style.transition = 'transform ' + time + 's cubic-bezier(0.2, 0, 0, 1)'
+        document.getElementById('wheelContainer').style.transition = 'transform ' + time + 's cubic-bezier(0.3, 0, 0.6, 1)'
         document.getElementById('wheelContainer').style.transform = 'rotate(' + deg + 'deg)';
       }
     }

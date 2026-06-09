@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Access</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: bold;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    select:focus,
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    input[type="password"] {
+      letter-spacing: 2px;
+      font-size: 18px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #764ba2;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 5px;
+      text-align: center;
+      display: none;
+      font-weight: bold;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🎮 Player Access</h1>
+    <div class="form-group">
+      <label for="playerSelect">Select Your Page:</label>
+      <select id="playerSelect">
+        <option value="">-- Choose --</option>
+        <option value="p1">Player 1</option>
+        <option value="p2">Player 2</option>
+        <option value="p3">Player 3</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="passwordInput">Enter Password:</label>
+      <input type="password" id="passwordInput" placeholder="Enter password">
+    </div>
+    <button onclick="submitPassword()">Access Game</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    async function submitPassword() {
+      const page = document.getElementById('playerSelect').value;
+      const password = document.getElementById('passwordInput').value;
+
+      if (!page) {
+        showMessage('Please select a player page', 'error');
+        return;
+      }
+      if (!password) {
+        showMessage('Please enter the password', 'error');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/validate-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ page, password })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          showMessage('❌ Invalid password', 'error');
+          return;
+        }
+
+        // Redirect with token
+        window.location.href = `/pages/${page}.html?token=${data.token}`;
+      } catch (error) {
+        showMessage('Error validating password', 'error');
+      }
+    }
+
+    function showMessage(text, type) {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.className = `message ${type}`;
+      setTimeout(() => { msg.className = 'message'; }, 5000);
+    }
+
+    document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') submitPassword();
+    });
+  </script>
+</body>
+
+</html>

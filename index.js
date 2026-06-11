@@ -9,19 +9,19 @@ const { join } = require('node:path');
 
 // Password protection - controller sets these
 let pagePasswords = {
-  p1: '1441',
-  p2: '2002',
-  p3: '5555'
+  p1: '',
+  p2: '',
+  p3: ''
 };
 
 app.use(express.json());
 
 // Controller sets passwords for pages
 app.post('/api/set-passwords', (req, res) => {
-  const { p1, p2, p3 } = req.body;
-  if (p1) pagePasswords.p1 = p1;
-  if (p2) pagePasswords.p2 = p2;
-  if (p3) pagePasswords.p3 = p3;
+  const { nc1, nc2, nc3 } = req.body;
+  if (nc1) pagePasswords.p1 = nc1;
+  if (nc2) pagePasswords.p2 = nc2;
+  if (nc3) pagePasswords.p3 = nc3;
   res.json({ message: 'Passwords updated', pagePasswords });
 });
 
@@ -43,7 +43,7 @@ app.get(/^\/pages\/(p1|p2|p3)\.html$/, (req, res, next) => {
   const page = pageMatch[1];
   
   if (!token) {
-    return res.status(403).send('Access Denied: No token provided. Use the login page.');
+    return res.status(403).send('Token không hợp lệ.');
   }
   
   try {
@@ -51,13 +51,13 @@ app.get(/^\/pages\/(p1|p2|p3)\.html$/, (req, res, next) => {
     const [tokenPage] = decoded.split(':');
     
     if (tokenPage !== page) {
-      return res.status(403).send('Access Denied: Invalid token');
+      return res.status(403).send('Token không hợp lệ.');
     }
     
     // Valid token, serve the page
     res.sendFile(join(__dirname, 'public', req.path));
   } catch (error) {
-    return res.status(403).send('Access Denied: Invalid token');
+    return res.status(403).send('Token không hợp lệ.');
   }
 });
 
@@ -489,5 +489,11 @@ io.on('connection',(socket)=>{
       io.emit('setPlayerQualify', player, score.p3.qualify)
     }
     console.log(score.p1.qualify, score.p2.qualify, score.p3.qualify)
+  })
+  socket.on('unlockSpin', (player) => {
+    io.emit('unlockSpin', player)
+  })
+  socket.on('lockSpinButton', (player) => {
+    io.emit('lockSpinButton', player)
   })
 })

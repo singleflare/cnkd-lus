@@ -118,6 +118,16 @@
       socket.emit('buzz', 1);
       $(this).prop('disabled', true)
     })
+    $('#spin').click(() => {
+      socket.emit('spin', 1)
+      socket.emit('lockSpinButton', 1)
+      $('#spin').prop('disabled', true)
+    })
+    socket.on('unlockSpin', (player) => {
+      if (player == 1) {
+        $('#spin').prop('disabled', false)
+      }
+    })
   </script>
   <script src='playerGeneral.js'></script>
   <script src='disableDevTools.js'></script>

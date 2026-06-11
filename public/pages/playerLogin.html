@@ -13,32 +13,12 @@
     }
 
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: black;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       font-family: Arial, sans-serif;
-    }
-
-    .container {
-      background: white;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      max-width: 400px;
-      width: 90%;
-    }
-
-    h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 30px;
-      font-size: 28px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
     }
 
     label {
@@ -50,10 +30,7 @@
 
     select,
     input {
-      width: 100%;
       padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 5px;
       font-size: 16px;
       transition: border-color 0.3s;
     }
@@ -64,36 +41,24 @@
       border-color: #667eea;
     }
 
-    input[type="password"] {
-      letter-spacing: 2px;
-      font-size: 18px;
-    }
-
     button {
       width: 100%;
       padding: 12px;
-      background: #667eea;
+      background: gray;
       color: white;
       border: none;
       border-radius: 5px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
     }
 
     button:hover {
-      background: #764ba2;
-    }
-
-    button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+      background: #6e6e6e;
     }
 
     .message {
-      margin-top: 15px;
-      padding: 12px;
+      padding: 5px;
       border-radius: 5px;
       text-align: center;
       display: none;
@@ -116,21 +81,20 @@
 
 <body>
   <div class="container">
-    <h1>🎮 Player Access</h1>
-    <div class="form-group">
-      <label for="playerSelect">Select Your Page:</label>
-      <select id="playerSelect">
-        <option value="">-- Choose --</option>
-        <option value="p1">Player 1</option>
-        <option value="p2">Player 2</option>
-        <option value="p3">Player 3</option>
-      </select>
+    <div style='display:flex;'>
+      <div class="form-group" style='flex:2;'>
+        <select id="playerSelect">
+          <option value="">Người chơi</option>
+          <option value="p1">1</option>
+          <option value="p2">2</option>
+          <option value="p3">3</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="password" id="passwordInput" placeholder="Mật khẩu">
+      </div>
+      <button onclick="submitPassword()">Đăng nhập</button>
     </div>
-    <div class="form-group">
-      <label for="passwordInput">Enter Password:</label>
-      <input type="password" id="passwordInput" placeholder="Enter password">
-    </div>
-    <button onclick="submitPassword()">Access Game</button>
     <div class="message" id="message"></div>
   </div>
 
@@ -140,11 +104,11 @@
       const password = document.getElementById('passwordInput').value;
 
       if (!page) {
-        showMessage('Please select a player page', 'error');
+        showMessage('Bạn chưa chọn người chơi', 'error');
         return;
       }
       if (!password) {
-        showMessage('Please enter the password', 'error');
+        showMessage('Vui lòng nhập mật khẩu', 'error');
         return;
       }
 
@@ -157,14 +121,14 @@
 
         const data = await response.json();
         if (!response.ok) {
-          showMessage('❌ Invalid password', 'error');
+          showMessage('Sai mật khẩu', 'error');
           return;
         }
 
         // Redirect with token
         window.location.href = `/pages/${page}.html?token=${data.token}`;
       } catch (error) {
-        showMessage('Error validating password', 'error');
+        showMessage('Lỗi xác thực mật khẩu', 'error');
       }
     }
 

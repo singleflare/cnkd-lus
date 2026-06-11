@@ -272,22 +272,27 @@
         style='aspect-ratio: 16/9;transform-origin: top left;scale: 0.5;width: 1920px;'></iframe>
     </div>
     <div style='position:absolute;top:540px;'>
-      <span>Nón</span>
-      <button id='spinWheel' style='width: 47%;'>Quay nón</button>
-      <button id='spinBonusWheel' style='width: 47%;'>Quay nón đặc biệt</button>
+      <button id='spinWheel' style='width: 49.5%;'>Quay nón</button>
+      <button id='spinBonusWheel' style='width: 49.5%;'>Quay nón đặc biệt</button>
       <br>
-      <span>Nón vòng</span>
-      <button id='showWheel1'>1</button>
-      <button id='showWheel2'>2</button>
-      <button id='showWheel3'>3</button>
-      <button id='showWheel4'>4</button>
-      <button id='showWheel5'>5</button>
-      <button id='showWheelBonus'>Đặc biệt</button>
+      <span>Nón</span>
+      <button id='showWheel1'>Vòng 1</button>
+      <button id='showWheel2'>Vòng 2</button>
+      <button id='showWheel3'>Vòng 3</button>
+      <button id='showWheel4'>Vòng 4</button>
+      <button id='showWheel5'>Vòng 5</button>
+      <button id='showWheelBonus'>Vòng đ.biệt</button>
+      <br>
       <span>Đèn kim</span>
       <button id='indicatePlayer0'>Tắt</button>
-      <button id='indicatePlayer1'>1</button>
-      <button id='indicatePlayer2'>2</button>
-      <button id='indicatePlayer3'>3</button>
+      <button id='indicatePlayer1'>Kim đỏ</button>
+      <button id='indicatePlayer2'>Kim vàng</button>
+      <button id='indicatePlayer3'>Kim xanh</button>
+      <br>
+      <span>Mở nút quay</span>
+      <button id='unlockSpinBtn1'>NC1</button>
+      <button id='unlockSpinBtn2'>NC2</button>
+      <button id='unlockSpinBtn3'>NC3</button>
       <hr>
       <span>Thẻ/Ô trên nón</span>
       <button id='toggleBm700'>BM 700</button>
@@ -437,6 +442,15 @@
           <br>
           <button id="stopBtn">Dừng hết tất cả âm thanh</button>
         </div>
+      </div>
+      <hr>
+      <div>
+        <span>Mật khẩu</span>
+        <input type="text" id="passwordInput1" placeholder="NC1" style='width:100px'>
+        <input type="text" id="passwordInput2" placeholder="NC2" style='width:100px'>
+        <input type="text" id="passwordInput3" placeholder="NC3" style='width:100px'>
+        <button id='setPassword'>Đặt mật khẩu</button>
+        <button id='randomizePassword'>Đặt ngẫu nhiên</button>
       </div>
     </div>
   </div>
@@ -1216,6 +1230,54 @@
       }
     })
 
+    $('#unlockSpinBtn1').click(() => {
+      socket.emit('unlockSpin', 1)
+      $('#unlockSpinBtn1').css({ 'background-color': 'white', 'color': 'black' })
+    })
+    $('#unlockSpinBtn2').click(() => {
+      socket.emit('unlockSpin', 2)
+      $('#unlockSpinBtn2').css({ 'background-color': 'white', 'color': 'black' })
+    })
+    $('#unlockSpinBtn3').click(() => {
+      socket.emit('unlockSpin', 3)
+      $('#unlockSpinBtn3').css({ 'background-color': 'white', 'color': 'black' })
+    })
+
+
+    $('#setPassword').click(async () => {
+      let p1 = $('#passwordInput1').val()
+      let p2 = $('#passwordInput2').val()
+      let p3 = $('#passwordInput3').val()
+      const response = await fetch('/api/set-passwords', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nc1: p1, nc2: p2, nc3: p3 })
+      });
+      console.log(await response.json())
+    })
+    $('#randomizePassword').click(async () => {
+      const generateRandomString = (length) => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let result = '';
+        const randomValues = new Uint32Array(length);
+        window.crypto.getRandomValues(randomValues);
+        randomValues.forEach((value) => {
+          result += characters.charAt(value % charactersLength);
+        });
+        return result;
+      };
+      $('#passwordInput1').val(generateRandomString(4))
+      $('#passwordInput2').val(generateRandomString(4))
+      $('#passwordInput3').val(generateRandomString(4))
+      const response = await fetch('/api/set-passwords', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nc1: $('#passwordInput1').val(), nc2: $('#passwordInput2').val(), nc3: $('#passwordInput3').val() })
+      });
+      console.log(await response.json())
+    })
+
     socket.on('disableLetterBtn', letterNumber => {
       $('#letterBtn' + letterNumber).prop('disabled', true)
     })
@@ -1224,6 +1286,9 @@
     })
     socket.on('bonusTime', time => {
       $('#time').text('Thời gian: ' + time)
+    })
+    socket.on('lockSpinButton', player => {
+      $('#unlockSpinBtn' + player).css({ 'background-color': 'black', 'color': 'white' })
     })
   </script>
 </body>

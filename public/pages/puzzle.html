@@ -94,6 +94,10 @@
       width: 100%;
       text-align: center;
     }
+
+    .buzz {
+      transition: opacity 0.5s;
+    }
   </style>
   <video id='tossupVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đoán nhanh (full).mp4'></video>
@@ -103,7 +107,7 @@
     src='../gpx/Ô chữ hiện.mp4'></video>
   <video id='solvePuzzleVid' style='position: absolute;left: 0;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đúng ô chữ.mp4'></video>
-  <img src='../gpx/Bìa ô chữ (trống).png' id='boardBg' style='width: 1920px;position: absolute;'>
+  <img src='../gpx/Bảng chữ.png' id='boardBg' style='width: 1920px;position: absolute;'>
   <div id='catContainer' style='position: absolute;top:240px;'>
     <img src='../gpx/gợi ý.png' id='normal' style='position: absolute;opacity: 0;
     left: 417px;
@@ -155,6 +159,8 @@
     </div>
     <div id='p1ScoreContainer' style='position: absolute;left: 310px;top:15px;'>
       <img src='../gpx/Thanhdiemdo.png' class='color' style='position: absolute;width: 450px;'>
+      <img src='../gpx/chuông đỏ.png' class='buzz'
+        style='position: absolute;width: 480px;top: -20px;left: -15px;opacity: 0;'>
       <img src='../gpx/thanhdiemxam.png' class='gray' style='position: absolute;width: 450px;opacity: 0;'>
       <div id='p1Name'
         style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
@@ -173,6 +179,8 @@
     </div>
     <div id='p2ScoreContainer' style='position: absolute;left: 740px;top:15px;'>
       <img src='../gpx/thanhdiemvang.png' class='color' style='position: absolute;width: 450px;'>
+      <img src='../gpx/chuông vàng.png' class='buzz'
+        style='position: absolute;width: 480px;top: -20px;left: -15px;opacity: 0;'>
       <img src='../gpx/thanhdiemxam.png' class='gray' style='position: absolute;width: 450px;opacity: 0;'>
       <div id='p2Name'
         style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
@@ -191,6 +199,8 @@
     </div>
     <div id='p3ScoreContainer' style='position: absolute;left: 1170px;top:15px;'>
       <img src='../gpx/thanhdiemxanh.png' class='color' style='position: absolute;width: 450px;'>
+      <img src='../gpx/chuông xanh.png' class='buzz'
+        style='position: absolute;width: 480px;top: -20px;left: -15px;opacity: 0;'>
       <img src='../gpx/thanhdiemxam.png' class='gray' style='position: absolute;width: 450px;opacity: 0;'>
       <div id='p3Name'
         style='font-family: Lufga;position: absolute;left: 50px;top: 20px;width: 350px;text-align: center;font-size: 30pt;'>
@@ -507,6 +517,12 @@
       console.log(player, state)
       $('#p' + player + 'ScoreContainer .color,#p' + player + 'ScoreContainer .gray').css('opacity', 0)
       $('#p' + player + 'ScoreContainer .' + (state ? 'gray' : 'color')).css('opacity', 1)
+    })
+    socket.on('buzzed', player => {
+      $('#p' + player + 'ScoreContainer .buzz').css('opacity', 1)
+    })
+    socket.on('buzzersReset', player => {
+      $('.buzz').css('opacity', 0)
     })
   </script>
 </body>

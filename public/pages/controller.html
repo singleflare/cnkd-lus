@@ -117,6 +117,7 @@
       <hr>
       <span>Ô chữ</span>
       <button id="showPuzzle">Hiện</button>
+      <button id="showGiaimaPuzzle">Hiện (+tiếng giải mã)</button>
       <button id="puzzleMode">Chế độ:</button>
       <br>
       <span>Dạng ô chữ</span>
@@ -593,6 +594,10 @@
     })
     $('#showPuzzle').click(() => {
       socket.emit('playSound', '../sounds/hienochu.mp3')
+      socket.emit('revealPuzzle')
+    })
+    $('#showGiaimaPuzzle').click(() => {
+      socket.emit('playSound', '../sounds/Mở ô chữ giải mã.mp3')
       socket.emit('revealPuzzle')
     })
     $('#solvePuzzleNormal').click(() => {

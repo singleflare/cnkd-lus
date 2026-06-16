@@ -297,6 +297,7 @@ io.on('connection',(socket)=>{
       else {
         const idx = idxToOpen[i]
         io.emit('reveal',{index:idx,state:3,letter:puzzle[idx]})
+        console.log(idx, puzzleState[idx], puzzle[idx])
         puzzleState[idx]=3
         io.emit('disableLetterBtn',idx)
         i++
@@ -359,6 +360,7 @@ io.on('connection',(socket)=>{
       else {
         const idx = idxToOpen[i]
         io.emit('reveal',{index:idx,state:3,letter:puzzle[idx]})
+        console.log(idx, puzzleState[idx], puzzle[idx])
         puzzleState[idx]=3
         io.emit('disableLetterBtn',idx)
         i++

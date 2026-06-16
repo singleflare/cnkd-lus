@@ -9,6 +9,16 @@
 
 <body style='overflow: hidden;background:black;'>
   <style>
+    * {
+      -webkit-user-select: none;
+      /* Safari */
+      -ms-user-select: none;
+      /* IE 10 and IE 11 */
+      user-select: none;
+      /* Standard syntax */
+      pointer-events: none;
+    }
+
     #bonusWheel {
       transition: transform 15s cubic-bezier(1, 0, 0, 1);
     }

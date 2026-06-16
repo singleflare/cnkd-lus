@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player 1</title>
+  <style>
+    * {
+      font-size: 20pt
+    }
+
+    p {
+      color: white;
+      text-align: center;
+      margin: 1px;
+    }
+
+    button:hover {
+      background: white !important;
+      color: black !important;
+    }
+
+    button:disabled {
+      background: black !important;
+      color: white !important;
+      opacity: 0.5;
+    }
+
+    button:hover:disabled {
+      background: black !important;
+      color: white !important;
+      opacity: 0.5;
+    }
+
+    #wheelWeb {
+      width: 1920px;
+      position: absolute;
+      top: -325px;
+      aspect-ratio: 16 / 9;
+      scale: 0.4;
+      left: -577px;
+      border: none;
+    }
+
+    #wheelWeb.zoomedInP1 {
+      width: 1920px;
+      position: absolute;
+      top: -60px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -503px;
+      transform: rotate(45deg);
+    }
+
+    #wheelWeb.zoomedInP2 {
+      width: 1920px;
+      position: absolute;
+      top: -70px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -603px;
+      transform: rotate(0deg);
+    }
+
+    #wheelWeb.zoomedInP3 {
+      width: 1920px;
+      position: absolute;
+      top: -60px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -703px;
+      transform: rotate(-45deg);
+    }
+
+    .letter {
+      border: 1px solid white;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .guessedLetters {
+      border: 1px solid white;
+      color: white;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .guessedLetters.active {
+      background-color: #ff0000 !important;
+    }
+  </style>
+</head>
+
+<body style='background:black;overflow: hidden;margin:0;position: absolute;'>
+  <div style='overflow: hidden;background-color: #202020;
+    width: 772px;
+    position: absolute;
+    top: 433px;
+    height: 435px;'>
+    <iframe src="wheel.html" id="wheelWeb"></iframe>
+  </div>
+  <iframe src='puzzle.html'
+    style='width: 1920px;aspect-ratio:16/9;transform-origin: top left;scale:.4;display: inline;position: absolute;'></iframe>
+  <div style='width: calc(100vw - 770px);right:-100vw;position: absolute'>
+    <div id='playersScore'></div>
+    <div id='puzzleInfo'>
+      <div style='display:flex'>
+        <div style='display: grid;grid-template-rows: repeat(2, 1fr);width:20%;'>
+          <p id='round'></p>
+          <p id='category'></p>
+        </div>
+        <div id='puzzle'
+          style='display:grid;grid-template-columns: repeat(14, 1fr);grid-template-rows: repeat(4, 1fr);width: 40%;'>
+        </div>
+        <div style='display: grid;grid-template-rows: repeat(1, 1fr);width:40%;'>
+          <p id='explanation' style='font-size:12pt'>Giai thich</p>
+        </div>
+      </div>
+      <div id='guessedLetters'
+        style='display:grid;grid-template-columns: repeat(15, 1fr);grid-template-rows: repeat(2, 1fr);width:100%;'>
+        <div id='totalLetters' style='color:white'>Tổng:</div>
+        <button class='guessedLetters'>A:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Ă:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Â:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>B:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>C:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>D:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Đ:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>E:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Ê:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>G:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>H:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>I:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>K:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>L:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>M:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>N:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>O:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Ô:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Ơ:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>P:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Q:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>R:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>S:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>T:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>U:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Ư:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>V:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>X:
+          <div class='letters'></div>
+        </button>
+        <button class='guessedLetters'>Y:
+          <div class='letters'></div>
+        </button>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+      integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      const socket = io();
+      $(() => {
+        for (let i = 0; i <= 55; i++) {
+          $('#puzzle').append('<div class="letter" id="letter' + i + '">?</div>');
+        }
+      })
+
+      $('.guessedLetters').on('click', function () {
+        $(this).toggleClass('active');
+      });
+
+      socket.on('hostPuzzle', (data) => {
+        $('#guessedLetters').each(function () {
+          $(this).css('background-color', 'transparent');
+        });
+        $('#round').text(data.round);
+        $('#category').text(data.category);
+        $('#explanation').text(data.explanation);
+        $('#totalLetters').text('Tổng: ' + Object.values(data.letterOccurence)[0]);
+        $('.letters').each(function (index) {
+          $(this).text(Object.values(data.letterOccurence)[index + 1]);
+        });
+        for (let i = 0; i < data.puzzle.length; i++) {
+          if (data.solved[i]) {
+            $('#letter' + i).text(data.puzzle[i]);
+          } else {
+            $('#letter' + i).text('');
+          }
+        }
+      })
+    </script>
+</body>
+
+</html>

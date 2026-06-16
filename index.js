@@ -182,6 +182,7 @@ io.on('connection',(socket)=>{
   })
   socket.on('puzzle',(data)=>{
     io.emit('resetPuzzle')
+    io.emit('hostPuzzle',data)
     puzzle=data.puzzle
     solvedPuzzle=data.solved
     question=data.question

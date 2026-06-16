@@ -112,6 +112,7 @@
       </div>
       <span>Đề</span>
       <input type="file" id="fileInput" accept='.xlsx' style='display: inline;' /><br>
+      <input type="file" id="fileInputNew" accept='.xlsx' style='display: inline;' /><br>
       <button id="prevRoundBtn">Ô chữ trước</button>
       <button id="nextRoundBtn">Ô chữ sau</button>
       <hr>
@@ -475,10 +476,12 @@
       }
     })
 
-    let puzzles = [];
-    let solvedPuzzles = [];
+    let puzzles = []
+    let solvedPuzzles = []
     let questions = []
     let explains = []
+    let rounds = []
+    let letterOccurences = []
     let puzzleNumber = 0
     let onetwothree = [1, 2, 3]
     let bonusPrizes = [40, 40, 40, 40, 40, 40, 45, 45, 45, 45, 45, 50, 50, 50, 50, 55, 55, 55, 60, 60, 65, 65, 75, 100]
@@ -531,22 +534,108 @@
       }
       console.log(puzzles, solvedPuzzles, questions, explains)
     })
-
-    function countLetters(puzzleArray) {
-      let letters = ['A', 'Ă', 'Â', 'B', 'C', 'D', 'Đ', 'E', 'Ê', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'Ô', 'Ơ', 'P', 'Q', 'R', 'S', 'T', 'U', 'Ư', 'V', 'X', 'Y']
-      let numberOfLetters = []
-      let totalNumOfLetters = 0
-      letters.forEach(letter => {
-        let letterCount = 0
-        puzzles.forEach(puzzleLetter => {
-          if (puzzleLetter == letter) letterCount++
-        })
-        numberOfLetters.push(letterCount)
-        totalNumOfLetters += letterCount
-      })
-      console.log(totalNumOfLetters)
-      return [numberOfLetters, totalNumOfLetters]
-    }
+    $('#fileInputNew').on('change', async (e) => {
+      const file = e.target.files[0]
+      const data = await file.arrayBuffer()
+      const workbook = XLSX.read(data)
+      const sheet = workbook.Sheets[workbook.SheetNames[0]]
+      // Helper function to safely get cell 
+      const getCellValue = (sheet, col, row) => {
+        const cell = sheet[XLSX.utils.encode_cell({ c: col, r: row })]
+        return cell ? cell.v : ''
+      }
+      let puzzle = []
+      let solvedPuzzle = []
+      for (let r = 0; r < 52; r++) {
+        if (r % 4 == 0) {
+          rounds.push(getCellValue(sheet, 0, r))
+          questions.push(getCellValue(sheet, 0, r + 2))
+          explains.push(getCellValue(sheet, 15, r + 2))
+          letterOccurences.push({
+            'Tổng': getCellValue(sheet, 15, r + 1),
+            'A': getCellValue(sheet, 16, r + 1),
+            'Ă': getCellValue(sheet, 17, r + 1),
+            'Â': getCellValue(sheet, 18, r + 1),
+            'B': getCellValue(sheet, 19, r + 1),
+            'C': getCellValue(sheet, 20, r + 1),
+            'D': getCellValue(sheet, 21, r + 1),
+            'Đ': getCellValue(sheet, 22, r + 1),
+            'E': getCellValue(sheet, 23, r + 1),
+            'Ê': getCellValue(sheet, 24, r + 1),
+            'G': getCellValue(sheet, 25, r + 1),
+            'H': getCellValue(sheet, 26, r + 1),
+            'I': getCellValue(sheet, 27, r + 1),
+            'K': getCellValue(sheet, 28, r + 1),
+            'L': getCellValue(sheet, 29, r + 1),
+            'M': getCellValue(sheet, 30, r + 1),
+            'N': getCellValue(sheet, 31, r + 1),
+            'O': getCellValue(sheet, 32, r + 1),
+            'Ô': getCellValue(sheet, 33, r + 1),
+            'Ơ': getCellValue(sheet, 34, r + 1),
+            'P': getCellValue(sheet, 35, r + 1),
+            'Q': getCellValue(sheet, 36, r + 1),
+            'R': getCellValue(sheet, 37, r + 1),
+            'S': getCellValue(sheet, 38, r + 1),
+            'T': getCellValue(sheet, 39, r + 1),
+            'U': getCellValue(sheet, 40, r + 1),
+            'Ư': getCellValue(sheet, 41, r + 1),
+            'V': getCellValue(sheet, 42, r + 1),
+            'X': getCellValue(sheet, 43, r + 1),
+            'Y': getCellValue(sheet, 44, r + 1),
+          })
+        }
+        for (let c = 1; c < 15; c++) {
+          solvedPuzzle.push(getCellValue(sheet, c, r))
+          console.log(getCellValue(sheet, c, r))
+          if (getCellValue(sheet, c, r) == 'Á' || getCellValue(sheet, c, r) == 'À' || getCellValue(sheet, c, r) == 'Ả' || getCellValue(sheet, c, r) == 'Ã' || getCellValue(sheet, c, r) == 'Ạ') {
+            puzzle.push('A')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ắ' || getCellValue(sheet, c, r) == 'Ằ' || getCellValue(sheet, c, r) == 'Ẳ' || getCellValue(sheet, c, r) == 'Ẵ' || getCellValue(sheet, c, r) == 'Ặ') {
+            puzzle.push('Ă')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ấ' || getCellValue(sheet, c, r) == 'Ầ' || getCellValue(sheet, c, r) == 'Ẩ' || getCellValue(sheet, c, r) == 'Ẫ' || getCellValue(sheet, c, r) == 'Ậ') {
+            puzzle.push('Â')
+          }
+          else if (getCellValue(sheet, c, r) == 'É' || getCellValue(sheet, c, r) == 'È' || getCellValue(sheet, c, r) == 'Ẻ' || getCellValue(sheet, c, r) == 'Ẽ' || getCellValue(sheet, c, r) == 'Ẹ') {
+            puzzle.push('E')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ế' || getCellValue(sheet, c, r) == 'Ề' || getCellValue(sheet, c, r) == 'Ể' || getCellValue(sheet, c, r) == 'Ễ' || getCellValue(sheet, c, r) == 'Ệ') {
+            puzzle.push('Ê')
+          }
+          else if (getCellValue(sheet, c, r) == 'Í' || getCellValue(sheet, c, r) == 'Ì' || getCellValue(sheet, c, r) == 'Ỉ' || getCellValue(sheet, c, r) == 'Ĩ' || getCellValue(sheet, c, r) == 'Ị') {
+            puzzle.push('I')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ó' || getCellValue(sheet, c, r) == 'Ò' || getCellValue(sheet, c, r) == 'Ỏ' || getCellValue(sheet, c, r) == 'Õ' || getCellValue(sheet, c, r) == 'Ọ') {
+            puzzle.push('O')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ố' || getCellValue(sheet, c, r) == 'Ồ' || getCellValue(sheet, c, r) == 'Ổ' || getCellValue(sheet, c, r) == 'Ỗ' || getCellValue(sheet, c, r) == 'Ộ') {
+            puzzle.push('Ô')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ớ' || getCellValue(sheet, c, r) == 'Ờ' || getCellValue(sheet, c, r) == 'Ở' || getCellValue(sheet, c, r) == 'Ỡ' || getCellValue(sheet, c, r) == 'Ợ') {
+            puzzle.push('Ơ')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ú' || getCellValue(sheet, c, r) == 'Ù' || getCellValue(sheet, c, r) == 'Ủ' || getCellValue(sheet, c, r) == 'Ũ' || getCellValue(sheet, c, r) == 'Ụ') {
+            puzzle.push('U')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ứ' || getCellValue(sheet, c, r) == 'Ừ' || getCellValue(sheet, c, r) == 'Ử' || getCellValue(sheet, c, r) == 'Ữ' || getCellValue(sheet, c, r) == 'Ự') {
+            puzzle.push('Ư')
+          }
+          else if (getCellValue(sheet, c, r) == 'Ý' || getCellValue(sheet, c, r) == 'Ỳ' || getCellValue(sheet, c, r) == 'Ỷ' || getCellValue(sheet, c, r) == 'Ỹ' || getCellValue(sheet, c, r) == 'Ỵ') {
+            puzzle.push('Y')
+          }
+          else {
+            puzzle.push(getCellValue(sheet, c, r))
+          }
+        }
+        if (r % 4 == 3) {
+          puzzles.push(puzzle)
+          solvedPuzzles.push(solvedPuzzle)
+          puzzle = []
+          solvedPuzzle = []
+        }
+      }
+      console.log(puzzles, solvedPuzzles, questions, explains, rounds, letterOccurences)
+    })
 
     function resetControlLetters() {
       for (let i = 0; i <= 55; i++) {
@@ -575,7 +664,7 @@
           $('#letterBtn' + i).prop('disabled', false)
           puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
         }
-        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber] })
+        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber] })
       }
     })
     $('#nextRoundBtn').click(() => {
@@ -589,7 +678,7 @@
           $('#letterBtn' + i).prop('disabled', false)
           puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
         }
-        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber] })
+        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber] })
       }
     })
     $('#showPuzzle').click(() => {

@@ -73,21 +73,22 @@ let puzzleMode=1
 let isFinalSpin=false
 let tossupInterval=null
 let bonusTimeInterval=null
+let fsTimeout=null
 let bonusTime=0
 let currentRotation=0
 let currentBonusRotation=0
 
 let wedgesStatus=new Map()
-wedgesStatus.set('obm700', 0)
-wedgesStatus.set('obm300', 0)
-wedgesStatus.set('gl12500450300', 0)
-wedgesStatus.set('gl12500350900', 0)
-wedgesStatus.set('nhandoi', 0)
-wedgesStatus.set('cohoi', 0)
-wedgesStatus.set('phanthuong', 0)
-wedgesStatus.set('gl1million', 0)
-wedgesStatus.set('themluot', 0)
-wedgesStatus.set('mayman', 0)
+wedgesStatus.set('obm700', false)
+wedgesStatus.set('obm300', false)
+wedgesStatus.set('gl12500450300', false)
+wedgesStatus.set('gl12500350900', false)
+wedgesStatus.set('nhandoi', false)
+wedgesStatus.set('cohoi', false)
+wedgesStatus.set('phanthuong', false)
+wedgesStatus.set('gl1m', false)
+wedgesStatus.set('themluot', false)
+wedgesStatus.set('mayman', false)
 
 function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
@@ -224,6 +225,12 @@ io.on('connection',(socket)=>{
     io.emit('revealPuzzle',puzzle)
   })
   socket.on('reveal',(idx)=>{
+    if(isFinalSpin) {
+      clearTimeout(fsTimeout)
+      fsTimeout=setTimeout(()=>{
+        io.emit('playSound', '../sounds/sai.mp3')
+      }, 5000)
+    }
     if(puzzleMode==0) {
       if(puzzleState[idx]==1) {
         puzzleState[idx]=3
@@ -389,7 +396,7 @@ io.on('connection',(socket)=>{
         io.emit('reveal',{index:i,state:1})
       }
     }
-    shuffleArray(idxToOpen)
+    shuffleArray(idxToOpen) 
     console.log(idxToOpen)
     let i=0
     tossupInterval = setInterval(()=>{
@@ -445,6 +452,11 @@ io.on('connection',(socket)=>{
 
   socket.on('togglePlayerWedge', (player, wedge) => {
     console.log('togglePlayerWedge', player, wedge,score.p1.wedges[wedge], score.p2.wedges[wedge], score.p3.wedges[wedge])
+    const statusOnWheel = wedgesStatus.get(wedge)
+    if(statusOnWheel==true) {
+      wedgesStatus.set(wedge, !statusOnWheel)
+      io.emit('toggleWedge', wedge, !statusOnWheel)
+    }
     if(player==1){
       score.p1.wedges[wedge]=!score.p1.wedges[wedge]
       io.emit('togglePlayerWedge', player, score.p1.wedges[wedge], wedge)
@@ -463,6 +475,7 @@ io.on('connection',(socket)=>{
     }
   })
   socket.on('toggleWedge', (wedge) => {
+    console.log(wedge, wedgesStatus.get(wedge))
     const currentStatus = wedgesStatus.get(wedge)
     wedgesStatus.set(wedge, !currentStatus)
     io.emit('toggleWedge', wedge, !currentStatus)

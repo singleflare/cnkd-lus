@@ -128,6 +128,11 @@
         $('#spin').prop('disabled', false)
       }
     })
+    socket.on('lockSpinButton', (player) => {
+      if (player == 3) {
+        $('#spin').prop('disabled', true)
+      }
+    })
   </script>
   <script src='playerGeneral.js'></script>
   <script src='disableDevTools.js'></script>

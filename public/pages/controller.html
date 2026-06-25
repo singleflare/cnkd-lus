@@ -18,7 +18,7 @@
     }
 
     * {
-      font-size: 15pt;
+      font-size: 22pt;
     }
 
     span {
@@ -47,8 +47,6 @@
     }
 
     .letterBtn {
-      background-color: black;
-      color: white;
       height: 50px;
       font-size: 30pt;
     }
@@ -99,10 +97,6 @@
       position: absolute;
       width: 960px;
     }
-
-    .scoreController>* {
-      font-size: 15pt;
-    }
   </style>
   <div class='column' style='left:0'>
     <iframe src='./puzzle.html' id='puzzleWeb'
@@ -111,8 +105,7 @@
       <div id="controlLetters">
       </div>
       <span>Đề</span>
-      <!-- <input type="file" id="fileInput" accept='.xlsx' style='display: inline;' /><br> -->
-      <input type="file" id="fileInputNew" accept='.xlsx' style='display: inline;' /><br>
+      <input type="file" id="fileInputNew" accept='.xlsx' style='display: inline;width: 170px;' />
       <button id="prevRoundBtn">Ô chữ trước</button>
       <button id="nextRoundBtn">Ô chữ sau</button>
       <hr>
@@ -148,9 +141,7 @@
       <span>VQCC</span>
       <button id='finalSpinMode'>VQCC:</button>
       <button id='playFinalSpinBed'>Nhạc VQCC</button>
-      <br>
-      <button id="deletePuzzle">Xóa ô chữ</button>
-      <hr></span>
+      <hr>
       <span>VĐB luật mới</span>
       <button id='setBounsTime'>Đặt thời gian</button>
       <button id='startTossUpBonus'>Mở chữ N,H,A và chữ ngẫu nhiên</button>
@@ -158,114 +149,114 @@
       <button id="continueOpenRandomTossup">Tiếp tục ĐN</button>
       <button id="solvePuzzleNoSound">Giải (không tiếng)</button>
       <span id='time'>Thời gian: 0</span>
-    </div>
-    <hr>
-    <span>VĐB</span>
-    <button id='randomizeBonus'>Random</button>
-    <div id='bonusBoard'
-      style='display:grid;grid-template-columns: repeat(24,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white'>
-      <div>C</div>
-      <div>H</div>
-      <div>I</div>
-      <div>Ế</div>
-      <div>C</div>
-      <div>*</div>
-      <div>N</div>
-      <div>Ó</div>
-      <div>N</div>
-      <div>**</div>
-      <div>K</div>
-      <div>Ỳ</div>
-      <div>***</div>
-      <div>D</div>
-      <div>I</div>
-      <div>Ệ</div>
-      <div>U</div>
-      <div>*****</div>
-      <div>B</div>
-      <div>O</div>
-      <div>N</div>
-      <div>U</div>
-      <div>S</div>
-      <div>*****</div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <span>Phần thưởng</span>
-    <button id='randomizePrize'>Random</button>
-    <div id='prizeBoard'
-      style='display:grid;grid-template-columns: repeat(20,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white'>
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
-      <div>5</div>
-      <div>6</div>
-      <div>7</div>
-      <div>8</div>
-      <div>9</div>
-      <div>10</div>
-      <div>11</div>
-      <div>12</div>
-      <div>13</div>
-      <div>14</div>
-      <div>15</div>
-      <div>16</div>
-      <div>17</div>
-      <div>18</div>
-      <div>19</div>
-      <div>20</div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <span>Bí mật</span>
-    <button id='randomizeMystery'>Random</button>
-    <div id='mysteryBoard'
-      style='display:grid;grid-template-columns: repeat(2,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white'>
-      <div>BM 700</div>
-      <div>BM 300</div>
-      <div></div>
-      <div></div>
+      <hr>
+      <span>VĐB</span>
+      <button id='randomizeBonus'>Random</button>
+      <div id='bonusBoard'
+        style='display:grid;grid-template-columns: repeat(24,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white;gap:5px'>
+        <div>C</div>
+        <div>H</div>
+        <div>I</div>
+        <div>Ế</div>
+        <div>C</div>
+        <div>*</div>
+        <div>N</div>
+        <div>Ó</div>
+        <div>N</div>
+        <div>**</div>
+        <div>K</div>
+        <div>Ỳ</div>
+        <div>***</div>
+        <div>D</div>
+        <div>I</div>
+        <div>Ệ</div>
+        <div>U</div>
+        <div>*****</div>
+        <div>B</div>
+        <div>O</div>
+        <div>N</div>
+        <div>U</div>
+        <div>S</div>
+        <div>*****</div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <span>Phần thưởng</span>
+      <button id='randomizePrize'>Random</button>
+      <div id='prizeBoard'
+        style='display:grid;grid-template-columns: repeat(20,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white'>
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+        <div>9</div>
+        <div>10</div>
+        <div>11</div>
+        <div>12</div>
+        <div>13</div>
+        <div>14</div>
+        <div>15</div>
+        <div>16</div>
+        <div>17</div>
+        <div>18</div>
+        <div>19</div>
+        <div>20</div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <span>Bí mật</span>
+      <button id='randomizeMystery'>Random</button>
+      <div id='mysteryBoard'
+        style='display:grid;grid-template-columns: repeat(2,1fr);grid-template-rows:repeat(2,1fr);color:white;border:1px solid white'>
+        <div>BM 700</div>
+        <div>BM 300</div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   </div>
   <div class='column' style='left:960px'>
@@ -287,35 +278,32 @@
       <br>
       <span>Đèn kim</span>
       <button id='indicatePlayer0'>Tắt</button>
-      <button id='indicatePlayer1'>Kim đỏ</button>
-      <button id='indicatePlayer2'>Kim vàng</button>
-      <button id='indicatePlayer3'>Kim xanh</button>
-      <br>
-      <span>Mở nút quay</span>
-      <button id='unlockSpinBtn1'>NC1</button>
-      <button id='unlockSpinBtn2'>NC2</button>
-      <button id='unlockSpinBtn3'>NC3</button>
+      <button id='indicatePlayer1'>Đỏ</button>
+      <button id='indicatePlayer2'>Vàng</button>
+      <button id='indicatePlayer3'>Xanh</button>
+      <span>Nút quay</span>
+      <button id='unlockSpinBtn1'>Đỏ</button>
+      <button id='unlockSpinBtn2'>Vàng</button>
+      <button id='unlockSpinBtn3'>Xanh</button>
       <hr>
       <span>Thẻ/Ô trên nón</span>
-      <button id='toggleBm700'>BM 700</button>
-      <button id='toggleBm300'>BM 300</button>
-      <button id='toggleHalf500450300'>1/2 500 giữa 450 & 300</button>
-      <button id='toggleHalf500350900'>1/2 500 giữa 350 & 900</button>
-      <button id='toggleNd'>Nhân đôi</button>
-      <button id='toggleCh'>Cơ hội</button>
-      <button id='togglePt'>Phần thưởng</button>
-      <button id='toggle1mil'>1M</button>
-      <button id='toggleTl'>Thêm lượt</button>
-      <button id='toggleMm'>May mắn</button>
+      <button id='toggleBm700' style='background-image:linear-gradient(90deg, #9F7CD3,#7A47C0);color:black'>800 BM
+        ML</button>
+      <button id='toggleBm300' style='background-image:linear-gradient(90deg, #9F7CD3,#7A47C0);color:black'>700 BM
+        800</button>
+      <button id='toggleHalf500450300' style='color:#301BBE;background:white'>450 1/2 300</button>
+      <button id='toggleHalf500350900' style='color:#301BBE;background:white'>350 1/2 900</button>
+      <button id='toggleNd' style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
+      <button id='toggleCh' style='background:#E7528B;color:#9EE243'>C.hội</button>
+      <!-- <button id='togglePt'>Phần thưởng</button> -->
+      <button id='toggle1mil' style='background:#52EA23;color:black'>1M</button>
+      <button id='toggleTl' style='background:#22BF18;color:#FFC50D'>T.lượt</button>
+      <button id='toggleMm' style='background:#10336B;color:white'>M.mắn</button>
       <hr>
       <div id='scoreboard'>
-        <div class='scoreController'>
-          <button id='showKs'>Hiện đồ họa két sắt</button>
-          <button id='hideKs'>Ẩn đồ họa két sắt</button>
-          <br>
-          <span>NC1</span>
+        <div style='margin:0 0 20px 0'>
           <input id='p1Name' placeholder='Tên NC1' style='width: 150px;'>
-          <input type="number" id="p1ScoreInput" style='width: 60px;' placeholder='Điểm' />
+          <input type="number" id="p1ScoreInput" style='width: 100px;' placeholder='Điểm' />
           <button class='set' id='p1Set'>Set</button>
           <button class='plus' id='p1Plus'>+</button>
           <button class='minus' id='p1Minus'>-</button>
@@ -325,23 +313,28 @@
           <button class='clear' id='p1Clear'>MĐ</button>
           <span id='p1Score'></span>
           <!-- <input type='number' id='p1TotalInput' style='width:60px' placeholder='Tổng' />
-          <button class='totalSet' id='p1SetTotal'>Set</button>
-          <button class='totalAdd' id='p1AddTotal'>+</button>
-          <span id='p1Total'></span> -->
+            <button class='totalSet' id='p1SetTotal'>Set</button>
+            <button class='totalAdd' id='p1AddTotal'>+</button>
+            <span id='p1Total'></span> -->
           <button id='p1Qualify'>LOẠI</button>
           <br>
-          <button class='togglePlayerCohoi' id='togglePlayer1cohoi'>Cơ hội</button>
-          <button class='togglePlayergl12500450300' id='togglePlayer1gl12500450300'>1/2 500 giữa 450 & 300</button>
-          <button class='togglePlayergl12500350900' id='togglePlayer1gl12500350900'>1/2 500 giữa 350 & 900</button>
-          <button class='togglePlayerThemluot' id='togglePlayer1themluot'>Thêm lượt</button>
-          <button class='togglePlayerMayman' id='togglePlayer1mayman'>May mắn</button>
-          <button class='togglePlayer1m' id='togglePlayer11mgl'>1M</button>
-          <button class='togglePlayerNhandoi' id='togglePlayer1nhandoi'>Nhân đôi</button>
+          <button class='togglePlayerCohoi' id='togglePlayer1cohoi'
+            style='background:#E7528B;color:#9EE243'>C.hội</button>
+          <button class='togglePlayergl12500450300' id='togglePlayer1gl12500450300'
+            style='color:#301BBE;background:white'>450 1/2 300</button>
+          <button class='togglePlayergl12500350900' id='togglePlayer1gl12500350900'
+            style='color:#301BBE;background:white'>350 1/2 900</button>
+          <button class='togglePlayerThemluot' id='togglePlayer1themluot'
+            style='background:#22BF18;color:#FFC50D'>T.lượt</button>
+          <button class='togglePlayerMayman' id='togglePlayer1mayman'
+            style='background:#10336B;color:white'>M.mắn</button>
+          <button class='togglePlayer1m' id='togglePlayer11mgl' style='background:#52EA23;color:black'>1M</button>
+          <button class='togglePlayerNhandoi' id='togglePlayer1nhandoi'
+            style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
         </div>
-        <div class='scoreController'>
-          <span>NC2</span>
+        <div style='margin:20px 0'>
           <input id='p2Name' placeholder='Tên NC2' style='width: 150px;'>
-          <input type="number" id="p2ScoreInput" style='width: 60px;' placeholder='Điểm' />
+          <input type="number" id="p2ScoreInput" style='width: 100px;' placeholder='Điểm' />
           <button class='set' id='p2Set'>Set</button>
           <button class='plus' id='p2Plus'>+</button>
           <button class='minus' id='p2Minus'>-</button>
@@ -356,18 +349,23 @@
           <span id='p2Total'></span> -->
           <button id='p2Qualify'>LOẠI</button>
           <br>
-          <button class='togglePlayerCohoi' id='togglePlayer2cohoi'>Cơ hội</button>
-          <button class='togglePlayergl12500450300' id='togglePlayer2gl12500450300'>1/2 500 giữa 450 & 300</button>
-          <button class='togglePlayergl12500350900' id='togglePlayer2gl12500350900'>1/2 500 giữa 350 & 900</button>
-          <button class='togglePlayerThemluot' id='togglePlayer2themluot'>Thêm lượt</button>
-          <button class='togglePlayerMayman' id='togglePlayer2mayman'>May mắn</button>
-          <button class='togglePlayer1m' id='togglePlayer21mgl'>1M</button>
-          <button class='togglePlayerNhandoi' id='togglePlayer2nhandoi'>Nhân đôi</button>
+          <button class='togglePlayerCohoi' id='togglePlayer2cohoi'
+            style='background:#E7528B;color:#9EE243'>C.hội</button>
+          <button class='togglePlayergl12500450300' id='togglePlayer2gl12500450300'
+            style='color:#301BBE;background:white'>450 1/2 300</button>
+          <button class='togglePlayergl12500350900' id='togglePlayer2gl12500350900'
+            style='color:#301BBE;background:white'>350 1/2 900</button>
+          <button class='togglePlayerThemluot' id='togglePlayer2themluot'
+            style='background:#22BF18;color:#FFC50D'>T.lượt</button>
+          <button class='togglePlayerMayman' id='togglePlayer2mayman'
+            style='background:#10336B;color:white'>M.mắn</button>
+          <button class='togglePlayer1m' id='togglePlayer21mgl' style='background:#52EA23;color:black'>1M</button>
+          <button class='togglePlayerNhandoi' id='togglePlayer2nhandoi'
+            style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
         </div>
-        <div class='scoreController'>
-          <span>NC3</span>
+        <div style='margin:20px 0'>
           <input id='p3Name' placeholder='Tên NC3' style='width: 150px;'>
-          <input type="number" id="p3ScoreInput" style='width: 60px;' placeholder='Điểm' />
+          <input type="number" id="p3ScoreInput" style='width: 100px;' placeholder='Điểm' />
           <button class='set' id='p3Set'>Set</button>
           <button class='plus' id='p3Plus'>+</button>
           <button class='minus' id='p3Minus'>-</button>
@@ -382,29 +380,42 @@
           <span id='p3Total'></span> -->
           <button id='p3Qualify'>LOẠI</button>
           <br>
-          <button class='togglePlayerCohoi' id='togglePlayer3cohoi'>Cơ hội</button>
-          <button class='togglePlayergl12500450300' id='togglePlayer3gl12500450300'>1/2 500 giữa 450 & 300</button>
-          <button class='togglePlayergl12500350900' id='togglePlayer3gl12500350900'>1/2 500 giữa 350 & 900</button>
-          <button class='togglePlayerThemluot' id='togglePlayer3themluot'>Thêm lượt</button>
-          <button class='togglePlayerMayman' id='togglePlayer3mayman'>May mắn</button>
-          <button class='togglePlayer1m' id='togglePlayer31mgl'>1M</button>
-          <button class='togglePlayerNhandoi' id='togglePlayer3nhandoi'>Nhân đôi</button>
+          <button class='togglePlayerCohoi' id='togglePlayer3cohoi'
+            style='background:#E7528B;color:#9EE243'>C.hội</button>
+          <button class='togglePlayergl12500450300' id='togglePlayer3gl12500450300'
+            style='color:#301BBE;background:white'>450 1/2 300</button>
+          <button class='togglePlayergl12500350900' id='togglePlayer3gl12500350900'
+            style='color:#301BBE;background:white'>350 1/2 900</button>
+          <button class='togglePlayerThemluot' id='togglePlayer3themluot'
+            style='background:#22BF18;color:#FFC50D'>T.lượt</button>
+          <button class='togglePlayerMayman' id='togglePlayer3mayman'
+            style='background:#10336B;color:white'>M.mắn</button>
+          <button class='togglePlayer1m' id='togglePlayer31mgl' style='background:#52EA23;color:black'>1M</button>
+          <button class='togglePlayerNhandoi' id='togglePlayer3nhandoi'
+            style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
         </div>
-        <div class='scoreController'>
+        <div style='margin:20px 0'>
           <span>Két sắt</span>
-          <input type="number" id="ksScoreInput" style='width: 60px;' placeholder='Điểm' />
+          <button id='showKs'>Hiện đồ họa két sắt</button>
+          <button id='hideKs'>Ẩn đồ họa két sắt</button>
+          <br>
+          <input type="number" id="ksScoreInput" style='width: 100px;' placeholder='Điểm' />
           <button class='set' id='ksSet'>Set</button>
           <button class='plus' id='ksPlus'>+</button>
           <button class='clear' id='ksClear'>0</button>
           <span id='ksScore'></span>
           <br>
-          <button class='togglePlayerCohoi' id='toggleKscohoi'>Cơ hội</button>
-          <button class='togglePlayergl12500450300' id='toggleKsgl12500450300'>1/2 500 giữa 450 & 300</button>
-          <button class='togglePlayergl12500350900' id='toggleKsgl12500350900'>1/2 500 giữa 350 & 900</button>
-          <button class='togglePlayerThemluot' id='toggleKsthemluot'>Thêm lượt</button>
-          <button class='togglePlayerMayman' id='toggleKsmayman'>May mắn</button>
-          <button class='togglePlayer1m' id='toggleKs1mgl'>1M</button>
-          <button class='togglePlayerNhandoi' id='toggleKsnhandoi'>Nhân đôi</button>
+          <button class='togglePlayerCohoi' id='toggleKscohoi' style='background:#E7528B;color:#9EE243'>C.hội</button>
+          <button class='togglePlayergl12500450300' id='toggleKsgl12500450300'
+            style='color:#301BBE;background:white'>450 1/2 300</button>
+          <button class='togglePlayergl12500350900' id='toggleKsgl12500350900'
+            style='color:#301BBE;background:white'>350 1/2 900</button>
+          <button class='togglePlayerThemluot' id='toggleKsthemluot'
+            style='background:#22BF18;color:#FFC50D'>T.lượt</button>
+          <button class='togglePlayerMayman' id='toggleKsmayman' style='background:#10336B;color:white'>M.mắn</button>
+          <button class='togglePlayer1m' id='toggleKs1mgl' style='background:#52EA23;color:black'>1M</button>
+          <button class='togglePlayerNhandoi' id='toggleKsnhandoi'
+            style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
         </div>
         <hr>
         <div>
@@ -419,20 +430,20 @@
           <button id='introBtn'>Intro</button>
           <button id='hostBtn'>Host entrance</button>
           <button id='breakBtn'>Nghỉ giải lao</button>
+          <button id="saiBtn">Sai</button>
           <br>
           <span>Âm thanh ô/thẻ</span>
-          <button id="bmBtn">Bí mật</button>
-          <button id="cdBtn">Chia đôi</button>
-          <button id="chBtn">Cơ hội</button>
-          <button id="ddBtn">Độc đắc</button>
-          <button id="mdBtn">Mất điểm</button>
-          <button id="mlBtn">Mất lượt</button>
-          <button id='halfBtn'>1/2</button>
-          <button id='ndBtn'>Nhân đôi</button>
-          <button id="ptBtn">Phần thưởng</button>
-          <button id='stBtn'>Siêu tốc</button>
-          <button id="tlmmBtn">Thêm lượt/May mắn/Nhân đôi</button>
-          <button id="saiBtn">Sai</button>
+          <button id="bmBtn" style='background-image:linear-gradient(90deg, #9F7CD3,#7A47C0);color:black'>B.mật</button>
+          <button id="cdBtn">C.đôi</button>
+          <button id="chBtn" style='background:#E7528B;color:#9EE243'>C.hội</button>
+          <button id="ddBtn">Đ.đắc</button>
+          <button id="mdBtn">M.điểm</button>
+          <button id="mlBtn">M.lượt</button>
+          <button id='halfBtn' style='color:#301BBE;background:white'>1/2</button>
+          <button id='ndBtn' style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
+          <button id="ptBtn">P.thưởng</button>
+          <button id='stBtn'>S.tốc</button>
+          <button id="tlmmBtn">T.lượt/M.mắn/N.đôi</button>
           <br>
           <span>Âm thanh đặc biệt</span>
           <button id="playSpinBonusBed">Quay nón đặc biệt</button>
@@ -1196,7 +1207,7 @@
       socket.emit('toggleWedge', 'phanthuong')
     })
     $('#toggle1mil').click(() => {
-      socket.emit('toggleWedge', 'gl1million')
+      socket.emit('toggleWedge', 'gl1m')
     })
     $('#toggleTl').click(() => {
       socket.emit('toggleWedge', 'themluot')
@@ -1324,17 +1335,46 @@
       }
     })
 
+    let spinBtnState = [false, false, false]
+
     $('#unlockSpinBtn1').click(() => {
-      socket.emit('unlockSpin', 1)
-      $('#unlockSpinBtn1').css({ 'background-color': 'white', 'color': 'black' })
+      if (spinBtnState[0] == false) {
+        socket.emit('unlockSpin', 1)
+        socket.emit('indicatePlayer', 1)
+        $('#unlockSpinBtn1').css({ 'background-color': 'white', 'color': 'black' })
+        spinBtnState[0] = true
+      }
+      else {
+        socket.emit('lockSpinButton', 1)
+        $('#unlockSpinBtn1').css({ 'background-color': 'black', 'color': 'white' })
+        spinBtnState[0] = false
+      }
     })
     $('#unlockSpinBtn2').click(() => {
-      socket.emit('unlockSpin', 2)
-      $('#unlockSpinBtn2').css({ 'background-color': 'white', 'color': 'black' })
+      if (spinBtnState[1] == false) {
+        socket.emit('unlockSpin', 2)
+        socket.emit('indicatePlayer', 2)
+        $('#unlockSpinBtn2').css({ 'background-color': 'white', 'color': 'black' })
+        spinBtnState[1] = true
+      }
+      else {
+        socket.emit('lockSpinButton', 2)
+        $('#unlockSpinBtn2').css({ 'background-color': 'black', 'color': 'white' })
+        spinBtnState[1] = false
+      }
     })
     $('#unlockSpinBtn3').click(() => {
-      socket.emit('unlockSpin', 3)
-      $('#unlockSpinBtn3').css({ 'background-color': 'white', 'color': 'black' })
+      if (spinBtnState[2] == false) {
+        socket.emit('unlockSpin', 3)
+        socket.emit('indicatePlayer', 3)
+        $('#unlockSpinBtn3').css({ 'background-color': 'white', 'color': 'black' })
+        spinBtnState[2] = true
+      }
+      else {
+        socket.emit('lockSpinButton', 3)
+        $('#unlockSpinBtn3').css({ 'background-color': 'black', 'color': 'white' })
+        spinBtnState[2] = false
+      }
     })
 
 
@@ -1382,6 +1422,7 @@
       $('#time').text('Thời gian: ' + time)
     })
     socket.on('lockSpinButton', player => {
+      spinBtnState[player - 1] = false
       $('#unlockSpinBtn' + player).css({ 'background-color': 'black', 'color': 'white' })
     })
   </script>

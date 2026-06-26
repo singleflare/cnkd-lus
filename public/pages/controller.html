@@ -109,9 +109,10 @@
       <button id="prevRoundBtn">Ô chữ trước</button>
       <button id="nextRoundBtn">Ô chữ sau</button>
       <hr>
-      <span>Ô chữ</span>
-      <button id="showPuzzle">Hiện</button>
-      <button id="showGiaimaPuzzle">Hiện (+tiếng giải mã)</button>
+      <span>Hiện ô chữ</span>
+      <button id="showPuzzle">Thường/Tung hoành</button>
+      <button id="showGiaimaPuzzle">Giải mã</button>
+      <button id="showNoSoundPuzzle">Không tiếng</button>
       <button id="puzzleMode">Chế độ:</button>
       <br>
       <span>Dạng ô chữ</span>
@@ -426,32 +427,31 @@
               <span style='text-align:center;width: 100%;display: block;'>Tổng</span>
             </div>
           </div> -->
-          <span>Âm thanh</span>
+          <span>Ch.trình</span>
           <button id='introBtn'>Intro</button>
-          <button id='hostBtn'>Host entrance</button>
-          <button id='breakBtn'>Nghỉ giải lao</button>
+          <button id='hostBtn'>Host</button>
+          <button id='breakBtn'>Giải lao</button>
+          <button id='mainTheme'>Kết thúc ch.trình</button>
           <button id="saiBtn">Sai</button>
           <br>
-          <span>Âm thanh ô/thẻ</span>
+          <span>Ô/thẻ</span>
           <button id="bmBtn" style='background-image:linear-gradient(90deg, #9F7CD3,#7A47C0);color:black'>B.mật</button>
-          <button id="cdBtn">C.đôi</button>
+          <!-- <button id="cdBtn">C.đôi</button> -->
           <button id="chBtn" style='background:#E7528B;color:#9EE243'>C.hội</button>
-          <button id="ddBtn">Đ.đắc</button>
+          <!-- <button id="ddBtn">Đ.đắc</button> -->
           <button id="mdBtn">M.điểm</button>
-          <button id="mlBtn">M.lượt</button>
+          <button id="mlBtn" style='color:black;background: white;'>M.lượt</button>
           <button id='halfBtn' style='color:#301BBE;background:white'>1/2</button>
           <button id='ndBtn' style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
           <button id="ptBtn">P.thưởng</button>
           <button id='stBtn'>S.tốc</button>
           <button id="tlmmBtn">T.lượt/M.mắn/N.đôi</button>
           <br>
-          <span>Âm thanh đặc biệt</span>
-          <button id="playSpinBonusBed">Quay nón đặc biệt</button>
+          <span>VĐB</span>
           <button id="playGALUletters">NGHIA</button>
           <button id='playOtherLetters'>Chữ khác</button>
           <button id="playBonusThink">10s suy nghĩ</button>
           <button id="playBonus">10s trả lời</button>
-          <button id='mainTheme'>Kết thúc chương trình</button>
           <br>
           <button id="stopBtn">Dừng hết tất cả âm thanh</button>
         </div>
@@ -481,9 +481,6 @@
     $(() => {
       for (let i = 0; i <= 55; i++) {
         $('#controlLetters').append('<button class="letterBtn" id="letterBtn' + i + '"></button>');
-        $('#letterBtn' + i).click(() => {
-          socket.emit('reveal', i)
-        })
       }
     })
 
@@ -648,32 +645,27 @@
       console.log(puzzles, solvedPuzzles, questions, explains, rounds, letterOccurences)
     })
 
-    function resetControlLetters() {
-      for (let i = 0; i <= 55; i++) {
-        $('#letterBtn' + i).text('')
-        $('#letterBtn' + i).css('background-color', 'black')
-        $('#letterBtn' + i).css('color', 'white')
-        $('#letterBtn' + i).hover(() => {
-          $('#letterBtn' + i).css('background-color', 'white')
-          $('#letterBtn' + i).css('color', 'black')
-        })
-        $('#letterBtn' + i).mouseleave(() => {
-          $('#letterBtn' + i).css('background-color', 'black')
-          $('#letterBtn' + i).css('color', 'white')
-        })
-      }
-    }
-
     $('#prevRoundBtn').click(() => {
       $('#scoreboard div').css('background-color', 'black')
       socket.emit('resetBuzzers')
       if (puzzleNumber > 0) {
         puzzleNumber--
         for (let i = 0; i <= 55; i++) {
-          $('#letterBtn' + i).prop('disabled', true)
+          $('#letterBtn' + i).off('click')
           $('#letterBtn' + i).text('')
           $('#letterBtn' + i).prop('disabled', false)
-          puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
+          if (puzzles[puzzleNumber][i] != '') {
+            $('#letterBtn' + i).text(puzzles[puzzleNumber][i])
+            $('#letterBtn' + i).on('click', () => {
+              socket.emit('reveal', i)
+            })
+          }
+          else {
+            $('#letterBtn' + i).on('click', () => {
+              socket.emit('playSound', '../sounds/sai.mp3')
+            })
+          }
+          //puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
         }
         socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber] })
       }
@@ -684,10 +676,21 @@
       if (puzzleNumber < puzzles.length - 1) {
         puzzleNumber++
         for (let i = 0; i <= 55; i++) {
-          $('#letterBtn' + i).prop('disabled', true)
+          $('#letterBtn' + i).off('click')
           $('#letterBtn' + i).text('')
           $('#letterBtn' + i).prop('disabled', false)
-          puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
+          if (puzzles[puzzleNumber][i] != '') {
+            $('#letterBtn' + i).text(puzzles[puzzleNumber][i])
+            $('#letterBtn' + i).on('click', () => {
+              socket.emit('reveal', i)
+            })
+          }
+          else {
+            $('#letterBtn' + i).on('click', () => {
+              socket.emit('playSound', '../sounds/sai.mp3')
+            })
+          }
+          //puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
         }
         socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber] })
       }
@@ -698,6 +701,9 @@
     })
     $('#showGiaimaPuzzle').click(() => {
       socket.emit('playSound', '../sounds/Mở ô chữ giải mã.mp3')
+      socket.emit('revealPuzzle')
+    })
+    $('#showNoSoundPuzzle').click(() => {
       socket.emit('revealPuzzle')
     })
     $('#solvePuzzleNormal').click(() => {

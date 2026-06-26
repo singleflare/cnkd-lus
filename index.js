@@ -85,7 +85,7 @@ wedgesStatus.set('gl12500450300', false)
 wedgesStatus.set('gl12500350900', false)
 wedgesStatus.set('nhandoi', false)
 wedgesStatus.set('cohoi', false)
-wedgesStatus.set('phanthuong', false)
+wedgesStatus.set('phanthuong', true)
 wedgesStatus.set('gl1m', false)
 wedgesStatus.set('themluot', false)
 wedgesStatus.set('mayman', false)
@@ -447,7 +447,45 @@ io.on('connection',(socket)=>{
   })
   socket.on('showWheel', round => {
     if(round=='bonus') io.emit('showWheel', 'bonus')
-    else io.emit('showWheel', round)
+    else{
+      wedgesStatus.set('cohoi', true)
+      wedgesStatus.set('themluot', true)
+      wedgesStatus.set('mayman', true)
+      wedgesStatus.set('gl1m', true)
+      wedgesStatus.set('gl12500450300', true)
+      wedgesStatus.set('gl12500350900', true)
+      io.emit('toggleWedge', 'cohoi', true)
+      io.emit('toggleWedge', 'themluot', true)
+      io.emit('toggleWedge', 'mayman', true)
+      io.emit('toggleWedge', 'gl1m', true)
+      io.emit('toggleWedge', 'gl12500450300', true)
+      io.emit('toggleWedge', 'gl12500350900', true)
+      if(round==1){        
+        wedgesStatus.set('obm700', false)
+        wedgesStatus.set('obm300', false)
+        wedgesStatus.set('nhandoi', true)
+        io.emit('toggleWedge', 'nhandoi', true)
+        io.emit('toggleWedge', 'obm700', false)
+        io.emit('toggleWedge', 'obm300', false)
+      }
+      else if(round==2){
+        wedgesStatus.set('obm700', true)
+        wedgesStatus.set('obm300', true)
+        wedgesStatus.set('nhandoi', false)
+        io.emit('toggleWedge', 'obm700', true)
+        io.emit('toggleWedge', 'obm300', true)
+        io.emit('toggleWedge', 'nhandoi', false)
+      }
+      else if(round==3||round==4||round==5){
+        wedgesStatus.set('obm700', false)
+        wedgesStatus.set('obm300', false)
+        wedgesStatus.set('nhandoi', false)
+        io.emit('toggleWedge', 'obm700', false)
+        io.emit('toggleWedge', 'obm300', false)
+        io.emit('toggleWedge', 'nhandoi', false)
+      }
+      io.emit('showWheel', round)
+    } 
   })
 
   socket.on('togglePlayerWedge', (player, wedge) => {

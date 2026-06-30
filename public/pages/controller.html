@@ -296,7 +296,7 @@
       <button id='toggleHalf500350900' style='color:#301BBE;background:white'>350 1/2 900</button>
       <button id='toggleNd' style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
       <button id='toggleCh' style='background:#E7528B;color:#9EE243'>C.hội</button>
-      <!-- <button id='togglePt'>Phần thưởng</button> -->
+      <button id='togglePt' style='background:red;color:white'>P.thưởng</button>
       <button id='toggle1mil' style='background:#52EA23;color:black'>1M</button>
       <button id='toggleTl' style='background:#22BF18;color:#FFC50D'>T.lượt</button>
       <button id='toggleMm' style='background:#10336B;color:white'>M.mắn</button>
@@ -443,8 +443,9 @@
           <button id="mlBtn" style='color:black;background: white;'>M.lượt</button>
           <button id='halfBtn' style='color:#301BBE;background:white'>1/2</button>
           <button id='ndBtn' style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>N.đôi</button>
-          <button id="ptBtn">P.thưởng</button>
-          <button id='stBtn'>S.tốc</button>
+          <button id="ptBtn" style='background:red;color:white'>P.thưởng</button>
+          <button id='stBtn' style='background:#3898FF;color:#FFFF03'>S.tốc</button>
+          <button id='stBedBtn' style='background:#3898FF;color:#FFFF03'>Nhạc S.tốc</button>
           <button id="tlmmBtn">T.lượt/M.mắn/N.đôi</button>
           <br>
           <span>VĐB</span>
@@ -835,6 +836,9 @@
     })
     $('#stBtn').click(() => {
       socket.emit('playSound', '../sounds/sieutoc.mp3')
+    })
+    $('#stBedBtn').click(() => {
+      socket.emit('playSound', '../sounds/nhac sieu toc.mp3')
     })
     $('#stopBtn').click(() => {
       socket.emit('stopAllSounds')

@@ -85,7 +85,7 @@ wedgesStatus.set('gl12500450300', false)
 wedgesStatus.set('gl12500350900', false)
 wedgesStatus.set('nhandoi', false)
 wedgesStatus.set('cohoi', false)
-wedgesStatus.set('phanthuong', true)
+wedgesStatus.set('phanthuong', false)
 wedgesStatus.set('gl1m', false)
 wedgesStatus.set('themluot', false)
 wedgesStatus.set('mayman', false)
@@ -202,9 +202,9 @@ io.on('connection',(socket)=>{
     io.emit('puzzleMode',puzzleMode)
   })
   socket.on('toggleFinalSpinMode',()=>{
+    if(isFinalSpin==false) io.emit('playSound', '../sounds/chuong finalspin.mp3')
     isFinalSpin=!isFinalSpin
     io.emit('finalSpinMode',isFinalSpin)
-    io.emit('playSound', '../sounds/chuong finalspin.mp3')
   })
 
   socket.on('scoreboard',(data)=>{

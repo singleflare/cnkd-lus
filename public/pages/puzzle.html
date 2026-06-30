@@ -431,7 +431,7 @@
         if (puzzle[openSequence[i]] != '') {
           $('#letter' + openSequence[i]).addClass('hasLetter');
         }
-        if (puzzle[openSequence[i]] == '?' || puzzle[openSequence[i]] == '-' || puzzle[openSequence[i]] == '!' || puzzle[openSequence[i]] == '.' || puzzle[openSequence[i]] == ',' || puzzle[openSequence[i]] == "&" || puzzle[openSequence[i]] == '/') {
+        if (puzzle[openSequence[i]] == '?' || puzzle[openSequence[i]] == '-' || puzzle[openSequence[i]] == '!' || puzzle[openSequence[i]] == '.' || puzzle[openSequence[i]] == ',' || puzzle[openSequence[i]] == "&" || puzzle[openSequence[i]] == '/' || puzzle[openSequence[i]] == '#') {
           $('#letter' + openSequence[i]).addClass('hasLetter').removeClass('waitToOpen');
           $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
         }

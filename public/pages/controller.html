@@ -433,6 +433,7 @@
           <button id='breakBtn'>Giải lao</button>
           <button id='mainTheme'>Kết thúc ch.trình</button>
           <button id="saiBtn">Sai</button>
+          <button id='obmptBed'>Nhạc mở ÔBM/PT</button>
           <br>
           <span>Ô/thẻ</span>
           <button id="bmBtn" style='background-image:linear-gradient(90deg, #9F7CD3,#7A47C0);color:black'>B.mật</button>
@@ -446,7 +447,8 @@
           <button id="ptBtn" style='background:red;color:white'>P.thưởng</button>
           <button id='stBtn' style='background:#3898FF;color:#FFFF03'>S.tốc</button>
           <button id='stBedBtn' style='background:#3898FF;color:#FFFF03'>Nhạc S.tốc</button>
-          <button id="tlmmBtn">T.lượt/M.mắn/N.đôi</button>
+          <button id="tlBtn">T.lượt</button>
+          <button id="mmBtn" style='background:#10336B;color:white'>M.mắn</button>
           <br>
           <span>VĐB</span>
           <button id="playGALUletters">NGHIA</button>
@@ -802,13 +804,19 @@
     })
 
     $('#ptBtn').click(() => {
-      socket.emit('playSound', '../sounds/phanthuong.wav')
+      socket.emit('playSound', '../sounds/phanthuong.mp3')
     })
     $('#bmBtn').click(() => {
       socket.emit('playSound', '../sounds/bimat.mp3')
     })
-    $('#tlmmBtn').click(() => {
-      socket.emit('playSound', '../sounds/themluotvamayman.wav')
+    $('#tlBtn').click(() => {
+      socket.emit('playSound', '../sounds/themluot.mp3')
+    })
+    $('#mmBtn').click(() => {
+      socket.emit('playSound', '../sounds/mayman.mp3')
+    })
+    $('#ndBtn').click(() => {
+      socket.emit('playSound', '../sounds/nhandoi.mp3')
     })
     $('#cdBtn').click(() => {
       socket.emit('playSound', '../sounds/chiadoi.wav')
@@ -821,6 +829,9 @@
     })
     $('#saiBtn').click(() => {
       socket.emit('playSound', '../sounds/sai.mp3')
+    })
+    $('#obmptBed').click(() => {
+      socket.emit('playSound', '../sounds/nhacmoptobm.mp3')
     })
     $('#ddBtn').click(() => {
       socket.emit('playSound', '../sounds/docdac.mp3')

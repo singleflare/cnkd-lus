@@ -232,9 +232,8 @@
   </div>
   <div id='leftBonusArea' style='position:absolute;left:-1100px;top:850px;'>
     <img src='../gpx/NGHIA.png' id='nghia' style='position:absolute;width: 1100px;left: 0;'>
-    <span
-      style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:220px;top:35px;width:800px;text-align: center;'>CHỦ
-      ĐỀ</span>
+    <span id='category'
+      style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:220px;top:35px;width:800px;text-align: center;'></span>
     <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:400px;top:100px'></span>
     <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:500px;top:100px'></span>
     <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:600px;top:100px'></span>
@@ -261,7 +260,6 @@
   <script>
     const socket = io();
     socket.on('data', data => {
-      console.log(data)
       $('#p1Score').text(digitGroup(data.score.p1.score) + ' GL')
       $('#p2Score').text(digitGroup(data.score.p2.score) + ' GL')
       $('#p3Score').text(digitGroup(data.score.p3.score) + ' GL')
@@ -458,7 +456,6 @@
 
     function revealPuzzle(puzzle) {
       playShowPuzzleVid()
-      console.log(puzzle)
       let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
       let i = 0
       let interval = setInterval(() => {
@@ -477,11 +474,9 @@
     function solvePuzzle(puzzle, mode) {
       if (mode == 'normal') playSolvePuzzleVid()
       else if (mode == 'tossup') playSolveTossupPuzzleVid()
-      console.log(puzzle)
       let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
       let i = 0
       let interval = setInterval(() => {
-        console.log(i, openSequence[i], puzzle[openSequence[i]])
         $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
         i++
         if (i >= openSequence.length) clearInterval(interval)
@@ -545,7 +540,6 @@
       }
     })
     socket.on('setPlayerQualify', (player, state) => {
-      console.log(player, state)
       $('#p' + player + 'ScoreContainer .color,#p' + player + 'ScoreContainer .gray').css('opacity', 0)
       $('#p' + player + 'ScoreContainer .' + (state ? 'gray' : 'color')).css('opacity', 1)
       $('#p' + player + 'Name,#p' + player + 'Score').css('opacity', state ? 0.1 : 1)
@@ -584,8 +578,9 @@
         $('#cat1Chosen, #cat2Chosen, #cat3Chosen').css('opacity', 0)
       })
     })
-    socket.on('chooseCategory', (cat) => {
+    socket.on('chooseCategory', (cat, catName) => {
       $('#cat' + cat + 'Chosen').css('opacity', 1)
+      $('#category').text(catName)
     })
     socket.on('showBonusGraphics', () => {
       $('#leftBonusArea').animate({
@@ -634,24 +629,24 @@
     })
     let timerInterval
     socket.on('playThinkGpx', () => {
-      let i = 10
+      let i = 1
       $('#timerRed').attr('src', '../gpx/' + i + 's.png')
       timerInterval = setInterval(() => {
-        i--
+        i++
         $('#timerRed').attr('src', '../gpx/' + i + 's.png')
-        if (i <= 0) {
+        if (i >= 11) {
           clearInterval(timerInterval)
           $('#timerRed').attr('src', '')
         }
       }, 1000)
     })
     socket.on('playAnswerGpx', () => {
-      let i = 10
+      let i = 1
       $('#timerRed').attr('src', '../gpx/' + i + 's.png')
       timerInterval = setInterval(() => {
-        i--
+        i++
         $('#timerRed').attr('src', '../gpx/' + i + 's.png')
-        if (i <= 0) {
+        if (i >= 11) {
           clearInterval(timerInterval)
           $('#timerRed').attr('src', '')
         }

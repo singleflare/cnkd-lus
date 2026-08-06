@@ -473,6 +473,7 @@ io.on('connection',(socket)=>{
   })
   socket.on('playSound',url=>{
     io.emit('playSound',url)
+    console.log(url)
   })
   socket.on('stopAllSounds',()=>{
     io.emit('stopAllSounds')
@@ -645,8 +646,8 @@ io.on('connection',(socket)=>{
   socket.on('hide3Categories', () => {
     io.emit('hide3Categories')
   })
-  socket.on('chooseCategory', (cat) => {
-    io.emit('chooseCategory', cat)
+  socket.on('chooseCategory', (cat,catName) => {
+    io.emit('chooseCategory', cat, catName)
   })
   socket.on('showBonusGraphics', () => {
     io.emit('showBonusGraphics')

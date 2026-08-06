@@ -168,6 +168,10 @@
       <button id="solvePuzzleLose">Thua</button>
       <button id="solvePuzzleWin">Thắng</button>
       <button id="solvePuzzleNoSound">Không tiếng</button>
+      <br>
+      <span>VQCC</span>
+      <button id='finalSpinMode'>VQCC:</button>
+      <button id='playFinalSpinBed'>Nhạc VQCC</button>
       <hr>
       <span>VĐB</span>
       <button id='show3Categories'>Hiện 3 chủ đề</button>
@@ -445,6 +449,7 @@
       <button id="saiBtn">Sai</button>
       <button id='obmptBed'>Nhạc mở ÔBM/PT</button>
       <button id='cmts'>Chúc mừng t.sinh</button>
+      <button id='giaima5s'>5s giải mã</button>
       <br>
       <span>Ô/thẻ</span>
       <button id="bmBtn" style='background-image:linear-gradient(90deg, #9F7CD3,#7A47C0);color:black'>BM</button>
@@ -826,6 +831,9 @@
     })
     $('#cmts').click(() => {
       socket.emit('playSound', '../sounds/Chúc mừng thí sinh.wav')
+    })
+    $('#giaima5s').click(() => {
+      socket.emit('playSound', '../sounds/5s Giải Mã.mp3')
     })
     $('#ddBtn').click(() => {
       socket.emit('playSound', '../sounds/docdac.mp3')
@@ -1374,13 +1382,13 @@
       socket.emit('hide3Categories')
     })
     $('#chooseCat1').click(() => {
-      socket.emit('chooseCategory', 1)
+      socket.emit('chooseCategory', 1, questions[10])
     })
     $('#chooseCat2').click(() => {
-      socket.emit('chooseCategory', 2)
+      socket.emit('chooseCategory', 2, questions[11])
     })
     $('#chooseCat3').click(() => {
-      socket.emit('chooseCategory', 3)
+      socket.emit('chooseCategory', 3, questions[12])
     })
     $('#showBonusGraphics').click(() => {
       socket.emit('showBonusGraphics')

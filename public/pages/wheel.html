@@ -371,7 +371,6 @@
     })
 
     socket.on('revealPrize', (prizeIndex, prize) => {
-      console.log(prizeIndex, prize)
       $(`#ptArea>div:nth-child(${prizeIndex})>.ptMini`).attr('src', '../gpx/' + prize + '.png')
     })
     socket.on('hidePrizePrizes', () => {
@@ -385,7 +384,6 @@
     })
 
     socket.on('revealMysteryPrize', (position, prize) => {
-      console.log('revealMystery', position, prize)
       if (prize == 'MĐ') {
         if (position == '700') {
           $('#obm700').attr('src', '../gpx/Ô bí mật (Mất điểm).png')
@@ -416,7 +414,6 @@
       $('#bonusTopFace,#bonusFrontFace,#bonusBotFace').css('opacity', 0)
     })
     socket.on('revealBonusPrize', (prize) => {
-      console.log('revealBonusPrize', prize)
       $('#bonusFrontFace').css({ transform: 'rotateX(90deg)' })
       setTimeout(() => {
         $('#bonusTopFace').css({ transform: 'rotateX(0deg)' })

@@ -13,7 +13,6 @@
       background-color: black;
       aspect-ratio: 16/9;
       margin: 0;
-      width: 1920px;
       overflow: hidden;
     }
 
@@ -23,7 +22,6 @@
     }
 
     span {
-
       color: white;
     }
 
@@ -103,11 +101,43 @@
       border: 1px solid white;
       border-collapse: collapse;
     }
+
+    #wheelWeb {
+      scale: 0.33
+    }
+
+    #wheelWeb.zoomedInP1 {
+      scale: 1;
+      transform: rotate(45deg);
+      left: 80px;
+      top: -660px;
+    }
+
+    #wheelWeb.zoomedInP2 {
+      scale: 1;
+      transform: rotate(0deg);
+      left: -650px;
+      top: -150px;
+    }
+
+    #wheelWeb.zoomedInP3 {
+      scale: 1;
+      transform: rotate(-45deg);
+      left: -780px;
+      top: 720px;
+    }
   </style>
   <iframe src='./puzzle.html' id='puzzleWeb'
     style='aspect-ratio: 16/9;transform-origin: top left;scale: 0.33;width: 1920px;left:0;position: absolute;'></iframe>
-  <iframe src='./wheel.html' id='wheelWeb'
-    style='aspect-ratio: 16/9;transform-origin: top left;scale: 0.33;width: 1920px;left:640px;position: absolute;'></iframe>
+  <div style='overflow: hidden;
+    width: 637px;
+    position: absolute;
+    top: 0px;
+    height: 358px;
+    left:640px'>
+    <iframe src='./wheel.html' id='wheelWeb'
+      style='aspect-ratio: 16/9;transform-origin: top left;width: 1920px;position: absolute;'></iframe>
+  </div>
   <div style='display:flex'>
     <div style='width:640px;padding:5px;box-sizing:border-box;position:relative;top:360px;'>
       <div id="controlLetters">
@@ -119,7 +149,7 @@
       <hr>
       <span>Hiện ô chữ</span>
       <button id="showPuzzle">Thường</button>
-      <button>T.hoành</button>
+      <button id='showCrosswordPuzzle'>T.hoành</button>
       <button id="showGiaimaPuzzle">G.mã</button>
       <button id="showNoSoundPuzzle">Không tiếng</button>
       <button id="puzzleMode">Chế độ:</button>
@@ -156,12 +186,12 @@
       <button id='playAnswerGpx'>Trả lời</button>
     </div>
     <div style='width:640px;padding:5px;box-sizing:border-box;position:relative;top:360px;'>
-      <div style='display:flex' class='flexContainer'>
+      <div class='flexContainer'>
         <button id='spinWheel'>Quay nón</button>
         <button id='spinBonusWheel'>Quay nón đặc biệt</button>
         <button id='resetWheel'>Reset nón về 0 độ</button>
       </div>
-      <div style='display:flex' class='flexContainer'>
+      <div class='flexContainer'>
         <button id='showWheel1'>V1</button>
         <button id='showWheel2'>V2</button>
         <button id='showWheel3'>V3</button>
@@ -169,7 +199,7 @@
         <button id='showWheel5'>V5</button>
         <button id='showWheelBonus'>VĐB</button>
       </div>
-      <div style='display:flex' class='flexContainer'>
+      <div class='flexContainer'>
         <button id='indicatePlayer0'>Tắt</button>
         <button id='unlockSpinBtn1'>Đỏ</button>
         <button id='unlockSpinBtn2'>Vàng</button>
@@ -191,20 +221,17 @@
       <hr>
       <div id='scoreboard'>
         <div style='margin:0 0 10px 0'>
-          <input id='p1Name' placeholder='Tên NC1' style='width: 150px;'>
-          <input type="number" id="p1ScoreInput" style='width: 100px;' placeholder='Điểm' />
-          <button class='plus' id='p1Plus'>+</button>
-          <button class='minus' id='p1Minus'>-</button>
-          <button class='double' id='p1OneHalf'>x1.5</button>
-          <button class='double' id='p1Double'>x2</button>
-          <button class='half' id='p1Half'>/2</button>
-          <button class='clear' id='p1Clear'>0</button>
-          <!-- <input type='number' id='p1TotalInput' style='width:60px' placeholder='Tổng' />
-            <button class='totalSet' id='p1SetTotal'>Set</button>
-            <button class='totalAdd' id='p1AddTotal'>+</button>
-            <span id='p1Total'></span> -->
-          <button id='p1Qualify'>LOẠI</button>
-          <br>
+          <div class='flexContainer'>
+            <input id='p1Name' placeholder='Tên NC1' style='width: 120px;'>
+            <input type="number" id="p1ScoreInput" style='width: 80px;' placeholder='Điểm' />
+            <button class='plus' id='p1Plus'>+</button>
+            <button class='minus' id='p1Minus'>-</button>
+            <button class='double' id='p1OneHalf'>x1.5</button>
+            <button class='double' id='p1Double'>x2</button>
+            <button class='half' id='p1Half'>/2</button>
+            <button class='clear' id='p1Clear'>0</button>
+            <button id='p1Qualify'>LOẠI</button>
+          </div>
           <button class='togglePlayerCohoi' id='togglePlayer1cohoi' style='background:#E7528B;color:#9EE243'>CH</button>
           <button class='togglePlayergl12500450300' id='togglePlayer1gl12500450300'
             style='color:#301BBE;background:white'>450 1/2 300</button>
@@ -218,21 +245,17 @@
             style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>NĐ</button>
         </div>
         <div style='margin:10px 0'>
-          <input id='p2Name' placeholder='Tên NC2' style='width: 150px;'>
-          <input type="number" id="p2ScoreInput" style='width: 100px;' placeholder='Điểm' />
-          <button class='plus' id='p2Plus'>+</button>
-          <button class='minus' id='p2Minus'>-</button>
-          <button class='double' id='p2OneHalf'>x1.5</button>
-          <button class='double' id='p2Double'>x2</button>
-          <button class='half' id='p2Half'>/2</button>
-          <button class='clear' id='p2Clear'>0</button>
-          <span id='p2Score'></span>
-          <!-- <input type='number' id='p2TotalInput' style='width:60px' placeholder='Tổng' />
-          <button class='totalSet' id='p2SetTotal'>Set</button>
-          <button class='totalAdd' id='p2AddTotal'>+</button>
-          <span id='p2Total'></span> -->
-          <button id='p2Qualify'>LOẠI</button>
-          <br>
+          <div class='flexContainer'>
+            <input id='p2Name' placeholder='Tên NC2' style='width: 120px;'>
+            <input type="number" id="p2ScoreInput" style='width: 80px;' placeholder='Điểm' />
+            <button class='plus' id='p2Plus'>+</button>
+            <button class='minus' id='p2Minus'>-</button>
+            <button class='double' id='p2OneHalf'>x1.5</button>
+            <button class='double' id='p2Double'>x2</button>
+            <button class='half' id='p2Half'>/2</button>
+            <button class='clear' id='p2Clear'>0</button>
+            <button id='p2Qualify'>LOẠI</button>
+          </div>
           <button class='togglePlayerCohoi' id='togglePlayer2cohoi' style='background:#E7528B;color:#9EE243'>CH</button>
           <button class='togglePlayergl12500450300' id='togglePlayer2gl12500450300'
             style='color:#301BBE;background:white'>450 1/2 300</button>
@@ -246,21 +269,17 @@
             style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>NĐ</button>
         </div>
         <div style='margin:10px 0'>
-          <input id='p3Name' placeholder='Tên NC3' style='width: 150px;'>
-          <input type="number" id="p3ScoreInput" style='width: 100px;' placeholder='Điểm' />
-          <button class='plus' id='p3Plus'>+</button>
-          <button class='minus' id='p3Minus'>-</button>
-          <button class='double' id='p3OneHalf'>x1.5</button>
-          <button class='double' id='p3Double'>x2</button>
-          <button class='half' id='p3Half'>/2</button>
-          <button class='clear' id='p3Clear'>0</button>
-          <span id='p3Score'></span>
-          <!-- <input type='number' id='p3TotalInput' style='width:60px' placeholder='Tổng' />
-          <button class='totalSet' id='p3SetTotal'>Set</button>
-          <button class='totalAdd' id='p3AddTotal'>+</button>
-          <span id='p3Total'></span> -->
-          <button id='p3Qualify'>LOẠI</button>
-          <br>
+          <div class='flexContainer'>
+            <input id='p3Name' placeholder='Tên NC3' style='width: 120px;'>
+            <input type="number" id="p3ScoreInput" style='width: 80px;' placeholder='Điểm' />
+            <button class='plus' id='p3Plus'>+</button>
+            <button class='minus' id='p3Minus'>-</button>
+            <button class='double' id='p3OneHalf'>x1.5</button>
+            <button class='double' id='p3Double'>x2</button>
+            <button class='half' id='p3Half'>/2</button>
+            <button class='clear' id='p3Clear'>0</button>
+            <button id='p3Qualify'>LOẠI</button>
+          </div>
           <button class='togglePlayerCohoi' id='togglePlayer3cohoi' style='background:#E7528B;color:#9EE243'>CH</button>
           <button class='togglePlayergl12500450300' id='togglePlayer3gl12500450300'
             style='color:#301BBE;background:white'>450 1/2 300</button>
@@ -358,7 +377,7 @@
       <hr>
       <span>Phần thưởng</span>
       <button id='randomizePrize'>Random</button>
-      <button id='hidePrize'>Ẩn</button>
+      <button id='hidePrize'>Ẩn phần thưởng</button>
       <button id='showPrizePanel'>Hiện khung</button>
       <button id='hidePrizePanel'>Ẩn khung</button>
       <div id='prizeBoardR1'
@@ -451,9 +470,9 @@
       <button id="stopBtn">Dừng hết tất cả âm thanh</button>
       <br>
       <span>Mật khẩu</span>
-      <input type="text" id="passwordInput1" placeholder="NC1" style='width:100px'>
-      <input type="text" id="passwordInput2" placeholder="NC2" style='width:100px'>
-      <input type="text" id="passwordInput3" placeholder="NC3" style='width:100px'>
+      <input type="text" id="passwordInput1" placeholder="NC1" style='width:60px'>
+      <input type="text" id="passwordInput2" placeholder="NC2" style='width:60px'>
+      <input type="text" id="passwordInput3" placeholder="NC3" style='width:60px'>
       <button id='setPassword'>Set</button>
       <button id='randomizePassword'>Ngẫu nhiên</button>
     </div>
@@ -475,6 +494,8 @@
       }
       for (let i = 1; i <= 20; i++) {
         $('#revealPrize' + i).click(() => {
+          socket.emit('stopAllSounds')
+          socket.emit('playSound', '../sounds/phanthuong.mp3')
           socket.emit('revealPrize', i)
         })
       }
@@ -507,39 +528,6 @@
       }
     }
 
-    $('#fileInput').on('change', async (e) => {
-      const file = e.target.files[0]
-      const data = await file.arrayBuffer()
-      const workbook = XLSX.read(data)
-      const sheet = workbook.Sheets[workbook.SheetNames[0]]
-      // Helper function to safely get cell 
-      const getCellValue = (sheet, col, row) => {
-        const cell = sheet[XLSX.utils.encode_cell({ c: col, r: row })]
-        return cell ? cell.v : ''
-      }
-      let puzzle = []
-      let solvedPuzzle = []
-      for (let r = 1; r <= 100; r++) {
-        if ((r - 1) % 5 == 0) {
-          questions.push(getCellValue(sheet, 0, r - 1))
-          explains.push(getCellValue(sheet, 15, r - 1))
-        }
-        for (let c = 0; c < 14; c++) {
-          puzzle.push(getCellValue(sheet, c, r))
-        }
-        for (let c = 15; c < 29; c++) {
-          solvedPuzzle.push(getCellValue(sheet, c, r))
-        }
-        if (r % 5 == 4) {
-          puzzles.push(puzzle)
-          solvedPuzzles.push(solvedPuzzle)
-          puzzle = []
-          solvedPuzzle = []
-          r++
-        }
-      }
-      console.log(puzzles, solvedPuzzles, questions, explains)
-    })
     $('#fileInputNew').on('change', async (e) => {
       const file = e.target.files[0]
       const data = await file.arrayBuffer()
@@ -644,6 +632,7 @@
     })
 
     $('#prevRoundBtn').click(() => {
+      socket.emit('puzzleType', 'hide')
       $('#scoreboard div').css('background-color', 'black')
       socket.emit('resetBuzzers')
       if (puzzleNumber > 0) {
@@ -669,6 +658,7 @@
       }
     })
     $('#nextRoundBtn').click(() => {
+      socket.emit('puzzleType', 'hide')
       $('#scoreboard div').css('background-color', 'black')
       socket.emit('resetBuzzers')
       if (puzzleNumber < puzzles.length - 1) {
@@ -696,10 +686,16 @@
     $('#showPuzzle').click(() => {
       socket.emit('playSound', '../sounds/hienochu.mp3')
       socket.emit('revealPuzzle')
+      socket.emit('puzzleType', 'normal')
+    })
+    $('#showCrosswordPuzzle').click(() => {
+      socket.emit('revealPuzzle')
+      socket.emit('puzzleType', 'tunghoanh')
     })
     $('#showGiaimaPuzzle').click(() => {
       socket.emit('playSound', '../sounds/Mở ô chữ giải mã.mp3')
       socket.emit('revealPuzzle')
+      socket.emit('puzzleType', 'giaima')
     })
     $('#showNoSoundPuzzle').click(() => {
       socket.emit('revealPuzzle')
@@ -1294,6 +1290,7 @@
       socket.emit('hidePrizePrizes')
     })
     $('#showPrizePanel').click(() => {
+      socket.emit('playSound', '../sounds/nhacmoptobm.mp3')
       socket.emit('showPrizePanel')
     })
     $('#hidePrizePanel').click(() => {
@@ -1393,10 +1390,12 @@
       socket.emit('hideBonusGraphics')
     })
     $('#playThinkGpx').click(() => {
+      socket.emit('stopAllSounds')
       socket.emit('playThinkGpx')
       socket.emit('playSound', '../sounds/10s suy nghĩ (VĐB).m4a')
     })
     $('#playAnswerGpx').click(() => {
+      socket.emit('stopAllSounds')
       socket.emit('playAnswerGpx')
       socket.emit('playSound', '../sounds/bonus.mp3')
     })
@@ -1444,9 +1443,9 @@
         });
         return result;
       };
-      $('#passwordInput1').val(generateRandomString(4))
-      $('#passwordInput2').val(generateRandomString(4))
-      $('#passwordInput3').val(generateRandomString(4))
+      $('#passwordInput1').val(generateRandomString(3))
+      $('#passwordInput2').val(generateRandomString(3))
+      $('#passwordInput3').val(generateRandomString(3))
       const response = await fetch('/api/set-passwords', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1467,6 +1466,25 @@
     socket.on('lockSpinButton', player => {
       spinBtnState[player - 1] = false
       $('#unlockSpinBtn' + player).css({ 'background-color': 'black', 'color': 'white' })
+    })
+
+    $('#unlockSpinBtn1').hover(() => {
+      $('#wheelWeb').addClass('zoomedInP1')
+    })
+    $('#unlockSpinBtn1').mouseleave(() => {
+      $('#wheelWeb').removeClass('zoomedInP1')
+    })
+    $('#unlockSpinBtn2').hover(() => {
+      $('#wheelWeb').addClass('zoomedInP2')
+    })
+    $('#unlockSpinBtn2').mouseleave(() => {
+      $('#wheelWeb').removeClass('zoomedInP2')
+    })
+    $('#unlockSpinBtn3').hover(() => {
+      $('#wheelWeb').addClass('zoomedInP3')
+    })
+    $('#unlockSpinBtn3').mouseleave(() => {
+      $('#wheelWeb').removeClass('zoomedInP3')
     })
   </script>
 </body>

@@ -569,7 +569,7 @@
     })
     socket.on('show3Categories', (categories) => {
       $('#threeCatArea').css('opacity', 1).animate({
-        top: '-80px'
+        top: '-100px'
       }, 1000)
       $('#threeCatArea span:nth-child(5)').text(categories[0])
       $('#threeCatArea span:nth-child(6)').text(categories[1])
@@ -581,10 +581,11 @@
         top: '220px'
       }, 1000, () => {
         $('#threeCatArea').css('opacity', 0)
+        $('#cat1Chosen, #cat2Chosen, #cat3Chosen').css('opacity', 0)
       })
     })
     socket.on('chooseCategory', (cat) => {
-      $('#chooseCat' + cat).css('opacity', 1)
+      $('#cat' + cat + 'Chosen').css('opacity', 1)
     })
     socket.on('showBonusGraphics', () => {
       $('#leftBonusArea').animate({

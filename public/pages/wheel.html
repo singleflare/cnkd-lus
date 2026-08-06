@@ -7,7 +7,7 @@
   <title>Wheel</title>
 </head>
 
-<body style='overflow: hidden;background:black;'>
+<body style='overflow: hidden;background:black;top:0;left:0;width:1920px;height:1080px;margin:0;position:relative'>
   <style>
     * {
       -webkit-user-select: none;
@@ -21,6 +21,40 @@
 
     #bonusWheel {
       transition: transform 15s cubic-bezier(1, 0, 0, 1);
+    }
+
+    .ptMini {
+      width: 100%;
+      position: relative;
+    }
+
+    @font-face {
+      font-family: 'thanhnhac';
+      src: url('../gpx/UTM-Thanh-Nhac-TL.ttf')
+    }
+
+    .prize,
+    .prizeIndex {
+      color: white;
+      width: 100%;
+      text-align: center;
+      font-family: 'thanhnhac';
+    }
+
+    .prize {
+      top: 50px;
+      position: absolute;
+      font-size: 20px;
+    }
+
+    .prizeIndex {
+      position: relative;
+      top: -10px;
+      font-size: 30px;
+    }
+
+    #ptArea>div {
+      position: relative;
     }
   </style>
   <img src='../gpx/Sân khấu.png' style='position: absolute;
@@ -94,22 +128,22 @@
   </div>
   <img src='../gpx/3 Kim.png' id='kims' style='position: absolute;
     width: 1420px;
-    left: 164px;
-    top: -180px;'>
+    left: 165px;
+    top: -179px;'>
   <img src='../gpx/Kim đỏ (trắng).png' id='redPlayer' style='position: absolute;
     width: 1420px;
-    left: 164px;
-    top: -180px;
+    left: 165px;
+    top: -179px;
     opacity: 0;'>
   <img src='../gpx/kim vàng (trắng).png' id='yellowPlayer' style='position: absolute;
     width: 1420px;
-    left: 164px;
-    top: -180px;
+    left: 165px;
+    top: -179px;
     opacity: 0;'>
   <img src='../gpx/Kim xanh (trắng).png' id='bluePlayer' style='position: absolute;
     width: 1420px;
-    left: 164px;
-    top: -180px;
+    left: 165px;
+    top: -179px;
     opacity: 0;'>
   <div id='bonusContainer' style='opacity: 0;'>
     <img src='../gpx/stagedb.png' style='position: absolute;
@@ -124,6 +158,115 @@
     width: 300px;
     left: 812px;
     top: 149px;'>
+    <img id='bonusFrontFace' src='../gpx/vđb mặt trước.png' style='position: absolute;
+    width: 400px;
+    left: 760px;
+    top: 500px;
+    height:205px;
+    z-index: 3;
+    transform-origin: top;
+    transform: rotateX(0deg);
+    transition: transform 0.5s linear;
+    opacity:0'>
+    <img id='bonusTopFace' src='../gpx/vđb mặt trên.png' style='position: absolute;
+    width: 400px;
+    left: 760px;
+    top: 280px;
+    z-index:3;
+    transform-origin: bottom;
+    transform: rotateX(90deg);
+    transition: transform 0.5s linear;
+    opacity:0'>
+    <img id='bonusBotFace' src='../gpx/vđb mặt trước.png' style='position: absolute;
+    width: 400px;
+    left: 760px;
+    top: 500px;
+    height:205px;
+    z-index:2;
+    opacity:0'>
+  </div>
+  <div id='ptArea'
+    style='display:grid;grid-template-columns: repeat(5,1fr);grid-template-rows: repeat(4,1fr);position: absolute;width: 800px;height: 600px;background:rgba(0,0,0,0.9);border-radius: 10px;border:1px solid gold;left:560px;top:345px;padding:10px;scale:0;transform-origin:center;box-sizing:border-box;gap:10px;'>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>1</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>2</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>3</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>4</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>5</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>6</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>7</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>8</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>9</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>10</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>11</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>12</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>13</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>14</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>15</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>16</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>17</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>18</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>19</div>
+    </div>
+    <div>
+      <img src='../gpx/Phần thưởng.png' class='ptMini'>
+      <div class='prizeIndex'>20</div>
+    </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src='disableDevTools.js'></script>
@@ -135,7 +278,13 @@
   <script>
     const socket = io()
     socket.on('data', data => {
-      console.log(data)
+      $(`#wheel1, #wheel2, #wheel3, #wheel4, #wheel5, #bonusContainer`).css('opacity', '0')
+      $('#obm300,#obm700').attr('src', '../gpx/Ô bí mật.png')
+      if (data.currentRound == 'bonus') {
+        $(`#bonusContainer`).css('opacity', '1')
+      }
+      else $(`#wheel${data.currentRound}`).css('opacity', '1')
+
       document.getElementById('wheelContainer').style.transform = 'rotate(' + data.currentRotation + 'deg)';
       data.wedgesStatus && Object.entries(data.wedgesStatus).forEach(([wedge, status]) => {
         if (status) {
@@ -205,6 +354,7 @@
     })
     socket.on('showWheel', round => {
       $(`#wheel1, #wheel2, #wheel3, #wheel4, #wheel5, #bonusContainer`).css('opacity', '0')
+      $('#obm300,#obm700').attr('src', '../gpx/Ô bí mật.png')
       if (round == 'bonus') {
         $(`#bonusContainer`).css('opacity', '1')
       }
@@ -218,6 +368,60 @@
       else {
         $('#' + wedge).css('opacity', '0')
       }
+    })
+
+    socket.on('revealPrize', (prizeIndex, prize) => {
+      console.log(prizeIndex, prize)
+      $(`#ptArea>div:nth-child(${prizeIndex})>.ptMini`).attr('src', '../gpx/' + prize + '.png')
+    })
+    socket.on('hidePrizePrizes', () => {
+      $('#ptArea>div>.ptMini').attr('src', '../gpx/Phần thưởng.png')
+    })
+    socket.on('showPrizePanel', () => {
+      $('#ptArea').animate({ scale: 1 }, { duration: 750 })
+    })
+    socket.on('hidePrizePanel', () => {
+      $('#ptArea').animate({ scale: 0 }, { duration: 750 })
+    })
+
+    socket.on('revealMysteryPrize', (position, prize) => {
+      console.log('revealMystery', position, prize)
+      if (prize == 'MĐ') {
+        if (position == '700') {
+          $('#obm700').attr('src', '../gpx/Ô bí mật (Mất điểm).png')
+        }
+        else if (position == '300') {
+          $('#obm300').attr('src', '../gpx/Ô bí mật (Mất điểm).png')
+        }
+      }
+      else if (prize == '10k') {
+        if (position == '700') {
+          $('#obm700').attr('src', '../gpx/GL 10000.png')
+        }
+        else if (position == '300') {
+          $('#obm300').attr('src', '../gpx/GL 10000.png')
+        }
+      }
+    })
+    socket.on('showEnvelope', () => {
+      $('#bonusTopFace,#bonusFrontFace,#bonusBotFace').css('opacity', 1)
+    })
+    socket.on('closeEnvelope', () => {
+      $('#bonusTopFace').css({ transform: 'rotateX(90deg)' })
+      setTimeout(() => {
+        $('#bonusFrontFace').css({ transform: 'rotateX(0deg)' })
+      }, 500);
+    })
+    socket.on('hideEnvelope', () => {
+      $('#bonusTopFace,#bonusFrontFace,#bonusBotFace').css('opacity', 0)
+    })
+    socket.on('revealBonusPrize', (prize) => {
+      console.log('revealBonusPrize', prize)
+      $('#bonusFrontFace').css({ transform: 'rotateX(90deg)' })
+      setTimeout(() => {
+        $('#bonusTopFace').css({ transform: 'rotateX(0deg)' })
+      }, 500);
+      $('#bonusBotFace').attr('src', '../gpx/' + prize + 'kgl.png')
     })
   </script>
 </body>

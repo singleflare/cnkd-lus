@@ -62,6 +62,7 @@ app.get(/^\/pages\/(p1|p2|p3)\.html$/, (req, res, next) => {
 });
 
 app.use(express.static('public'))
+console.log('http://localhost:3000/pages/controller.html')
 
 let puzzle=[]
 let solvedPuzzle=[]
@@ -77,6 +78,7 @@ let fsTimeout=null
 let bonusTime=0
 let currentRotation=0
 let currentBonusRotation=0
+let currentRound=1
 
 let wedgesStatus=new Map()
 wedgesStatus.set('obm700', false)
@@ -163,10 +165,31 @@ let score={
   }
 }
 
+let bonusPrizes = [40, 40, 40, 40, 40, 40, 45, 45, 45, 45, 45, 50, 50, 50, 50, 55, 55, 55, 60, 60, 65, 65, 75, 100]
+let prizePrizes = ['nhân 1,5', 'nhân 2', 'KHÁNG MĐ', '0 GL', '50 GL', '100 GL', '150 GL', '200 GL', '250 GL', '300 GL','350 GL', '400 GL', '500 GL', '600 GL', '700 GL', '800 GL', '900 GL', '1000 GL', '1500 GL', '2000 GL']
+let mysteryPrizes = ['10k', 'MĐ']
+function shuffle(array) {
+  let currentIndex = array.length;
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+}
+
 io.on('connection',(socket)=>{
   socket.emit('puzzleMode',puzzleMode)
   socket.emit('finalSpinMode',isFinalSpin)
-  socket.emit('data', { score,currentRotation,wedgesStatus:Object.fromEntries(wedgesStatus) })
+  socket.emit('data', { score,currentRotation,currentRound,wedgesStatus:Object.fromEntries(wedgesStatus)})
+  for(let i=0;i<56;i++){
+    if(puzzleState[i]==1) socket.emit('reveal',{index:i,state:1})
+    else if(puzzleState[i]==2) socket.emit('reveal',{index:i,state:2})
+    else if(puzzleState[i]==3) socket.emit('reveal',{index:i,state:3,letter:puzzle[i]})
+  }
   socket.on('buzz',(data)=>{
     buzzed.push(data)
     if(buzzed.length==1){
@@ -207,18 +230,52 @@ io.on('connection',(socket)=>{
     io.emit('finalSpinMode',isFinalSpin)
   })
 
-  socket.on('scoreboard',(data)=>{
-    console.log(data,score)
-    score.p1.name=data.p1.name
-    score.p1.score=data.p1.score
-    score.p1.total=data.p1.total
-    score.p2.name=data.p2.name
-    score.p2.score=data.p2.score
-    score.p2.total=data.p2.total
-    score.p3.name=data.p3.name
-    score.p3.score=data.p3.score
-    score.p3.total=data.p3.total
-    io.emit('scoreboard',data)
+  socket.on('updateScoreboard',(method,player,inputScore)=>{
+    console.log('updateScoreboard', method, player, inputScore)
+    if(method=='set') {
+      if(player==1) score.p1.score=inputScore
+      else if(player==2) score.p2.score=inputScore
+      else if(player==3) score.p3.score=inputScore
+      else if(player=='ks') score.ks.score=inputScore
+    }
+    else if(method=='plus') {
+      if(player==1) score.p1.score+=inputScore
+      else if(player==2) score.p2.score+=inputScore
+      else if(player==3) score.p3.score+=inputScore
+      else if(player=='ks') score.ks.score+=inputScore
+    }
+    else if(method=='minus') {
+      if(player==1) score.p1.score-=inputScore
+      else if(player==2) score.p2.score-=inputScore
+      else if(player==3) score.p3.score-=inputScore
+    }
+    else if(method=='oneHalf') {
+      if(player==1) score.p1.score*=1.5
+      else if(player==2) score.p2.score*=1.5
+      else if(player==3) score.p3.score*=1.5
+    }
+    else if(method=='half') {
+      if(player==1) score.p1.score/=2
+      else if(player==2) score.p2.score/=2
+      else if(player==3) score.p3.score/=2
+    }
+    else if(method=='double') {
+      if(player==1) score.p1.score*=2
+      else if(player==2) score.p2.score*=2
+      else if(player==3) score.p3.score*=2
+    }
+    else if(method=='zero') {
+      if(player==1) score.p1.score=0
+      else if(player==2) score.p2.score=0
+      else if(player==3) score.p3.score=0
+      else if(player=='ks') score.ks.score=0
+    }
+    else if(method=='name') {
+      if(player==1) score.p1.name=inputScore
+      else if(player==2) score.p2.name=inputScore
+      else if(player==3) score.p3.name=inputScore
+    }
+    io.emit('scoreboard',score)
   })
 
   socket.on('revealPuzzle',()=>{
@@ -437,6 +494,10 @@ io.on('connection',(socket)=>{
       io.emit('spinWheel', currentRotation,8)
     }
   })
+  socket.on('resetWheel',()=>{
+    currentRotation = 0
+    io.emit('spinWheel', currentRotation,3)
+  })
   socket.on('spinBonusWheel',()=>{
     currentBonusRotation += getRandomInt(1080, 1440)
     io.emit('playSound', '../sounds/nhacquaynondacbiet.m4a')
@@ -446,6 +507,7 @@ io.on('connection',(socket)=>{
     io.emit('indicatePlayer', player)
   })
   socket.on('showWheel', round => {
+    currentRound=round
     if(round=='bonus') io.emit('showWheel', 'bonus')
     else{
       wedgesStatus.set('cohoi', true)
@@ -526,11 +588,6 @@ io.on('connection',(socket)=>{
   socket.on('hideKs', () => {
     io.emit('hideKs')
   })
-  socket.on('setKsScore', (ksScore) => {
-    score.ks.score=ksScore
-    console.log('setKsScore', ksScore)
-    io.emit('setKsScore', ksScore)
-  })
   socket.on('setPlayerQualify', (player) => {
     if(player==1){
       score.p1.qualify=!score.p1.qualify
@@ -551,5 +608,68 @@ io.on('connection',(socket)=>{
   })
   socket.on('lockSpinButton', (player) => {
     io.emit('lockSpinButton', player)
+  })
+  socket.on('randomizeBonusPrizes', () => {
+    shuffle(bonusPrizes)
+    io.emit('bonusPrizes', bonusPrizes)
+  })
+  socket.on('randomizePrizePrizes', () => {
+    shuffle(prizePrizes)
+    io.emit('prizePrizes', prizePrizes)
+  })
+  socket.on('hidePrizePrizes', () => {
+    io.emit('hidePrizePrizes')
+  })
+  socket.on('showPrizePanel', () => {
+    io.emit('showPrizePanel')
+  })
+  socket.on('hidePrizePanel', () => {
+    io.emit('hidePrizePanel')
+  })
+  socket.on('randomizeMysteryPrizes', () => {
+    shuffle(mysteryPrizes)
+    io.emit('mysteryPrizes', mysteryPrizes)
+  })
+  socket.on('revealMysteryPrize', (value) => {
+    io.emit('revealMysteryPrize', value, mysteryPrizes[value === 700 ? 0 : 1])
+  })
+  socket.on('revealPrize', (i) => {
+    io.emit('revealPrize', i, prizePrizes[i - 1])
+  })
+  socket.on('revealBonusPrize', (i) => {
+    io.emit('revealBonusPrize', bonusPrizes[i - 1])
+  })
+  socket.on('show3Categories', (categories) => {
+    io.emit('show3Categories',categories)
+  })
+  socket.on('hide3Categories', () => {
+    io.emit('hide3Categories')
+  })
+  socket.on('chooseCategory', (cat) => {
+    io.emit('chooseCategory', cat)
+  })
+  socket.on('showBonusGraphics', () => {
+    io.emit('showBonusGraphics')
+  })
+  socket.on('hideBonusGraphics', () => {
+    io.emit('hideBonusGraphics')
+  })
+  socket.on('playThinkGpx', () => {
+    io.emit('playThinkGpx')
+  })
+  socket.on('playAnswerGpx', () => {
+    io.emit('playAnswerGpx')
+  })
+  socket.on('bonusLetter', (pos ,letter) => {
+    io.emit('bonusLetter', pos ,letter)
+  })
+  socket.on('showEnvelope', () => {
+    io.emit('showEnvelope')
+  })
+  socket.on('closeEnvelope', () => {
+    io.emit('closeEnvelope')
+  })
+  socket.on('hideEnvelope', () => {
+    io.emit('hideEnvelope')
   })
 })

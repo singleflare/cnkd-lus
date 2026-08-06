@@ -94,10 +94,6 @@
       width: 100%;
       text-align: center;
     }
-
-    .buzz {
-      transition: opacity 0.5s;
-    }
   </style>
   <video id='tossupVid' style='position: absolute;left: -1px;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đoán nhanh (full).mp4'></video>
@@ -108,7 +104,7 @@
   <video id='solvePuzzleVid' style='position: absolute;left: -1px;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đúng ô chữ.mp4'></video>
   <img src='../gpx/Bảng chữ.png' id='boardBg' style='width: 1920px;position: absolute;'>
-  <div id='catContainer' style='position: absolute;top:240px;'>
+  <div id='catContainer' style='position: absolute;top:240px;opacity:0'>
     <img src='../gpx/gợi ý.png' id='normal' style='position: absolute;opacity: 0;
     left: 417px;
     top: 816px;
@@ -219,6 +215,42 @@
     </div>
   </div>
   <div id="board"></div>
+  <div id='threeCatArea' style='position:relative;top:220px;opacity:0;'>
+    <img src='../gpx/3 CHU DE.png' id='threeCat' style='position:absolute;width: 1200px;left: 360px;top: 850px;'>
+    <img src='../gpx/CHUDEDUOCHON.png' id='cat1Chosen'
+      style='position:absolute;width: 1200px;left: 360px;top: 850px;opacity: 0;'>
+    <img src='../gpx/CHUDEDUOCHON.png' id='cat2Chosen'
+      style='position:absolute;width: 1200px;left: 360px;top: 935px;opacity: 0;'>
+    <img src='../gpx/CHUDEDUOCHON.png' id='cat3Chosen'
+      style='position:absolute;width: 1200px;left: 360px;top: 1020px;opacity: 0;'>
+    <span
+      style='position: absolute;width: 1200px;left: 360px;top: 880px;text-align: center;font-family: Lufga;font-size: 40pt;color:white'></span>
+    <span
+      style='position: absolute;width: 1200px;left: 360px;top: 965px;text-align: center;font-family: Lufga;font-size: 40pt;color:white'></span>
+    <span
+      style='position: absolute;width: 1200px;left: 360px;top: 1050px;text-align: center;font-family: Lufga;font-size: 40pt;color:white'></span>
+  </div>
+  <div id='leftBonusArea' style='position:absolute;left:-1100px;top:850px;'>
+    <img src='../gpx/NGHIA.png' id='nghia' style='position:absolute;width: 1100px;left: 0;'>
+    <span
+      style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:220px;top:35px;width:800px;text-align: center;'>CHỦ
+      ĐỀ</span>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:400px;top:100px'></span>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:500px;top:100px'></span>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:600px;top:100px'></span>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:700px;top:100px'></span>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:780px;top:100px'></span>
+  </div>
+  <div id='rightBonusArea' style='position:absolute;left:1920px;top:910px;opacity:0;'>
+    <img src='../gpx/3 CHUCAI.png' id='nghia' style='position:absolute;width: 600px;left: 0;top:-10px;'>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:140px;top:17px'></span>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:240px;top:17px'></span>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:340px;top:17px'></span>
+    <span style='position:absolute;font-family: Lufga;font-size: 40pt;color:white;left:440px;top:17px'></span>
+    <img src='../gpx/10GIAY.png' id='timerOutline' style='position:absolute;width: 500px;left: 50px;top: -35px;'>
+    <img src='' id='timerRed' style='position:absolute;width: 493px;left: 53.6px;top: -33.1px;opacity:1;'>
+  </div>
+
   <script src="/socket.io/socket.io.js"></script>
   <script src='disableDevTools.js'></script>
   <script src="https://code.jquery.com/jquery-4.0.0.min.js"
@@ -365,11 +397,13 @@
     }
 
     function showCategory(catType, category) {
-      console.log(catType, category)
+      $('#catContainer').css('opacity', '1')
       if (catType == 'hide') {
         $('#catContainer').animate({
           top: '240px'
-        }, 500, 'swing')
+        }, 500, 'swing', () => {
+          $('#catContainer').css('opacity', '0')
+        })
         $('#uplight').stop().css({
           'opacity': 1, 'left': '393px'
         })
@@ -497,6 +531,7 @@
       $('#p1Score').text(digitGroup(data.p1.score) + ' GL');
       $('#p2Score').text(digitGroup(data.p2.score) + ' GL');
       $('#p3Score').text(digitGroup(data.p3.score) + ' GL');
+      $('#ksScore').text(digitGroup(data.ks.score) + ' GL');
     });
 
     socket.on('togglePlayerWedge', (player, status, wedge) => {
@@ -509,20 +544,120 @@
         else $('#p' + player + wedge).css('opacity', '0.1')
       }
     })
-
-    socket.on('setKsScore', score => {
-      $('#ksScore').text(digitGroup(score) + ' GL')
-    })
     socket.on('setPlayerQualify', (player, state) => {
       console.log(player, state)
       $('#p' + player + 'ScoreContainer .color,#p' + player + 'ScoreContainer .gray').css('opacity', 0)
       $('#p' + player + 'ScoreContainer .' + (state ? 'gray' : 'color')).css('opacity', 1)
+      $('#p' + player + 'Name,#p' + player + 'Score').css('opacity', state ? 0.1 : 1)
     })
     socket.on('buzzed', player => {
       $('#p' + player + 'ScoreContainer .buzz').css('opacity', 1)
+      for (let i = 1; i <= 3; i++) {
+        if (i != player) {
+          $('#p' + i + 'ScoreContainer .color,#p' + i + 'ScoreContainer .gray').css('opacity', 0)
+          $('#p' + i + 'ScoreContainer .gray').css('opacity', 1)
+          $('#p' + i + 'Name,#p' + i + 'Score').css('opacity', 0.1)
+        }
+      }
     })
     socket.on('buzzersReset', player => {
       $('.buzz').css('opacity', 0)
+      for (let i = 1; i <= 3; i++) {
+        $('.gray').css('opacity', 0)
+        $('#p' + i + 'Name,#p' + i + 'Score,.color').css('opacity', 1)
+      }
+    })
+    socket.on('show3Categories', (categories) => {
+      $('#threeCatArea').css('opacity', 1).animate({
+        top: '-80px'
+      }, 1000)
+      $('#threeCatArea span:nth-child(5)').text(categories[0])
+      $('#threeCatArea span:nth-child(6)').text(categories[1])
+      $('#threeCatArea span:nth-child(7)').text(categories[2])
+
+    })
+    socket.on('hide3Categories', () => {
+      $('#threeCatArea').animate({
+        top: '220px'
+      }, 1000, () => {
+        $('#threeCatArea').css('opacity', 0)
+      })
+    })
+    socket.on('chooseCategory', (cat) => {
+      $('#chooseCat' + cat).css('opacity', 1)
+    })
+    socket.on('showBonusGraphics', () => {
+      $('#leftBonusArea').animate({
+        left: '-170px'
+      }, 1500, 'swing')
+      setTimeout(() => {
+        $('#leftBonusArea span:nth-child(3)').text('N')
+      }, 500)
+      setTimeout(() => {
+        $('#leftBonusArea span:nth-child(4)').text('G')
+      }, 1000)
+      setTimeout(() => {
+        $('#leftBonusArea span:nth-child(5)').text('H')
+      }, 1500)
+      setTimeout(() => {
+        $('#leftBonusArea span:nth-child(6)').text('I')
+      }, 2000)
+      setTimeout(() => {
+        $('#leftBonusArea span:nth-child(7)').text('A')
+      }, 2500)
+      setTimeout(() => {
+        $('#rightBonusArea').css('opacity', 1).animate({
+          left: '1250px'
+        }, 1500, 'swing')
+      }, 2500)
+    })
+    socket.on('hideBonusGraphics', () => {
+      $('#leftBonusArea').animate({
+        left: '-1100px'
+      }, 1500, 'swing', () => {
+        $('#leftBonusArea span:nth-child(3)').text('')
+        $('#leftBonusArea span:nth-child(4)').text('')
+        $('#leftBonusArea span:nth-child(5)').text('')
+        $('#leftBonusArea span:nth-child(6)').text('')
+        $('#leftBonusArea span:nth-child(7)').text('')
+      })
+      $('#rightBonusArea').animate({
+        left: '1920px'
+      }, 1500, 'swing', () => {
+        $('#rightBonusArea span:nth-child(2)').text('')
+        $('#rightBonusArea span:nth-child(3)').text('')
+        $('#rightBonusArea span:nth-child(4)').text('')
+        $('#rightBonusArea span:nth-child(5)').text('')
+        $('#rightBonusArea').css('opacity', 0)
+      })
+    })
+    let timerInterval
+    socket.on('playThinkGpx', () => {
+      let i = 10
+      $('#timerRed').attr('src', '../gpx/' + i + 's.png')
+      timerInterval = setInterval(() => {
+        i--
+        $('#timerRed').attr('src', '../gpx/' + i + 's.png')
+        if (i <= 0) {
+          clearInterval(timerInterval)
+          $('#timerRed').attr('src', '')
+        }
+      }, 1000)
+    })
+    socket.on('playAnswerGpx', () => {
+      let i = 10
+      $('#timerRed').attr('src', '../gpx/' + i + 's.png')
+      timerInterval = setInterval(() => {
+        i--
+        $('#timerRed').attr('src', '../gpx/' + i + 's.png')
+        if (i <= 0) {
+          clearInterval(timerInterval)
+          $('#timerRed').attr('src', '')
+        }
+      }, 1000)
+    })
+    socket.on('bonusLetter', (pos, letter) => {
+      $('#rightBonusArea span:nth-child(' + (pos + 1) + ')').text(letter)
     })
   </script>
 </body>

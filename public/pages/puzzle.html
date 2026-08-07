@@ -95,14 +95,14 @@
       text-align: center;
     }
   </style>
-  <video id='tossupVid' style='position: absolute;left: -1px;top: 0;width: 1920px;opacity: 0;'
+  <!-- <video id='tossupVid' style='position: absolute;left: -1px;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đoán nhanh (full).mp4'></video>
   <video id='solveTossupPuzzleVid' style='position: absolute;left: -1px;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đúng ô chữ (đoán nhanh).mp4'></video>
   <video id='showPuzzleVid' style='position: absolute;left: -1px;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Ô chữ hiện.mp4'></video>
   <video id='solvePuzzleVid' style='position: absolute;left: -1px;top: 0;width: 1920px;opacity: 0;'
-    src='../gpx/Đúng ô chữ.mp4'></video>
+    src='../gpx/Đúng ô chữ.mp4'></video> -->
   <img src='../gpx/Bảng chữ.png' id='boardBg' style='width: 1920px;position: absolute;'>
   <div id='catContainer' style='position: absolute;top:240px;opacity:0'>
     <img src='../gpx/gợi ý.png' id='normal' style='position: absolute;opacity: 0;
@@ -309,10 +309,12 @@
     })
 
     let vol = .1
+    let repeatedSounds = ['../sounds/toss up 1.mp3', '../sounds/toss up 2.mp3', '../sounds/toss up 3.mp3', '../sounds/nhac sieu toc.mp3', '../sounds/nhacmoptobm.mp3', '../sounds/speed up.mp3', '../sounds/3c1v.mp3']
     function playSound(url, vol) {
       const sound = new Howl({
         src: [url],
-        volume: vol
+        volume: vol,
+        loop: repeatedSounds.includes(url) ? true : false
       });
       sounds.push(sound)
       sound.play();
@@ -341,7 +343,7 @@
       return output;
     }
 
-    document.getElementById('showPuzzleVid').addEventListener('play', () => {
+    /*document.getElementById('showPuzzleVid').addEventListener('play', () => {
       document.getElementById('showPuzzleVid').currentTime = 1
       document.getElementById('showPuzzleVid').style.opacity = 1
       $('#boardBg').css('opacity', 0)
@@ -392,7 +394,7 @@
     }
     function playSolveTossupPuzzleVid() {
       document.getElementById('solveTossupPuzzleVid').play()
-    }
+    }*/
 
     function showCategory(catType, category) {
       $('#catContainer').css('opacity', '1')
@@ -455,7 +457,7 @@
     }
 
     function revealPuzzle(puzzle) {
-      playShowPuzzleVid()
+      //playShowPuzzleVid()
       let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
       let i = 0
       let interval = setInterval(() => {
@@ -472,8 +474,8 @@
     }
 
     function solvePuzzle(puzzle, mode) {
-      if (mode == 'normal') playSolvePuzzleVid()
-      else if (mode == 'tossup') playSolveTossupPuzzleVid()
+      //if (mode == 'normal') playSolvePuzzleVid()
+      //else if (mode == 'tossup') playSolveTossupPuzzleVid()
       let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
       let i = 0
       let interval = setInterval(() => {
@@ -516,9 +518,9 @@
       }, 500, 'swing')
     })
 
-    socket.on('openRandomTossup', () => {
+    /*socket.on('openRandomTossup', () => {
       playTossupVid()
-    })
+    })*/
     socket.on('scoreboard', (data) => {
       $('#p1Name').text(data.p1.name);
       $('#p2Name').text(data.p2.name);

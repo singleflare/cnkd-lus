@@ -139,6 +139,9 @@
     text-align: center;'></div>
   </div>
   <div id='scoreContainer'>
+    <!-- <div id='stContainer' style='position: absolute;left: 200px;top: 10px;'>
+      <img src='../gpx/siêu tốc đồ họa.png' style='position: absolute;'>
+    </div> -->
     <div id='ksContainer' style='position: absolute;left: -500px;top: 10px;'>
       <img src='../gpx/Ketsat.png' style='position: absolute;width: 500px;'>
       <div id='ksScore'
@@ -249,7 +252,6 @@
     <img src='../gpx/10GIAY.png' id='timerOutline' style='position:absolute;width: 500px;left: 50px;top: -35px;'>
     <img src='' id='timerRed' style='position:absolute;width: 493px;left: 53.6px;top: -33.1px;opacity:1;'>
   </div>
-
   <script src="/socket.io/socket.io.js"></script>
   <script src='disableDevTools.js'></script>
   <script src="https://code.jquery.com/jquery-4.0.0.min.js"
@@ -460,6 +462,13 @@
       //playShowPuzzleVid()
       let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
       let i = 0
+      for (let j = 0; j < openSequence.length; j++) {
+        if (puzzle[openSequence[j]] == '') {
+          openSequence.splice(j, 1);
+          j--;
+        }
+      }
+      console.log(openSequence)
       let interval = setInterval(() => {
         if (puzzle[openSequence[i]] != '') {
           $('#letter' + openSequence[i]).addClass('hasLetter');
@@ -470,19 +479,37 @@
         }
         i++
         if (i >= openSequence.length) clearInterval(interval)
-      }, 25)
+      }, 75)
     }
 
     function solvePuzzle(puzzle, mode) {
       //if (mode == 'normal') playSolvePuzzleVid()
       //else if (mode == 'tossup') playSolveTossupPuzzleVid()
       let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
+      for (let j = 0; j < openSequence.length; j++) {
+        if (puzzle[openSequence[j]] == '') {
+          openSequence.splice(j, 1);
+          j--;
+        }
+      }
       let i = 0
-      let interval = setInterval(() => {
-        $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
-        i++
-        if (i >= openSequence.length) clearInterval(interval)
-      }, 10)
+      if (mode == 'lose') {
+        let interval = setInterval(() => {
+          $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
+          i++
+          if (i >= openSequence.length) {
+            socket.emit('playSound', '../sounds/lose bonus.mp3')
+            clearInterval(interval)
+          }
+        }, 250)
+      }
+      else {
+        let interval = setInterval(() => {
+          $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
+          i++
+          if (i >= openSequence.length) clearInterval(interval)
+        }, 10)
+      }
     }
 
     socket.on('revealPuzzle', puzzle => revealPuzzle(puzzle))
@@ -505,16 +532,28 @@
       $('#ksContainer').animate({
         'left': '40px'
       }, 500, 'swing')
-      $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
-        'left': '+=270px'
+      $('#p1ScoreContainer').animate({
+        'left': '580px'
+      }, 500, 'swing')
+      $('#p2ScoreContainer').animate({
+        'left': '1010px'
+      }, 500, 'swing')
+      $('#p3ScoreContainer').animate({
+        'left': '1440px'
       }, 500, 'swing')
     })
     socket.on('hideKs', () => {
       $('#ksContainer').animate({
         'left': '-500px'
       }, 500, 'swing')
-      $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
-        'left': '-=270px'
+      $('#p1ScoreContainer').animate({
+        'left': '310px'
+      }, 500, 'swing')
+      $('#p2ScoreContainer').animate({
+        'left': '740px'
+      }, 500, 'swing')
+      $('#p3ScoreContainer').animate({
+        'left': '1170px'
       }, 500, 'swing')
     })
 
@@ -657,6 +696,35 @@
     socket.on('bonusLetter', (pos, letter) => {
       $('#rightBonusArea span:nth-child(' + (pos + 1) + ')').text(letter)
     })
+
+    // socket.on('showSt', () => {
+    //   $('#stContainer').animate({
+    //     'left': '40px'
+    //   }, 500, 'swing')
+    //   $('#p1ScoreContainer').animate({
+    //     'left': '580px'
+    //   }, 500, 'swing')
+    //   $('#p2ScoreContainer').animate({
+    //     'left': '1010px'
+    //   }, 500, 'swing')
+    //   $('#p3ScoreContainer').animate({
+    //     'left': '1440px'
+    //   }, 500, 'swing')
+    // })
+    // socket.on('hideSt', () => {
+    //   $('#stContainer').animate({
+    //     'left': '-200px'
+    //   }, 500, 'swing')
+    //   $('#p1ScoreContainer').animate({
+    //     'left': '-200px'
+    //   }, 500, 'swing')
+    //   $('#p2ScoreContainer').animate({
+    //     'left': '-200px'
+    //   }, 500, 'swing')
+    //   $('#p3ScoreContainer').animate({
+    //     'left': '-200px'
+    //   }, 500, 'swing')
+    // })
   </script>
 </body>
 

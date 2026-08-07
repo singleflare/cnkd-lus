@@ -316,6 +316,13 @@
           <button class='togglePlayerNhandoi' id='toggleKsnhandoi'
             style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>NĐ</button>
         </div>
+        <!-- <div style='margin:10px 0'>
+          <span>Hiện đồ họa ST với điểm</span>
+          <button id='showSt1'>NC1</button>
+          <button id='showSt2'>NC2</button>
+          <button id='showSt3'>NC3</button>
+          <button id='hideSt'>Ẩn</button>
+        </div> -->
       </div>
     </div>
     <div style='width:640px;padding:5px;box-sizing:border-box;position:relative;'>
@@ -465,6 +472,7 @@
       <button id='stBedBtn' style='background:#3898FF;color:#FFFF03'>Nhạc ST</button>
       <button id="tlBtn">TL</button>
       <button id="mmBtn" style='background:#10336B;color:white'>MM</button>
+      <button id="ksBtn" style='background-image:linear-gradient(gray,lightgray,gray);color:black'>KS</button>
       <br>
       <span>VĐB</span>
       <button id="playGALUletters">NGHIA</button>
@@ -731,8 +739,8 @@
     })
     $('#solvePuzzleLose').click(() => {
       socket.emit('stopAllSounds')
-      socket.emit('playSound', '../sounds/lose bonus.mp3')
-      socket.emit('solvePuzzle', 'tossup')
+      //socket.emit('playSound', '../sounds/lose bonus.mp3')
+      socket.emit('solvePuzzle', 'lose')
       onetwothree.forEach(player => {
         $('#scoreboard div').css('background-color', 'black')
       })
@@ -810,6 +818,9 @@
     })
     $('#mmBtn').click(() => {
       socket.emit('playSound', '../sounds/mayman.mp3')
+    })
+    $('#ksBtn').click(() => {
+      socket.emit('playSound', '../sounds/lucky_coin_redeem.wav')
     })
     $('#ndBtn').click(() => {
       socket.emit('playSound', '../sounds/nhandoi.mp3')
@@ -1050,6 +1061,11 @@
     $('#p1Clear').click(() => {
       socket.emit('updateScoreboard', 'zero', 1)
     })
+    $('#p2Name').on('keydown', (e) => {
+      if (e.key === 'Enter') {
+        socket.emit('updateScoreboard', 'name', 2, $('#p2Name').val())
+      }
+    })
     $('#p2ScoreInput').on('keydown', (e) => {
       if (e.key === 'Enter') {
         socket.emit('updateScoreboard', 'set', 2, parseInt($('#p2ScoreInput').val()))
@@ -1072,6 +1088,11 @@
     })
     $('#p2Clear').click(() => {
       socket.emit('updateScoreboard', 'zero', 2)
+    })
+    $('#p3Name').on('keydown', (e) => {
+      if (e.key === 'Enter') {
+        socket.emit('updateScoreboard', 'name', 3, $('#p3Name').val())
+      }
     })
     $('#p3ScoreInput').on('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -1265,10 +1286,19 @@
     })
     $('#showKs').click(() => {
       socket.emit('showKs')
+      socket.emit('playSound', '../sounds/lucky_coin_redeem.wav')
     })
     $('#hideKs').click(() => {
       socket.emit('hideKs')
     })
+
+    $('#showSt').click(() => {
+      socket.emit('showSt')
+    })
+    $('#hideSt').click(() => {
+      socket.emit('hideSt')
+    })
+
     $('#p1Qualify').click(() => {
       socket.emit('setPlayerQualify', 1)
     })

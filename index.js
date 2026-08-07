@@ -166,7 +166,7 @@ let score={
 }
 
 let bonusPrizes = [40, 40, 40, 40, 40, 40, 45, 45, 45, 45, 45, 50, 50, 50, 50, 55, 55, 55, 60, 60, 65, 65, 75, 100]
-let prizePrizes = ['nhân 1,5', 'nhân 2', 'KHÁNG MĐ', '0 GL', '50 GL', '100 GL', '150 GL', '200 GL', '250 GL', '300 GL','350 GL', '400 GL', '500 GL', '600 GL', '700 GL', '800 GL', '900 GL', '1000 GL', '1500 GL', '2000 GL']
+let prizePrizes = ['NHÂN 1,5', 'NHÂN 2', 'KHÁNG MĐ', '0 GL', '50 GL', '100 GL', '150 GL', '200 GL', '250 GL', '300 GL','350 GL', '400 GL', '500 GL', '600 GL', '700 GL', '800 GL', '900 GL', '1000 GL', '1500 GL', '2000 GL']
 let mysteryPrizes = ['10k', 'MĐ']
 function shuffle(array) {
   let currentIndex = array.length;
@@ -588,6 +588,12 @@ io.on('connection',(socket)=>{
   })
   socket.on('hideKs', () => {
     io.emit('hideKs')
+  })
+  socket.on('showSt', () => {
+    io.emit('showSt')
+  })
+  socket.on('hideSt', () => {
+    io.emit('hideSt')
   })
   socket.on('setPlayerQualify', (player) => {
     if(player==1){

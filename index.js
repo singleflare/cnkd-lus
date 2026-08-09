@@ -78,7 +78,10 @@ let fsTimeout=null
 let bonusTime=0
 let currentRotation=0
 let currentBonusRotation=0
-let currentRound=1
+let puzzleNumber=-1
+let wheelNumber=1
+let isBonusPrizeWith1m=false
+let messageHistory=[]
 
 let wedgesStatus=new Map()
 wedgesStatus.set('obm700', false)
@@ -106,6 +109,7 @@ let score={
     name:'',
     score:0,
     total:0,
+    eachRoundScore:[0,0,0,0,0,0,0,0,0,0,0,0],
     wedges:{
       'themluot': false,
       'cohoi': false,
@@ -122,6 +126,7 @@ let score={
     name:'',
     score:0,
     total:0,
+    eachRoundScore:[0,0,0,0,0,0,0,0,0,0,0,0],
     wedges:{
       'themluot': false,
       'cohoi': false,
@@ -138,6 +143,7 @@ let score={
     name:'',
     score:0,
     total:0,
+    eachRoundScore:[0,0,0,0,0,0,0,0,0,0,0,0],
     wedges:{
       'themluot': false,
       'cohoi': false,
@@ -166,6 +172,7 @@ let score={
 }
 
 let bonusPrizes = [40, 40, 40, 40, 40, 40, 45, 45, 45, 45, 45, 50, 50, 50, 50, 55, 55, 55, 60, 60, 65, 65, 75, 100]
+let bonusPrizesWith1m = [40, 40, 40, 40, 40, 40, 45, 45, 45, 45, 45, 50, 50, 50, 50, 55, 55, 55, 60, 60, 65, 65, 75, '1mgl']
 let prizePrizes = ['NHÂN 1,5', 'NHÂN 2', 'KHÁNG MĐ', '0 GL', '50 GL', '100 GL', '150 GL', '200 GL', '250 GL', '300 GL','350 GL', '400 GL', '500 GL', '600 GL', '700 GL', '800 GL', '900 GL', '1000 GL', '1500 GL', '2000 GL']
 let mysteryPrizes = ['10k', 'MĐ']
 function shuffle(array) {
@@ -182,9 +189,10 @@ function shuffle(array) {
 }
 
 io.on('connection',(socket)=>{
+  socket.emit('messageHistory', messageHistory)
   socket.emit('puzzleMode',puzzleMode)
   socket.emit('finalSpinMode',isFinalSpin)
-  socket.emit('data', { score,currentRotation,currentRound,wedgesStatus:Object.fromEntries(wedgesStatus)})
+  socket.emit('data', { score,currentRotation,wheelNumber,wedgesStatus:Object.fromEntries(wedgesStatus)})
   for(let i=0;i<56;i++){
     if(puzzleState[i]==1) socket.emit('reveal',{index:i,state:1})
     else if(puzzleState[i]==2) socket.emit('reveal',{index:i,state:2})
@@ -211,6 +219,7 @@ io.on('connection',(socket)=>{
     solvedPuzzle=data.solved
     question=data.question
     explain=data.explain
+    puzzleNumber=data.puzzleNumber
     for(let i=0;i<56;i++){
       if(puzzle[i]=='') puzzleState[i]=0
       else if(puzzle[i]=='?'||puzzle[i]=='-'||puzzle[i]=='!'||puzzle[i]=='.'||puzzle[i]==','||puzzle[i]=="&"||puzzle[i]=='/') puzzleState[i]=3
@@ -275,7 +284,26 @@ io.on('connection',(socket)=>{
       else if(player==2) score.p2.name=inputScore
       else if(player==3) score.p3.name=inputScore
     }
-    io.emit('scoreboard',score)
+    io.emit('scoreboard',player,score)
+  })
+  socket.on('updateTotal',(player,method,inputTotal)=>{
+    if(method=='set') {
+      if(!inputTotal){
+        if(player==1) score.p1.eachRoundScore[puzzleNumber]=score.p1.score
+        else if(player==2) score.p2.eachRoundScore[puzzleNumber]=score.p2.score
+        else if(player==3) score.p3.eachRoundScore[puzzleNumber]=score.p3.score
+      }
+      else{
+        if(player==1) score.p1.total=inputTotal
+        else if(player==2) score.p2.total=inputTotal
+        else if(player==3) score.p3.total=inputTotal
+      }
+    }
+    else if(method=='add') {
+      if(player==1) score.p1.total+=score.p1.score
+      else if(player==2) score.p2.total+=score.p2.score
+      else if(player==3) score.p3.total+=score.p3.score
+    }
   })
 
   socket.on('revealPuzzle',()=>{
@@ -308,6 +336,57 @@ io.on('connection',(socket)=>{
     }
     console.log(idx, puzzleState[idx], puzzle[idx])
     io.emit('reveal',{index:idx,state:puzzleState[idx],letter:puzzle[idx]})
+  })
+  socket.on('individualLetter',(letter)=>{
+    let idxToOpen=[]
+    for(let i=0;i<56;i++){
+      if(letter=='DB'){
+        let bonusLetters=['N','G','H','I','A']
+        bonusLetters.forEach(bonusLetter=>{
+          if((puzzle[i]==bonusLetter&&puzzleState[i]==1)||(puzzle[i]==bonusLetter&&puzzleState[i]==2)){
+            idxToOpen.push(i)
+          }
+        })
+      }
+      else if((puzzle[i]==letter&&puzzleState[i]==1)||(puzzle[i]==letter&&puzzleState[i]==2)) {
+        idxToOpen.push(i)
+      }
+    }
+    if(idxToOpen.length==0) {
+      io.emit('playSound', '../sounds/sai.mp3')
+    }
+    else{
+      console.log(idxToOpen)
+      if(puzzleState[idxToOpen[0]]==1) {
+        if(!isFinalSpin) io.emit('playSound', '../sounds/ding.mp3')
+        for(let i=0;i<idxToOpen.length;i++){
+          puzzleState[idxToOpen[i]]=2
+          console.log(puzzleState[idxToOpen[i]])
+          io.emit('reveal',{index:idxToOpen[i],state:2,letter:puzzle[idxToOpen[i]]})
+        }
+      }
+      else if(puzzleState[idxToOpen[0]]==2) {
+        if(isFinalSpin) {
+          clearTimeout(fsTimeout)
+          fsTimeout=setTimeout(()=>{
+            io.emit('playSound', '../sounds/sai.mp3')
+          }, 5000)
+        }
+        for(let i=0;i<idxToOpen.length;i++){
+          puzzleState[idxToOpen[i]]=3
+          io.emit('reveal',{index:idxToOpen[i],state:3,letter:puzzle[idxToOpen[i]]})
+          io.emit('disableLetterBtn',idxToOpen[i])
+        }
+      }
+    }
+  })
+  socket.on('undoOpenedLetters',()=>{
+    for(let i=0;i<56;i++){
+      if(puzzleState[i]==2) {
+        puzzleState[i]=1
+        io.emit('reveal',{index:i,state:1})
+      }
+    }
   })
   socket.on('solvePuzzle',(mode)=>{ 
     socket.emit('stopAllSounds')
@@ -475,6 +554,17 @@ io.on('connection',(socket)=>{
     io.emit('playSound',url)
     console.log(url)
   })
+  socket.on('chatMessage', (text) => {
+    const messageText = (text || '').toString().trim()
+    if (!messageText) return
+    const message = {
+      text: messageText,
+      timestamp: new Date().toISOString()
+    }
+    messageHistory.push(message)
+    if (messageHistory.length > 100) messageHistory.shift()
+    io.emit('chatMessage', message)
+  })
   socket.on('stopAllSounds',()=>{
     io.emit('stopAllSounds')
   })
@@ -508,7 +598,7 @@ io.on('connection',(socket)=>{
     io.emit('indicatePlayer', player)
   })
   socket.on('showWheel', round => {
-    currentRound=round
+    wheelNumber=round
     if(round=='bonus') io.emit('showWheel', 'bonus')
     else{
       wedgesStatus.set('cohoi', true)
@@ -618,7 +708,13 @@ io.on('connection',(socket)=>{
   })
   socket.on('randomizeBonusPrizes', () => {
     shuffle(bonusPrizes)
+    isBonusPrizeWith1m=false
     io.emit('bonusPrizes', bonusPrizes)
+  })
+  socket.on('randomizeBonusPrizesWith1m', () => {
+    shuffle(bonusPrizesWith1m)
+    isBonusPrizeWith1m=true
+    io.emit('bonusPrizesWith1m', bonusPrizesWith1m)
   })
   socket.on('randomizePrizePrizes', () => {
     shuffle(prizePrizes)
@@ -644,7 +740,7 @@ io.on('connection',(socket)=>{
     io.emit('revealPrize', i, prizePrizes[i - 1])
   })
   socket.on('revealBonusPrize', (i) => {
-    io.emit('revealBonusPrize', bonusPrizes[i - 1])
+    io.emit('revealBonusPrize', isBonusPrizeWith1m?bonusPrizesWith1m[i - 1]:bonusPrizes[i - 1])
   })
   socket.on('show3Categories', (categories) => {
     io.emit('show3Categories',categories)

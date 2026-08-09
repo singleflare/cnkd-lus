@@ -280,10 +280,10 @@
     socket.on('data', data => {
       $(`#wheel1, #wheel2, #wheel3, #wheel4, #wheel5, #bonusContainer`).css('opacity', '0')
       $('#obm300,#obm700').attr('src', '../gpx/Ô bí mật.png')
-      if (data.currentRound == 'bonus') {
+      if (data.wheelNumber == 'bonus') {
         $(`#bonusContainer`).css('opacity', '1')
       }
-      else $(`#wheel${data.currentRound}`).css('opacity', '1')
+      else $(`#wheel${data.wheelNumber}`).css('opacity', '1')
 
       document.getElementById('wheelContainer').style.transform = 'rotate(' + data.currentRotation + 'deg)';
       data.wedgesStatus && Object.entries(data.wedgesStatus).forEach(([wedge, status]) => {
@@ -418,7 +418,7 @@
       setTimeout(() => {
         $('#bonusTopFace').css({ transform: 'rotateX(0deg)' })
       }, 500);
-      $('#bonusBotFace').attr('src', '../gpx/' + prize + 'kgl.png')
+      $('#bonusBotFace').attr('src', prize == '1mgl' ? '../gpx/1mgl.png' : '../gpx/' + prize + 'kgl.png')
     })
   </script>
 </body>

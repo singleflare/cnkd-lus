@@ -94,6 +94,11 @@
       width: 100%;
       text-align: center;
     }
+
+    @font-face {
+      font-family: 'helve';
+      src: url('../gpx/HelveticaNeueLTStd-MdCn.otf');
+    }
   </style>
   <!-- <video id='tossupVid' style='position: absolute;left: -1px;top: 0;width: 1920px;opacity: 0;'
     src='../gpx/Đoán nhanh (full).mp4'></video>
@@ -139,9 +144,11 @@
     text-align: center;'></div>
   </div>
   <div id='scoreContainer'>
-    <!-- <div id='stContainer' style='position: absolute;left: 200px;top: 10px;'>
-      <img src='../gpx/siêu tốc đồ họa.png' style='position: absolute;'>
-    </div> -->
+    <div id='stContainer' style='position: absolute;left: 260px;top: -200px;'>
+      <img src='../gpx/siêu tốc đồ hoạ.png' style='position: absolute;width:600px'>
+      <span id='stText'
+        style='position: absolute;font-family: helve;font-style:italic;font-size: 40pt;text-shadow:-2px -2px 0 black,2px -2px 0 black,-2px 2px 0 black,2px 2px 0 black;color:white;left: 240px;top: 33px;width:340px;text-align: center;'></span>
+    </div>
     <div id='ksContainer' style='position: absolute;left: -500px;top: 10px;'>
       <img src='../gpx/Ketsat.png' style='position: absolute;width: 500px;'>
       <div id='ksScore'
@@ -310,7 +317,7 @@
       }
     })
 
-    let vol = .1
+    let vol = .2
     let repeatedSounds = ['../sounds/toss up 1.mp3', '../sounds/toss up 2.mp3', '../sounds/toss up 3.mp3', '../sounds/nhac sieu toc.mp3', '../sounds/nhacmoptobm.mp3', '../sounds/speed up.mp3', '../sounds/3c1v.mp3']
     function playSound(url, vol) {
       const sound = new Howl({
@@ -447,7 +454,7 @@
         $('#letter' + index).removeClass('waitToOpen hasLetter')
       }
       else if (state == 1) {
-        $('#letter' + index).addClass('hasLetter')
+        $('#letter' + index).removeClass('waitToOpen').addClass('hasLetter')
       }
       else if (state == 2) {
         $('#letter' + index).addClass('waitToOpen')
@@ -502,6 +509,31 @@
             clearInterval(interval)
           }
         }, 250)
+      }
+      else if (mode == 'win') {
+        let interval = setInterval(() => {
+          $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
+          i++
+          if (i >= openSequence.length) clearInterval(interval)
+        }, 10)
+        $('#leftBonusArea').animate({
+          left: '-1100px'
+        }, 1500, 'swing', () => {
+          $('#leftBonusArea span:nth-child(3)').text('')
+          $('#leftBonusArea span:nth-child(4)').text('')
+          $('#leftBonusArea span:nth-child(5)').text('')
+          $('#leftBonusArea span:nth-child(6)').text('')
+          $('#leftBonusArea span:nth-child(7)').text('')
+        })
+        $('#rightBonusArea').animate({
+          left: '1920px'
+        }, 1500, 'swing', () => {
+          $('#rightBonusArea span:nth-child(2)').text('')
+          $('#rightBonusArea span:nth-child(3)').text('')
+          $('#rightBonusArea span:nth-child(4)').text('')
+          $('#rightBonusArea span:nth-child(5)').text('')
+          $('#rightBonusArea').css('opacity', 0)
+        })
       }
       else {
         let interval = setInterval(() => {
@@ -560,14 +592,16 @@
     /*socket.on('openRandomTossup', () => {
       playTossupVid()
     })*/
-    socket.on('scoreboard', (data) => {
-      $('#p1Name').text(data.p1.name);
-      $('#p2Name').text(data.p2.name);
-      $('#p3Name').text(data.p3.name);
-      $('#p1Score').text(digitGroup(data.p1.score) + ' GL');
-      $('#p2Score').text(digitGroup(data.p2.score) + ' GL');
-      $('#p3Score').text(digitGroup(data.p3.score) + ' GL');
-      $('#ksScore').text(digitGroup(data.ks.score) + ' GL');
+    socket.on('scoreboard', (player, score) => {
+      console.log(player, score)
+      $('#p1Name').text(score.p1.name);
+      $('#p2Name').text(score.p2.name);
+      $('#p3Name').text(score.p3.name);
+      $('#p1Score').text(digitGroup(score.p1.score) + ' GL');
+      $('#p2Score').text(digitGroup(score.p2.score) + ' GL');
+      $('#p3Score').text(digitGroup(score.p3.score) + ' GL');
+      $('#ksScore').text(digitGroup(score.ks.score) + ' GL');
+      $('#stText').text($('#p' + player + 'Score').text());
     });
 
     socket.on('togglePlayerWedge', (player, status, wedge) => {
@@ -697,34 +731,24 @@
       $('#rightBonusArea span:nth-child(' + (pos + 1) + ')').text(letter)
     })
 
-    // socket.on('showSt', () => {
-    //   $('#stContainer').animate({
-    //     'left': '40px'
-    //   }, 500, 'swing')
-    //   $('#p1ScoreContainer').animate({
-    //     'left': '580px'
-    //   }, 500, 'swing')
-    //   $('#p2ScoreContainer').animate({
-    //     'left': '1010px'
-    //   }, 500, 'swing')
-    //   $('#p3ScoreContainer').animate({
-    //     'left': '1440px'
-    //   }, 500, 'swing')
-    // })
-    // socket.on('hideSt', () => {
-    //   $('#stContainer').animate({
-    //     'left': '-200px'
-    //   }, 500, 'swing')
-    //   $('#p1ScoreContainer').animate({
-    //     'left': '-200px'
-    //   }, 500, 'swing')
-    //   $('#p2ScoreContainer').animate({
-    //     'left': '-200px'
-    //   }, 500, 'swing')
-    //   $('#p3ScoreContainer').animate({
-    //     'left': '-200px'
-    //   }, 500, 'swing')
-    // })
+    socket.on('showSt', () => {
+      $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
+        'top': '-200px'
+      }, 500, 'swing', () => {
+        $('#stContainer').animate({
+          'top': '50px'
+        }, 500, 'swing')
+      })
+    })
+    socket.on('hideSt', () => {
+      $('#stContainer').animate({
+        'top': '-200px'
+      }, 500, 'swing', () => {
+        $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
+          'top': '15px'
+        }, 500, 'swing')
+      })
+    })
   </script>
 </body>
 

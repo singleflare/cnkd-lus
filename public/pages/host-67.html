@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Host</title>
+  <style>
+    * {
+      font-size: 15pt;
+      color: white;
+    }
+
+    p {
+      text-align: center;
+      margin: 1px;
+    }
+
+    button:hover {
+      background: white !important;
+      color: black !important;
+    }
+
+    button:disabled {
+      background: black !important;
+      color: white !important;
+      opacity: 0.5;
+    }
+
+    button:hover:disabled {
+      background: black !important;
+      color: white !important;
+      opacity: 0.5;
+    }
+
+    #wheelWeb {
+      width: 1920px;
+      position: absolute;
+      top: -325px;
+      aspect-ratio: 16 / 9;
+      scale: 0.4;
+      left: -577px;
+      border: none;
+    }
+
+    #wheelWeb.zoomedInP1 {
+      width: 1920px;
+      position: absolute;
+      top: -60px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -503px;
+      transform: rotate(45deg);
+    }
+
+    #wheelWeb.zoomedInP2 {
+      width: 1920px;
+      position: absolute;
+      top: -70px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -603px;
+      transform: rotate(0deg);
+    }
+
+    #wheelWeb.zoomedInP3 {
+      width: 1920px;
+      position: absolute;
+      top: -60px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -703px;
+      transform: rotate(-45deg);
+    }
+
+    .letter {
+      border: 1px solid white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .guessedLetters {
+      border: 1px solid white;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .guessedLetters.active {
+      background-color: #ff0000 !important;
+    }
+
+    table,
+    td,
+    th {
+      border: 1px solid;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    tr td:nth-child(1) {
+      width: 50px;
+    }
+
+    #wheelWeb.zoomedInP1 {
+      width: 1920px;
+      position: absolute;
+      top: -60px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -503px;
+      transform: rotate(45deg);
+    }
+
+    #wheelWeb.zoomedInP2 {
+      width: 1920px;
+      position: absolute;
+      top: -70px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -603px;
+      transform: rotate(0deg);
+    }
+
+    #wheelWeb.zoomedInP3 {
+      width: 1920px;
+      position: absolute;
+      top: -60px;
+      aspect-ratio: 16 / 9;
+      scale: 1;
+      left: -703px;
+      transform: rotate(-45deg);
+    }
+
+    #messageHistory {
+      height: 160px;
+      overflow-y: auto;
+      border: 1px solid white;
+      padding: 8px;
+      box-sizing: border-box;
+      background: #050505;
+      color: white;
+      font-size: 12pt;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .messageEntry {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 4px;
+      word-break: break-word;
+    }
+
+    .messageMeta {
+      display: block;
+      color: #aaa;
+      font-size: 10pt;
+      margin-bottom: 2px;
+    }
+
+    #messageInputRow {
+      display: flex;
+      gap: 6px;
+      align-items: stretch;
+    }
+
+    #messageInput {
+      flex: 1;
+      min-width: 0;
+      background: black;
+      color: white;
+      border: 1px solid white;
+      padding: 6px 8px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body style='background:black;overflow: hidden;margin:0;position: absolute;'>
+  <div style='overflow: hidden;background-color: #202020;
+    width: 772px;
+    position: absolute;
+    top: 433px;
+    height: 435px;'>
+    <iframe src="wheel.html" id="wheelWeb"></iframe>
+  </div>
+  <iframe src='puzzle.html'
+    style='width: 1920px;aspect-ratio:16/9;transform-origin: top left;scale:.4;display: inline;position: absolute;'></iframe>
+  <div style='width: calc(100vw - 770px);right:-100vw;position: absolute;padding:10px;box-sizing:border-box;'>
+    <table id='playerScore' style='width:100%'>
+      <thead>
+        <tr>
+          <th></th>
+          <th>NC1</th>
+          <th>NC2</th>
+          <th>NC3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ĐN1</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>ĐN2</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>V1</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>V2</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>V3</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>ĐNLH1</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>ĐNLH2</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>ĐNLH1</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>V4</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>V5</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>ĐB</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <div id='puzzle'
+      style='display:grid;grid-template-columns: repeat(14, 1fr);grid-template-rows: repeat(4, 1fr);padding-top:10px'>
+    </div>
+    <div id='guessedLetters'
+      style='display:grid;grid-template-columns: repeat(15, 1fr);grid-template-rows: repeat(2, 1fr);padding-top:10px'>
+      <div id='totalLetters' style='color:white'>Σ:</div>
+      <button class='guessedLetters'>A:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Ă:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Â:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>B:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>C:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>D:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Đ:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>E:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Ê:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>G:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>H:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>I:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>K:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>L:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>M:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>N:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>O:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Ô:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Ơ:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>P:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Q:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>R:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>S:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>T:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>U:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Ư:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>V:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>X:
+        <div class='letters'></div>
+      </button>
+      <button class='guessedLetters'>Y:
+        <div class='letters'></div>
+      </button>
+    </div>
+    <div style='display: flex;width:100%;'>
+      <p id='round' style='width:25%;padding:1%'></p>
+      <p id='explanation' style='width:75%;padding:1%'></p>
+    </div>
+    <span>Tin nhắn</span>
+    <div id='messageHistory'></div>
+    <div id='messageInputRow'>
+      <input type='text' id='messageInput' placeholder='Nhập tin nhắn...'>
+      <button id='sendMessageBtn'>Gửi</button>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+    integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"
+    integrity="sha512-xi/RZRIF/S0hJ+yJJYuZ5yk6/8pCiRlEXZzoguSMl+vk2i3m6UjUO/WcZ11blRL/O+rnj94JRGwt/CHbc9+6EA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    const socket = io();
+    $(() => {
+      for (let i = 0; i <= 55; i++) {
+        $('#puzzle').append('<div class="letter" id="letter' + i + '">-</div>');
+      }
+    })
+
+    function formatMessageTime(timestamp) {
+      const date = new Date(timestamp)
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
+
+    function appendMessage(message) {
+      const messageElement = $('<div class="messageEntry"></div>')
+      $('<span class="messageMeta"></span>').text(formatMessageTime(message.timestamp)).appendTo(messageElement)
+      $('<div></div>').text(message.text).appendTo(messageElement)
+      $('#messageHistory').append(messageElement)
+      $('#messageHistory').scrollTop($('#messageHistory')[0].scrollHeight)
+    }
+
+    function sendMessage() {
+      const messageInput = $('#messageInput')
+      const text = messageInput.val().trim()
+      if (!text) return
+      socket.emit('chatMessage', 'Host: ' + text)
+      messageInput.val('')
+      messageInput.focus()
+    }
+
+    socket.on('messageHistory', messages => {
+      $('#messageHistory').empty()
+      messages.forEach(appendMessage)
+    })
+
+    socket.on('chatMessage', message => {
+      appendMessage(message)
+    })
+
+    $('#sendMessageBtn').click(() => {
+      sendMessage()
+    })
+    $('#messageInput').on('keydown', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage()
+      }
+    })
+
+    $('.guessedLetters').on('click', function () {
+      $(this).toggleClass('active');
+    });
+
+    socket.on('hostPuzzle', (data) => {
+      $('.guessedLetters').each(function () {
+        $(this).removeClass('active');
+      });
+      $('#round').text(data.round + ': ' + data.question);
+      $('#explanation').text(data.explain);
+      $('#totalLetters').text('Σ: ' + Object.values(data.letterOccurence)[0]);
+      $('.letters').each(function (index) {
+        $(this).text(Object.values(data.letterOccurence)[index + 1]);
+      });
+      for (let i = 0; i < data.puzzle.length; i++) {
+        if (data.solved[i]) {
+          $('#letter' + i).text(data.puzzle[i]);
+        } else {
+          $('#letter' + i).text('');
+        }
+      }
+    })
+
+    $('thead tr th:nth-child(2)').hover(() => {
+      $('#wheelWeb').addClass('zoomedInP1')
+    })
+    $('thead tr th:nth-child(2)').mouseleave(() => {
+      $('#wheelWeb').removeClass('zoomedInP1')
+    })
+    $('thead tr th:nth-child(3)').hover(() => {
+      $('#wheelWeb').addClass('zoomedInP2')
+    })
+    $('thead tr th:nth-child(3)').mouseleave(() => {
+      $('#wheelWeb').removeClass('zoomedInP2')
+    })
+    $('thead tr th:nth-child(4)').hover(() => {
+      $('#wheelWeb').addClass('zoomedInP3')
+    })
+    $('thead tr th:nth-child(4)').mouseleave(() => {
+      $('#wheelWeb').removeClass('zoomedInP3')
+    })
+  </script>
+</body>
+
+</html>

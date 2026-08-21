@@ -17,7 +17,7 @@
     }
 
     * {
-      font-size: 18pt;
+      font-size: 15pt;
       font-family: 'Arial';
     }
 
@@ -152,7 +152,6 @@
     }
 
     .messageMeta {
-      display: block;
       color: #aaa;
       font-size: 10pt;
       margin-bottom: 2px;
@@ -303,6 +302,7 @@
       <button id='toggle1mil' style='background:#52EA23;color:black'>1M</button>
       <button id='toggleTl' style='background:#22BF18;color:#FFC50D'>TL</button>
       <button id='toggleMm' style='background:#10336B;color:white'>MM</button>
+      <button id='untoggleAll'>Gỡ tất cả</button>
       <hr>
       <div id='scoreboard'>
         <div style='margin:0 0 10px 0'>
@@ -316,11 +316,6 @@
             <!-- <button class='half' id='p1Half'>/2</button> -->
             <button class='clear' id='p1Clear'>0</button>
             <button id='p1Qualify'>LOẠI</button>
-          </div>
-          <div class='flexContainer'>
-            <button id='p1AddCurrentToTotal' style='width:75%'>Cộng điểm hiện tại vào tổng</button>
-            <input type="number" id="p1TotalInput" style='width: 15%;' placeholder='Tổng' />
-            <button id='p1AddTotal' style='width: 10%;'>+</button>
           </div>
           <button class='togglePlayerCohoi' id='togglePlayer1cohoi' style='background:#E7528B;color:#9EE243'>CH</button>
           <button class='togglePlayergl12500450300' id='togglePlayer1gl12500450300'
@@ -346,11 +341,6 @@
             <button class='clear' id='p2Clear'>0</button>
             <button id='p2Qualify'>LOẠI</button>
           </div>
-          <div class='flexContainer'>
-            <button id='p2AddCurrentToTotal' style='width:75%'>Cộng điểm hiện tại vào tổng</button>
-            <input type="number" id="p2TotalInput" style='width: 15%;' placeholder='Tổng' />
-            <button id='p2AddTotal' style='width: 10%;'>+</button>
-          </div>
           <button class='togglePlayerCohoi' id='togglePlayer2cohoi' style='background:#E7528B;color:#9EE243'>CH</button>
           <button class='togglePlayergl12500450300' id='togglePlayer2gl12500450300'
             style='color:#301BBE;background:white'>450 1/2 300</button>
@@ -374,11 +364,6 @@
             <!-- <button class='half' id='p3Half'>/2</button> -->
             <button class='clear' id='p3Clear'>0</button>
             <button id='p3Qualify'>LOẠI</button>
-          </div>
-          <div class='flexContainer'>
-            <button id='p3AddCurrentToTotal' style='width:75%'>Cộng điểm hiện tại vào tổng</button>
-            <input type="number" id="p3TotalInput" style='width: 15%;' placeholder='Tổng' />
-            <button id='p3AddTotal' style='width: 10%;'>+</button>
           </div>
           <button class='togglePlayerCohoi' id='togglePlayer3cohoi' style='background:#E7528B;color:#9EE243'>CH</button>
           <button class='togglePlayergl12500450300' id='togglePlayer3gl12500450300'
@@ -412,6 +397,7 @@
           <button class='togglePlayerNhandoi' id='toggleKsnhandoi'
             style='background-image:linear-gradient(#E8CF32,#645B35);color:white'>NĐ</button>
         </div>
+        <button id='showTotal'>Hiện điểm tổng</button>
         <div style='margin:10px 0'>
           <span>Siêu tốc</span>
           <button id='showSt'>Hiện</button>
@@ -551,6 +537,7 @@
       <button id="saiBtn">Sai</button>
       <button id='obmptBed'>Nhạc mở ÔBM/PT</button>
       <button id='cmts'>Chúc mừng t.sinh</button>
+      <button id='cbgiaima'>Chuẩn bị giải mã</button>
       <button id='giaima5s'>5s giải mã</button>
       <br>
       <span>Ô/thẻ</span>
@@ -590,6 +577,7 @@
         <input type='text' id='messageInput' placeholder='Nhập tin nhắn...'>
         <button id='sendMessageBtn'>Gửi</button>
       </div>
+      <button id='logoutAllPlayerWebs'>Đăng xuất tất cả NC</button>
       <hr>
 
     </div>
@@ -608,13 +596,13 @@
 
     function formatMessageTime(timestamp) {
       const date = new Date(timestamp)
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
     }
 
     function appendMessage(message) {
       const messageElement = $('<div class="messageEntry"></div>')
       $('<span class="messageMeta"></span>').text(formatMessageTime(message.timestamp)).appendTo(messageElement)
-      $('<div></div>').text(message.text).appendTo(messageElement)
+      $("<div style='display:inline;margin-left:10px;'></div>").text(message.text).appendTo(messageElement)
       $('#messageHistory').append(messageElement)
       $('#messageHistory').scrollTop($('#messageHistory')[0].scrollHeight)
     }
@@ -634,6 +622,9 @@
     })
 
     socket.on('chatMessage', message => {
+      appendMessage(message)
+    })
+    socket.on('systemLog', message => {
       appendMessage(message)
     })
 
@@ -992,6 +983,9 @@
     $('#cmts').click(() => {
       socket.emit('playSound', '../sounds/Chúc mừng thí sinh.wav')
     })
+    $('#cbgiaima').click(() => {
+      socket.emit('playSound', '../sounds/cbgm.mp3')
+    })
     $('#giaima5s').click(() => {
       socket.emit('playSound', '../sounds/5s Giải Mã.mp3')
     })
@@ -1348,6 +1342,9 @@
     $('#toggleMm').click(() => {
       socket.emit('toggleWedge', 'mayman')
     })
+    $('#untoggleAll').click(() => {
+      socket.emit('untoggleAllWedges')
+    })
 
     $('#togglePlayer1cohoi').click(() => {
       socket.emit('togglePlayerWedge', 1, 'cohoi')
@@ -1441,6 +1438,9 @@
       socket.emit('hideKs')
     })
 
+    $('#showTotal').click(() => {
+      socket.emit('showTotal')
+    })
     $('#showSt').click(() => {
       socket.emit('showSt')
     })
@@ -1456,40 +1456,6 @@
     })
     $('#p3Qualify').click(() => {
       socket.emit('setPlayerQualify', 3)
-    })
-
-    $('#p1AddCurrentToTotal').click(() => {
-      socket.emit('updateTotal', 1, 'add')
-    })
-    $('#p2AddCurrentToTotal').click(() => {
-      socket.emit('updateTotal', 2, 'add')
-    })
-    $('#p3AddCurrentToTotal').click(() => {
-      socket.emit('updateTotal', 3, 'add')
-    })
-    $('#p1TotalInput').on('keydown', (e) => {
-      if (e.key === 'Enter') {
-        socket.emit('updateTotal', 1, 'set', parseInt($('#p1TotalInput').val()))
-      }
-    })
-    $('#p2TotalInput').on('keydown', (e) => {
-      if (e.key === 'Enter') {
-        socket.emit('updateTotal', 2, 'set', parseInt($('#p2TotalInput').val()))
-      }
-    })
-    $('#p3TotalInput').on('keydown', (e) => {
-      if (e.key === 'Enter') {
-        socket.emit('updateTotal', 3, 'set', parseInt($('#p3TotalInput').val()))
-      }
-    })
-    $('#p1AddTotal').click(() => {
-      socket.emit('updateTotal', 1, 'add', parseInt($('#p1TotalInput').val()))
-    })
-    $('#p2AddTotal').click(() => {
-      socket.emit('updateTotal', 2, 'add', parseInt($('#p2TotalInput').val()))
-    })
-    $('#p3AddTotal').click(() => {
-      socket.emit('updateTotal', 3, 'add', parseInt($('#p3TotalInput').val()))
     })
 
     $('#randomizeBonus').click(() => {
@@ -1718,6 +1684,10 @@
     })
     $('#unlockSpinBtn3').mouseleave(() => {
       $('#wheelWeb').removeClass('zoomedInP3')
+    })
+
+    $('#logoutAllPlayerWebs').click(() => {
+      socket.emit('logoutAllPlayerWebs')
     })
 
     for (let i = 0; i <= letters.length; i++) {

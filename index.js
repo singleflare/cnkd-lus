@@ -1,5 +1,6 @@
 const express = require('express');
 const {createServer} = require('node:http');
+const {randomBytes} = require('node:crypto');
 const app = express();
 const server=createServer(app)
 const {Server}=require('socket.io')
@@ -13,6 +14,7 @@ let pagePasswords = {
   p2: '',
   p3: ''
 };
+const pageTokens = new Map();
 
 app.use(express.json());
 
@@ -31,34 +33,25 @@ app.post('/api/validate-password', (req, res) => {
   
   if (!page || !password) return res.status(400).json({ error: 'Page and password required' });
   if (!pagePasswords[page] || pagePasswords[page] !== password) return res.status(403).json({ error: 'Invalid password' });
-  // Valid password - return token
-  const token = Buffer.from(`${page}:${password}:${Date.now()}`).toString('base64');
+  // Keep tokens opaque so they can be revoked by the controller.
+  const token = randomBytes(32).toString('hex');
+  pageTokens.set(token, page);
   res.json({ token, page });
 });
 
 // Protect pages - check token in query string
-app.get(/^\/pages\/(p1|p2|p3)\.html$/, (req, res, next) => {
+app.get(/^\/pages\/(p1|p2|p3)\.html$/, (req, res) => {
   const token = req.query.token;
   const pageMatch = req.path.match(/\/pages\/(p1|p2|p3)\.html/);
   const page = pageMatch[1];
-  
-  if (!token) {
+
+  if (!token || pageTokens.get(token) !== page) {
     return res.status(403).send('Token không hợp lệ.');
   }
-  
-  try {
-    const decoded = Buffer.from(token, 'base64').toString();
-    const [tokenPage] = decoded.split(':');
-    
-    if (tokenPage !== page) {
-      return res.status(403).send('Token không hợp lệ.');
-    }
-    
-    // Valid token, serve the page
-    res.sendFile(join(__dirname, 'public', req.path));
-  } catch (error) {
-    return res.status(403).send('Token không hợp lệ.');
-  }
+
+  pageTokens.delete(token);
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(join(__dirname, 'public', req.path));
 });
 
 app.use(express.static('public'))
@@ -108,7 +101,6 @@ let score={
   p1:{
     name:'',
     score:0,
-    total:0,
     eachRoundScore:[0,0,0,0,0,0,0,0,0,0,0,0],
     wedges:{
       'themluot': false,
@@ -125,7 +117,6 @@ let score={
   p2:{
     name:'',
     score:0,
-    total:0,
     eachRoundScore:[0,0,0,0,0,0,0,0,0,0,0,0],
     wedges:{
       'themluot': false,
@@ -142,7 +133,6 @@ let score={
   p3:{
     name:'',
     score:0,
-    total:0,
     eachRoundScore:[0,0,0,0,0,0,0,0,0,0,0,0],
     wedges:{
       'themluot': false,
@@ -284,26 +274,12 @@ io.on('connection',(socket)=>{
       else if(player==2) score.p2.name=inputScore
       else if(player==3) score.p3.name=inputScore
     }
+    else if(method=='total'){
+      if(player==1) score.p1.total=inputScore
+      else if(player==2) score.p2.total=inputScore
+      else if(player==3) score.p3.total=inputScore
+    }
     io.emit('scoreboard',player,score)
-  })
-  socket.on('updateTotal',(player,method,inputTotal)=>{
-    if(method=='set') {
-      if(!inputTotal){
-        if(player==1) score.p1.eachRoundScore[puzzleNumber]=score.p1.score
-        else if(player==2) score.p2.eachRoundScore[puzzleNumber]=score.p2.score
-        else if(player==3) score.p3.eachRoundScore[puzzleNumber]=score.p3.score
-      }
-      else{
-        if(player==1) score.p1.total=inputTotal
-        else if(player==2) score.p2.total=inputTotal
-        else if(player==3) score.p3.total=inputTotal
-      }
-    }
-    else if(method=='add') {
-      if(player==1) score.p1.total+=score.p1.score
-      else if(player==2) score.p2.total+=score.p2.score
-      else if(player==3) score.p3.total+=score.p3.score
-    }
   })
 
   socket.on('revealPuzzle',()=>{
@@ -673,11 +649,26 @@ io.on('connection',(socket)=>{
     wedgesStatus.set(wedge, !currentStatus)
     io.emit('toggleWedge', wedge, !currentStatus)
   })
+  socket.on('untoggleAllWedges', () => {
+    for (const [wedge, status] of wedgesStatus.entries()) {
+      if (status) {
+        wedgesStatus.set(wedge, false)
+        io.emit('toggleWedge', wedge, false)
+      }
+    }
+  })
   socket.on('showKs', () => {
     io.emit('showKs')
   })
   socket.on('hideKs', () => {
     io.emit('hideKs')
+  })
+  socket.on('showTotal', () => {
+    io.emit('showTotal', {
+      p1: score.p1.total,
+      p2: score.p2.total,
+      p3: score.p3.total
+    })
   })
   socket.on('showSt', () => {
     io.emit('showSt')
@@ -774,5 +765,15 @@ io.on('connection',(socket)=>{
   })
   socket.on('hideEnvelope', () => {
     io.emit('hideEnvelope')
+  })
+  socket.on('logoutAllPlayerWebs', () => {
+    pageTokens.clear()
+    io.emit('logoutAllPlayerWebs')
+  })
+  socket.on('log',msg=>{
+    const message={text:msg, timestamp: new Date().toISOString()}
+    messageHistory.push(message)
+    if (messageHistory.length > 100) messageHistory.shift()
+    io.emit('systemLog', message)
   })
 })

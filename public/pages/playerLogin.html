@@ -125,8 +125,7 @@
           return;
         }
 
-        // Redirect with token
-        window.location.href = `/pages/${page}.html?token=${data.token}`;
+        window.location.replace(`/pages/${page}.html?token=${data.token}`);
       } catch (error) {
         showMessage('Lỗi xác thực mật khẩu', 'error');
       }

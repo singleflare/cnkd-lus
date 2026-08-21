@@ -500,8 +500,8 @@
           $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
           i++
           if (i >= openSequence.length) {
-            socket.emit('playSound', '../sounds/lose bonus.mp3')
             clearInterval(interval)
+            socket.emit('playSound', '../sounds/lose bonus.mp3')
           }
         }, 250)
       }
@@ -726,6 +726,11 @@
       $('#rightBonusArea span:nth-child(' + (pos + 1) + ')').text(letter)
     })
 
+    socket.on('showTotal', (score) => {
+      $('#p1Score').text(digitGroup(score.p1) + ' GL')
+      $('#p2Score').text(digitGroup(score.p2) + ' GL')
+      $('#p3Score').text(digitGroup(score.p3) + ' GL')
+    })
     socket.on('showSt', () => {
       $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
         'top': '-200px'

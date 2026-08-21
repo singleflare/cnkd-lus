@@ -7,8 +7,9 @@
   <title>Host</title>
   <style>
     * {
-      font-size: 15pt;
       color: white;
+      font-size: 15pt;
+      font-family: 'Arial';
     }
 
     p {
@@ -21,16 +22,8 @@
       color: black !important;
     }
 
-    button:disabled {
-      background: black !important;
-      color: white !important;
-      opacity: 0.5;
-    }
-
-    button:hover:disabled {
-      background: black !important;
-      color: white !important;
-      opacity: 0.5;
+    button:hover>* {
+      color: black !important;
     }
 
     #wheelWeb {
@@ -78,6 +71,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 30px
     }
 
     .guessedLetters {
@@ -88,6 +82,10 @@
       align-items: center;
     }
 
+    .letters {
+      color: white;
+    }
+
     .guessedLetters.active {
       background-color: #ff0000 !important;
     }
@@ -95,7 +93,11 @@
     table,
     td,
     th {
-      border: 1px solid;
+      border: 1px solid white;
+    }
+
+    table>* {
+      font-size: 12pt;
     }
 
     table {
@@ -157,7 +159,6 @@
     }
 
     .messageMeta {
-      display: block;
       color: #aaa;
       font-size: 10pt;
       margin-bottom: 2px;
@@ -177,6 +178,28 @@
       border: 1px solid white;
       padding: 6px 8px;
       box-sizing: border-box;
+    }
+
+    .flexContainer {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .flexContainer>* {
+      width: 100%;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      background: black;
+      color: white;
+      border: none;
+      text-align: center;
     }
   </style>
 </head>
@@ -204,74 +227,85 @@
       <tbody>
         <tr>
           <td>ĐN1</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>ĐN2</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>V1</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>V2</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>V3</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>ĐNLH1</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>ĐNLH2</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>ĐNLH1</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>V4</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>V5</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
         </tr>
         <tr>
           <td>ĐB</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+          <td><input type='number' style='display:inline;width:100%;box-sizing: border-box;' value='0'></td>
+        </tr>
+        <tr>
+          <td>Tổng</td>
+          <td style='font-weight: bold;text-align: center;'>0</td>
+          <td style='font-weight: bold;text-align: center;'>0</td>
+          <td style='font-weight: bold;text-align: center;'>0</td>
         </tr>
       </tbody>
     </table>
-    <div id='puzzle'
-      style='display:grid;grid-template-columns: repeat(14, 1fr);grid-template-rows: repeat(4, 1fr);padding-top:10px'>
+    <div class='flexContainer'>
+      <div id='puzzle'
+        style='display:grid;grid-template-columns: repeat(14, 1fr);grid-template-rows: repeat(4, 1fr);padding-top:10px;padding-right:10px'>
+      </div>
+      <div id='solvedPuzzle'
+        style='display:grid;grid-template-columns: repeat(14, 1fr);grid-template-rows: repeat(4, 1fr);padding-top:10px;padding-left:10px'>
+      </div>
     </div>
     <div id='guessedLetters'
       style='display:grid;grid-template-columns: repeat(15, 1fr);grid-template-rows: repeat(2, 1fr);padding-top:10px'>
@@ -372,7 +406,7 @@
     <div id='messageHistory'></div>
     <div id='messageInputRow'>
       <input type='text' id='messageInput' placeholder='Nhập tin nhắn...'>
-      <button id='sendMessageBtn'>Gửi</button>
+      <button id='sendMessageBtn' style='background:black;border:1px soid white'>Gửi</button>
     </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
@@ -383,21 +417,46 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     const socket = io();
+    let totalScore1 = 0, totalScore2 = 0, totalScore3 = 0;
     $(() => {
       for (let i = 0; i <= 55; i++) {
-        $('#puzzle').append('<div class="letter" id="letter' + i + '">-</div>');
+        $('#puzzle').append('<div class="letter letter' + i + '">-</div>');
+        $('#solvedPuzzle').append('<div class="letter letter' + i + '">-</div>');
+      }
+      for (let i = 1; i <= 11; i++) {
+        $('tbody tr:nth-child(' + i + ') td:nth-child(2)').on('change', () => {
+          totalScore1 = 0;
+          for (let j = 1; j <= 11; j++) {
+            totalScore1 += parseInt($('tbody tr:nth-child(' + j + ') td:nth-child(2) input').val()) || 0;
+          }
+          $('tbody tr:nth-child(12) td:nth-child(2)').text(totalScore1);
+        })
+        $('tbody tr:nth-child(' + i + ') td:nth-child(3)').on('change', () => {
+          totalScore2 = 0;
+          for (let j = 1; j <= 11; j++) {
+            totalScore2 += parseInt($('tbody tr:nth-child(' + j + ') td:nth-child(3) input').val()) || 0;
+          }
+          $('tbody tr:nth-child(12) td:nth-child(3)').text(totalScore2);
+        })
+        $('tbody tr:nth-child(' + i + ') td:nth-child(4)').on('change', () => {
+          totalScore3 = 0;
+          for (let j = 1; j <= 11; j++) {
+            totalScore3 += parseInt($('tbody tr:nth-child(' + j + ') td:nth-child(4) input').val()) || 0;
+          }
+          $('tbody tr:nth-child(12) td:nth-child(4)').text(totalScore3);
+        })
       }
     })
 
     function formatMessageTime(timestamp) {
       const date = new Date(timestamp)
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
     }
 
     function appendMessage(message) {
       const messageElement = $('<div class="messageEntry"></div>')
       $('<span class="messageMeta"></span>').text(formatMessageTime(message.timestamp)).appendTo(messageElement)
-      $('<div></div>').text(message.text).appendTo(messageElement)
+      $("<div style='display:inline;margin-left:10px;'></div>").text(message.text).appendTo(messageElement)
       $('#messageHistory').append(messageElement)
       $('#messageHistory').scrollTop($('#messageHistory')[0].scrollHeight)
     }
@@ -417,6 +476,9 @@
     })
 
     socket.on('chatMessage', message => {
+      appendMessage(message)
+    })
+    socket.on('systemLog', message => {
       appendMessage(message)
     })
 
@@ -445,9 +507,11 @@
       });
       for (let i = 0; i < data.puzzle.length; i++) {
         if (data.solved[i]) {
-          $('#letter' + i).text(data.puzzle[i]);
+          $('#puzzle .letter' + i).text(data.puzzle[i]);
+          $('#solvedPuzzle .letter' + i).text(data.solved[i]);
         } else {
-          $('#letter' + i).text('');
+          $('#puzzle .letter' + i).text('');
+          $('#solvedPuzzle .letter' + i).text('');
         }
       }
     })

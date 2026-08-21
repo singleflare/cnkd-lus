@@ -73,6 +73,12 @@
       transform: rotate(-45deg);
     }
   </style>
+  <script type="text/javascript">
+    window.history.forward();
+    function noBack() {
+      window.history.forward();
+    }
+  </script>
 </head>
 
 <body style='background:black;overflow: hidden;margin:0;position: absolute;'>
@@ -114,6 +120,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     const socket = io();
+    socket.emit('log', 'NC1 đã kết nối')
     $('#buzzer').click(() => {
       socket.emit('buzz', 1);
       $(this).prop('disabled', true)
@@ -133,6 +140,18 @@
         $('#spin').prop('disabled', true)
       }
     })
+    window.addEventListener('pagehide', () => {
+      socket.emit('log', 'NC1 đã ngắt kết nối')
+    });
+    window.addEventListener("blur", () => console.log("Window blurred"));
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        socket.emit('log', 'NC1 đã rời khỏi tab')
+      }
+      else if (document.visibilityState === "visible") {
+        socket.emit('log', 'NC1 đã quay lại tab')
+      }
+    });
   </script>
   <script src='playerGeneral.js'></script>
   <script src='disableDevTools.js'></script>

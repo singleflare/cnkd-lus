@@ -1,5 +1,24 @@
 let isZoomedIn=false
 
+const playerPath = window.location.pathname
+const playerPageMatch = playerPath.match(/\/pages\/(p1|p2|p3)\.html$/)
+
+function leavePlayerPage() {
+  window.location.replace('/pages/playerLogin.html')
+}
+
+if (!new URLSearchParams(window.location.search).has('token')) {
+  leavePlayerPage()
+}
+else {
+  // Remove the consumed token from browser history and the address bar.
+  window.history.replaceState(null, '', playerPath)
+}
+
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted || !playerPageMatch) leavePlayerPage()
+})
+
 socket.on('buzzersReset', () => {
   $('#p1Slot').css('background', 'black')
   $('#p2Slot').css('background', 'black')
@@ -32,6 +51,9 @@ socket.on('scoreboard', (data) => {
   $('#p2Slot p:nth-child(2)').text(data.p2.score);
   $('#p3Slot p:nth-child(2)').text(data.p3.score);
 });
+socket.on('logoutAllPlayerWebs', () => {
+  leavePlayerPage()
+})
 
 $('#p1Name').hover(() => {
   $('#wheelWeb').addClass('zoomedInP1')

@@ -245,6 +245,7 @@
       <button id="solvePuzzleNormal">Thường</button>
       <button id="solvePuzzleTossup">Đoán nhanh</button>
       <button id="solvePuzzleTTU">ĐNLH</button>
+      <button id="solvePuzzleGiaima">Giải mã</button>
       <button id="solvePuzzleLose">Thua</button>
       <button id="solvePuzzleWin">Thắng</button>
       <button id="solvePuzzleNoSound">Không tiếng</button>
@@ -656,14 +657,7 @@
     })
 
     let letters = ['A', 'Ă', 'Â', 'B', 'C', 'D', 'Đ', 'E', 'Ê', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'Ô', 'Ơ', 'P', 'Q', 'R', 'S', 'T', 'U', 'Ư', 'V', 'X', 'Y', 'DB']
-    let puzzles = []
-    let solvedPuzzles = []
-    let questions = []
-    let explains = []
-    let rounds = []
-    let letterOccurences = []
-    let puzzleNumber = -1
-    let onetwothree = [1, 2, 3]
+    let puzzles = [], solvedPuzzles = [], solvedPuzzlesAfterGiaima = [], questions = [], explains = [], rounds = [], letterOccurences = [], puzzleNumber = -1, onetwothree = [1, 2, 3]
 
     function shuffle(array) {
       let currentIndex = array.length;
@@ -690,6 +684,7 @@
       }
       let puzzle = []
       let solvedPuzzle = []
+      let solvedPuzzleAfterGiaima = []
       for (let r = 0; r < 52; r++) {
         if (r % 4 == 0) {
           rounds.push(getCellValue(sheet, 0, r))
@@ -729,8 +724,14 @@
           })
         }
         for (let c = 1; c < 15; c++) {
-          solvedPuzzle.push(getCellValue(sheet, c, r))
-          console.log(getCellValue(sheet, c, r))
+          if (getCellValue(sheet, c, r).length == 2) {
+            solvedPuzzleAfterGiaima.push(getCellValue(sheet, c, r)[1].toString())
+            solvedPuzzle.push('#')
+          }
+          else {
+            solvedPuzzle.push(getCellValue(sheet, c, r).toString())
+            solvedPuzzleAfterGiaima.push(getCellValue(sheet, c, r).toString())
+          }
           if (getCellValue(sheet, c, r) == 'Á' || getCellValue(sheet, c, r) == 'À' || getCellValue(sheet, c, r) == 'Ả' || getCellValue(sheet, c, r) == 'Ã' || getCellValue(sheet, c, r) == 'Ạ') {
             puzzle.push('A')
           }
@@ -767,18 +768,23 @@
           else if (getCellValue(sheet, c, r) == 'Ý' || getCellValue(sheet, c, r) == 'Ỳ' || getCellValue(sheet, c, r) == 'Ỷ' || getCellValue(sheet, c, r) == 'Ỹ' || getCellValue(sheet, c, r) == 'Ỵ') {
             puzzle.push('Y')
           }
+          else if (getCellValue(sheet, c, r).length == 2) {
+            puzzle.push('#')
+          }
           else {
-            puzzle.push(getCellValue(sheet, c, r))
+            puzzle.push(getCellValue(sheet, c, r).toString())
           }
         }
         if (r % 4 == 3) {
           puzzles.push(puzzle)
           solvedPuzzles.push(solvedPuzzle)
+          solvedPuzzlesAfterGiaima.push(solvedPuzzleAfterGiaima)
           puzzle = []
           solvedPuzzle = []
+          solvedPuzzleAfterGiaima = []
         }
       }
-      console.log(puzzles, solvedPuzzles, questions, explains, rounds, letterOccurences)
+      console.log(puzzles, solvedPuzzles, solvedPuzzlesAfterGiaima, questions, explains, rounds, letterOccurences)
     })
 
     $('#prevRoundBtn').click(() => {
@@ -804,7 +810,7 @@
           }
           //puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
         }
-        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber], puzzleNumber: puzzleNumber })
+        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solvedPuzzle: solvedPuzzles[puzzleNumber], solvedPuzzleAfterGiaima: solvedPuzzlesAfterGiaima[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber], puzzleNumber: puzzleNumber })
       }
     })
     $('#nextRoundBtn').click(() => {
@@ -830,7 +836,7 @@
           }
           //puzzles[puzzleNumber][i] != '' ? $('#letterBtn' + i).text(puzzles[puzzleNumber][i]) : $('#letterBtn' + i).prop('disabled', true)
         }
-        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solved: solvedPuzzles[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber], puzzleNumber: puzzleNumber })
+        socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solvedPuzzle: solvedPuzzles[puzzleNumber], solvedPuzzleAfterGiaima: solvedPuzzlesAfterGiaima[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber], puzzleNumber: puzzleNumber })
       }
     })
     $('#undoOpenedLettersBtn').click(() => {
@@ -873,6 +879,14 @@
       socket.emit('stopAllSounds')
       socket.emit('playSound', '../sounds/ttusolve.mp3')
       socket.emit('solvePuzzle', 'tossup')
+      onetwothree.forEach(player => {
+        $('#scoreboard div').css('background-color', 'black')
+      })
+    })
+    $('#solvePuzzleGiaima').click(() => {
+      socket.emit('stopAllSounds')
+      socket.emit('playSound', '../sounds/mainsolve.m4a')
+      socket.emit('solvePuzzle', 'giaima')
       onetwothree.forEach(player => {
         $('#scoreboard div').css('background-color', 'black')
       })

@@ -68,6 +68,10 @@
       background-image: url('../gpx/chữ cái được gọi.png');
     }
 
+    .letter.giaima {
+      background-image: url('../gpx/ô giải mã.png');
+    }
+
     #p1Score,
     #p2Score,
     #p3Score {
@@ -475,19 +479,23 @@
         if (puzzle[openSequence[i]] != '') {
           $('#letter' + openSequence[i]).addClass('hasLetter');
         }
-        if (puzzle[openSequence[i]] == '?' || puzzle[openSequence[i]] == '-' || puzzle[openSequence[i]] == '!' || puzzle[openSequence[i]] == '.' || puzzle[openSequence[i]] == ',' || puzzle[openSequence[i]] == "&" || puzzle[openSequence[i]] == '/' || puzzle[openSequence[i]] == '#') {
+        if (puzzle[openSequence[i]] == '?' || puzzle[openSequence[i]] == '-' || puzzle[openSequence[i]] == '!' || puzzle[openSequence[i]] == '.' || puzzle[openSequence[i]] == ',' || puzzle[openSequence[i]] == "&" || puzzle[openSequence[i]] == '/') {
           $('#letter' + openSequence[i]).addClass('hasLetter').removeClass('waitToOpen');
           $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
+        }
+        else if (puzzle[openSequence[i]] == '#') {
+          $('#letter' + openSequence[i]).removeClass('waitToOpen hasLetter').addClass('giaima');
         }
         i++
         if (i >= openSequence.length) clearInterval(interval)
       }, 75)
     }
 
-    function solvePuzzle(puzzle, mode) {
+    function solvePuzzle(puzzle, puzzleAfterGiaima, mode) {
       //if (mode == 'normal') playSolvePuzzleVid()
       //else if (mode == 'tossup') playSolveTossupPuzzleVid()
       let openSequence = [14, 28, 1, 15, 29, 43, 2, 16, 30, 44, 3, 17, 31, 45, 4, 18, 32, 46, 5, 19, 33, 47, 6, 20, 34, 48, 7, 21, 35, 49, 8, 22, 36, 50, 9, 23, 37, 51, 10, 24, 38, 52, 11, 25, 39, 53, 12, 26, 40, 54, 27, 41]
+      if (mode == 'giaima') puzzle = puzzleAfterGiaima
       for (let j = 0; j < openSequence.length; j++) {
         if (puzzle[openSequence[j]] == '') {
           openSequence.splice(j, 1);
@@ -530,9 +538,18 @@
           $('#rightBonusArea').css('opacity', 0)
         })
       }
-      else {
+      else if (mode == 'giaima') {
         let interval = setInterval(() => {
           $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
+          $('#letter' + openSequence[i]).addClass('hasLetter').removeClass('giaima');
+          i++
+          if (i >= openSequence.length) clearInterval(interval)
+        }, 10)
+      }
+      else {
+        let interval = setInterval(() => {
+          $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]] == '#' ? '' : puzzle[openSequence[i]]);
+          $('#letter' + openSequence[i]).addClass('hasLetter').removeClass('waitToOpen');
           i++
           if (i >= openSequence.length) clearInterval(interval)
         }, 10)
@@ -543,11 +560,11 @@
     socket.on('reveal', (data) => reveal(data.index, data.letter, data.state))
 
     socket.on('solvePuzzle', (data) => {
-      solvePuzzle(data.solvedPuzzle, data.mode);
+      solvePuzzle(data.solvedPuzzle, data.solvedPuzzleAfterGiaima, data.mode);
     });
     socket.on('resetPuzzle', () => {
       for (let i = 0; i <= 55; i++) {
-        $('#letter' + i).removeClass('waitToOpen hasLetter');
+        $('#letter' + i).removeClass('waitToOpen hasLetter giaima');
         $('#letter' + i + ' p').text('');
       }
     })

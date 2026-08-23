@@ -57,12 +57,8 @@ app.get(/^\/pages\/(p1|p2|p3)\.html$/, (req, res) => {
 app.use(express.static('public'))
 console.log('http://localhost:3000/pages/controller.html')
 
-let puzzle=[]
-let solvedPuzzle=[]
+let puzzle=[],solvedPuzzle=[],solvedPuzzleAfterGiaima=[],puzzleState=[],buzzed=[]
 let question=''
-let explain=''
-let puzzleState=[] // 0: empty, 1: has letter, 2: selected, 3: revealed
-let buzzed=[]
 let puzzleMode=1
 let isFinalSpin=false
 let tossupInterval=null
@@ -206,15 +202,17 @@ io.on('connection',(socket)=>{
     io.emit('resetPuzzle')
     io.emit('hostPuzzle',data)
     puzzle=data.puzzle
-    solvedPuzzle=data.solved
     question=data.question
     explain=data.explain
     puzzleNumber=data.puzzleNumber
+    solvedPuzzle=data.solvedPuzzle
+    solvedPuzzleAfterGiaima=data.solvedPuzzleAfterGiaima
     for(let i=0;i<56;i++){
       if(puzzle[i]=='') puzzleState[i]=0
       else if(puzzle[i]=='?'||puzzle[i]=='-'||puzzle[i]=='!'||puzzle[i]=='.'||puzzle[i]==','||puzzle[i]=="&"||puzzle[i]=='/') puzzleState[i]=3
       else puzzleState[i]=1
     }
+    console.log(puzzle, solvedPuzzle, solvedPuzzleAfterGiaima)
   })
   socket.on('puzzleType',(type)=>{
     io.emit('puzzleType',type,question)
@@ -374,7 +372,7 @@ io.on('connection',(socket)=>{
       if(puzzleState[i]==1) puzzleState[i]=3
       if(puzzleState[i]==3) idxToOpen.push(i)
     }
-    io.emit('solvePuzzle', { solvedPuzzle, mode })
+    io.emit('solvePuzzle', { solvedPuzzle,solvedPuzzleAfterGiaima, mode })
   })
   socket.on('solvePuzzleNoSound',()=>{
     buzzed=[]

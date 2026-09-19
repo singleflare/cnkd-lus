@@ -227,6 +227,11 @@
       <button id="nextRoundBtn">Ô chữ sau</button>
       <button id='undoOpenedLettersBtn'>Undo chữ đang mở</button>
       <hr>
+      <span>Fortune frenzy</span>
+      <button id="startFFPuzzle">Bắt đầu</button>
+      <button id='solveAndNextFFPuzzle'>Đúng & ô tiếp theo</button>
+      <button id="wrongAndNextFFPuzzle">Sai & ô tiếp theo</button>
+      <hr>
       <span>Hiện ô chữ</span>
       <button id="showPuzzle">Thường</button>
       <button id='showCrosswordPuzzle'>T.hoành</button>
@@ -1709,6 +1714,69 @@
         socket.emit('individualLetter', letters[i])
       })
     }
+
+    $('#startFFPuzzle').click(() => {
+      socket.emit('puzzleType', 'normal')
+      socket.emit('revealPuzzleImmediate')
+      socket.emit('openRandomFortuneFrenzy')
+    })
+    $('#solveAndNextFFPuzzle').click(() => {
+      socket.emit('solvePuzzle', 'immediate')
+      $('#scoreboard div').css('background-color', 'black')
+      socket.emit('resetBuzzers')
+      setTimeout(() => {
+        if (puzzleNumber < puzzles.length - 1) {
+          puzzleNumber++
+          for (let i = 0; i <= 55; i++) {
+            $('#letterBtn' + i).off('click')
+            $('#letterBtn' + i).text('')
+            $('#letterBtn' + i).prop('disabled', false)
+            if (puzzles[puzzleNumber][i] != '') {
+              $('#letterBtn' + i).text(puzzles[puzzleNumber][i])
+              $('#letterBtn' + i).on('click', () => {
+                socket.emit('reveal', i)
+              })
+            }
+            else {
+              $('#letterBtn' + i).on('click', () => {
+                socket.emit('playSound', '../sounds/sai.mp3')
+              })
+            }
+          }
+          socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solvedPuzzle: solvedPuzzles[puzzleNumber], solvedPuzzleAfterGiaima: solvedPuzzlesAfterGiaima[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber], puzzleNumber: puzzleNumber })
+        }
+        socket.emit('revealPuzzleImmediate')
+        socket.emit('openRandomFortuneFrenzy')
+      }, 500)
+    })
+    $('#wrongAndNextFFPuzzle').click(() => {
+      $('#scoreboard div').css('background-color', 'black')
+      socket.emit('resetBuzzers')
+      setTimeout(() => {
+        if (puzzleNumber < puzzles.length - 1) {
+          puzzleNumber++
+          for (let i = 0; i <= 55; i++) {
+            $('#letterBtn' + i).off('click')
+            $('#letterBtn' + i).text('')
+            $('#letterBtn' + i).prop('disabled', false)
+            if (puzzles[puzzleNumber][i] != '') {
+              $('#letterBtn' + i).text(puzzles[puzzleNumber][i])
+              $('#letterBtn' + i).on('click', () => {
+                socket.emit('reveal', i)
+              })
+            }
+            else {
+              $('#letterBtn' + i).on('click', () => {
+                socket.emit('playSound', '../sounds/sai.mp3')
+              })
+            }
+          }
+          socket.emit('puzzle', { puzzle: puzzles[puzzleNumber], solvedPuzzle: solvedPuzzles[puzzleNumber], solvedPuzzleAfterGiaima: solvedPuzzlesAfterGiaima[puzzleNumber], question: questions[puzzleNumber], explain: explains[puzzleNumber], letterOccurence: letterOccurences[puzzleNumber], round: rounds[puzzleNumber], puzzleNumber: puzzleNumber })
+        }
+        socket.emit('revealPuzzleImmediate')
+        socket.emit('openRandomFortuneFrenzy')
+      }, 500)
+    })
   </script>
 </body>
 

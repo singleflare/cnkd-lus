@@ -490,6 +490,20 @@
         if (i >= openSequence.length) clearInterval(interval)
       }, 75)
     }
+    function revealPuzzleImmediate(puzzle) {
+      for (let i = 0; i <= puzzle.length; i++) {
+        if (puzzle[i] != '') {
+          $('#letter' + i).addClass('hasLetter');
+        }
+        if (puzzle[i] == '?' || puzzle[i] == '-' || puzzle[i] == '!' || puzzle[i] == '.' || puzzle[i] == ',' || puzzle[i] == "&" || puzzle[i] == '/') {
+          $('#letter' + i).addClass('hasLetter').removeClass('waitToOpen');
+          $('#letter' + i + ' p').text(puzzle[i]);
+        }
+        else if (puzzle[i] == '#') {
+          $('#letter' + i).removeClass('waitToOpen hasLetter').addClass('giaima');
+        }
+      }
+    }
 
     function solvePuzzle(puzzle, puzzleAfterGiaima, mode) {
       //if (mode == 'normal') playSolvePuzzleVid()
@@ -546,6 +560,12 @@
           if (i >= openSequence.length) clearInterval(interval)
         }, 10)
       }
+      else if (mode == 'immediate') {
+        for (let i = 0; i < openSequence.length; i++) {
+          $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]]);
+          $('#letter' + openSequence[i]).addClass('hasLetter').removeClass('waitToOpen');
+        }
+      }
       else {
         let interval = setInterval(() => {
           $('#letter' + openSequence[i] + ' p').text(puzzle[openSequence[i]] == '#' ? '' : puzzle[openSequence[i]]);
@@ -557,6 +577,7 @@
     }
 
     socket.on('revealPuzzle', puzzle => revealPuzzle(puzzle))
+    socket.on('revealPuzzleImmediate', puzzle => revealPuzzleImmediate(puzzle))
     socket.on('reveal', (data) => reveal(data.index, data.letter, data.state))
 
     socket.on('solvePuzzle', (data) => {

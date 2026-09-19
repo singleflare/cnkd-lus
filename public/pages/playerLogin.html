@@ -102,32 +102,23 @@
     async function submitPassword() {
       const page = document.getElementById('playerSelect').value;
       const password = document.getElementById('passwordInput').value;
-
-      if (!page) {
-        showMessage('Bạn chưa chọn người chơi', 'error');
+      if (!page || !password) {
+        showMessage('Bạn chưa chọn người chơi hoặc chưa nhập mật khẩu.', 'error');
         return;
       }
-      if (!password) {
-        showMessage('Vui lòng nhập mật khẩu', 'error');
-        return;
-      }
-
       try {
-        const response = await fetch('/api/validate-password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ page, password })
-        });
-
-        const data = await response.json();
+        //receive data (token) from server to validate password
+        const response = await fetch('/api/validate-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page, password }) });
+        const authData = await response.json();
         if (!response.ok) {
-          showMessage('Sai mật khẩu', 'error');
+          showMessage('Sai mật khẩu.', 'error');
           return;
         }
-
-        window.location.replace(`/pages/${page}.html?token=${data.token}`);
-      } catch (error) {
-        showMessage('Lỗi xác thực mật khẩu', 'error');
+        //server runs the GET request to return
+        window.location.replace(`/pages/${page}.html?token=${authData.token}`);
+      }
+      catch (error) {
+        showMessage('Lỗi xác thực mật khẩu.', 'error');
       }
     }
 

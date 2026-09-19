@@ -30,7 +30,6 @@ app.post('/api/set-passwords', (req, res) => {
 // Validate password and return token
 app.post('/api/validate-password', (req, res) => {
   const { page, password } = req.body;
-  
   if (!page || !password) return res.status(400).json({ error: 'Page and password required' });
   if (!pagePasswords[page] || pagePasswords[page] !== password) return res.status(403).json({ error: 'Invalid password' });
   // Keep tokens opaque so they can be revoked by the controller.
@@ -39,15 +38,13 @@ app.post('/api/validate-password', (req, res) => {
   res.json({ token, page });
 });
 
-// Protect pages - check token in query string
+// Check token in query string
 app.get(/^\/pages\/(p1|p2|p3)\.html$/, (req, res) => {
   const token = req.query.token;
   const pageMatch = req.path.match(/\/pages\/(p1|p2|p3)\.html/);
   const page = pageMatch[1];
 
-  if (!token || pageTokens.get(token) !== page) {
-    return res.status(403).send('Token không hợp lệ.');
-  }
+  if (!token || pageTokens.get(token) !== page) return res.status(403).send('Token không hợp lệ.');
 
   pageTokens.delete(token);
   res.set('Cache-Control', 'no-store');
@@ -283,6 +280,9 @@ io.on('connection',(socket)=>{
   socket.on('revealPuzzle',()=>{
     io.emit('revealPuzzle',puzzle)
   })
+  socket.on('revealPuzzleImmediate',()=>{
+    io.emit('revealPuzzleImmediate',puzzle)
+  })
   socket.on('reveal',(idx)=>{
     if(isFinalSpin) {
       clearTimeout(fsTimeout)
@@ -421,6 +421,35 @@ io.on('connection',(socket)=>{
       }
     },1000)
   })
+  socket.on('openRandomFortuneFrenzy',()=>{
+    io.emit('openRandomTossup')
+    buzzed=[]
+    io.emit('buzzersReset')
+    io.emit('enableBuzzers')
+    let idxToOpen=[]
+    for(let i=0;i<56;i++){
+      if(puzzleState[i]==1) idxToOpen.push(i)
+    }
+    shuffleArray(idxToOpen)
+    console.log(idxToOpen)
+    let i=0
+    io.emit('reveal',{index:idxToOpen[i],state:3,letter:puzzle[idxToOpen[i]]})
+    puzzleState[idxToOpen[i]]=3
+    io.emit('disableLetterBtn',idxToOpen[i])
+    i++
+    tossupInterval = setInterval(()=>{
+      if(i>=idxToOpen.length) clearInterval(tossupInterval)
+      else {
+        const idx = idxToOpen[i]
+        io.emit('reveal',{index:idx,state:3,letter:puzzle[idx]})
+        console.log(idx, puzzleState[idx], puzzle[idx])
+        puzzleState[idx]=3
+        io.emit('disableLetterBtn',idx)
+        i++
+      }
+    },500)
+  })
+
   socket.on('openRandomTossupWithTime',()=>{
     io.emit('enableBuzzers')
     io.emit('bonusTime',bonusTime)

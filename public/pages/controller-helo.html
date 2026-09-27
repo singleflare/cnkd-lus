@@ -690,7 +690,7 @@
       let puzzle = []
       let solvedPuzzle = []
       let solvedPuzzleAfterGiaima = []
-      for (let r = 0; r < 52; r++) {
+      for (let r = 0; r < 84; r++) {
         if (r % 4 == 0) {
           rounds.push(getCellValue(sheet, 0, r))
           questions.push(getCellValue(sheet, 0, r + 2))
@@ -1719,6 +1719,7 @@
       socket.emit('puzzleType', 'normal')
       socket.emit('revealPuzzleImmediate')
       socket.emit('openRandomFortuneFrenzy')
+      socket.emit('startTimer', 30)
     })
     $('#solveAndNextFFPuzzle').click(() => {
       socket.emit('solvePuzzle', 'immediate')

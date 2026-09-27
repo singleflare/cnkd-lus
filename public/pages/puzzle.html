@@ -223,6 +223,17 @@
       <img src='../gpx/Nhân đôi.png' id='p3nhandoi' style='position: absolute;left: 345px;top: 115px;width: 18px;'>
     </div>
   </div>
+  <div id='timerContainer' style='position: relative;top: 843px;left: 240px;opacity:0;'>
+    <img src='../gpx/ô chữ hiện.png' style='position:relative;width:130px'>
+    <span id='timerText' style='position: absolute;
+    font-family: helve;
+    font-size: 80pt;
+    color: black;
+    left: 0px;
+    top: 15px;
+    width: 130px;
+    text-align: center;'>30</span>
+  </div>
   <div id="board"></div>
   <div id='threeCatArea' style='position:relative;top:220px;opacity:0;'>
     <img src='../gpx/3 CHU DE.png' id='threeCat' style='position:absolute;width: 1200px;left: 360px;top: 850px;'>
@@ -786,6 +797,15 @@
           'top': '15px'
         }, 500, 'swing')
       })
+    })
+    socket.on('startTimer', (time) => {
+      $('#timerContainer').css('opacity', 1)
+    })
+    socket.on('endTimer', () => {
+      $('#timerContainer').css('opacity', 0)
+    })
+    socket.on('timer', (time) => {
+      $('#timerText').text(time)
     })
   </script>
 </body>

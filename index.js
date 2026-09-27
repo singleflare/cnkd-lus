@@ -60,6 +60,7 @@ let puzzleMode=1
 let isFinalSpin=false
 let tossupInterval=null
 let bonusTimeInterval=null
+let timerInterval=null
 let fsTimeout=null
 let bonusTime=0
 let currentRotation=0
@@ -422,6 +423,7 @@ io.on('connection',(socket)=>{
     },1000)
   })
   socket.on('openRandomFortuneFrenzy',()=>{
+    clearInterval(tossupInterval)
     io.emit('openRandomTossup')
     buzzed=[]
     io.emit('buzzersReset')
@@ -802,5 +804,21 @@ io.on('connection',(socket)=>{
     messageHistory.push(message)
     if (messageHistory.length > 100) messageHistory.shift()
     io.emit('systemLog', message)
+  })
+  socket.on('startTimer', (time) => {
+    let timer=time
+    io.emit('timer', timer)
+    timerInterval=setInterval(()=>{
+      if(timer>0) {
+        timer--
+        io.emit('timer', timer)
+      }
+      else{
+        clearInterval(timerInterval)
+        io.emit('endTimer')
+        clearInterval(tossupInterval)
+      }
+    },1000)
+    io.emit('startTimer')
   })
 })

@@ -1584,19 +1584,19 @@
       }
     })
     $('#show3Categories').click(() => {
-      socket.emit('show3Categories', [questions[10], questions[11], questions[12]])
+      socket.emit('show3Categories', [questions[puzzleNumber + 1], questions[puzzleNumber + 2], questions[puzzleNumber + 3]])
     })
     $('#hide3Categories').click(() => {
       socket.emit('hide3Categories')
     })
     $('#chooseCat1').click(() => {
-      socket.emit('chooseCategory', 1, questions[10])
+      socket.emit('chooseCategory', 1, questions[puzzleNumber + 1])
     })
     $('#chooseCat2').click(() => {
-      socket.emit('chooseCategory', 2, questions[11])
+      socket.emit('chooseCategory', 2, questions[puzzleNumber + 2])
     })
     $('#chooseCat3').click(() => {
-      socket.emit('chooseCategory', 3, questions[12])
+      socket.emit('chooseCategory', 3, questions[puzzleNumber + 3])
     })
     $('#showBonusGraphics').click(() => {
       socket.emit('showBonusGraphics')

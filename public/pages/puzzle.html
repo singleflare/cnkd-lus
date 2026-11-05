@@ -701,7 +701,9 @@
       $('#cat' + cat + 'Chosen').css('opacity', 1)
       $('#category').text(catName)
     })
-    socket.on('showBonusGraphics', () => {
+    socket.on('showBonusGraphics', (catName) => {
+      console.log(catName)
+      $('#category').text(catName)
       $('#leftBonusArea').animate({
         left: '-170px'
       }, 1500, 'swing')
@@ -775,10 +777,15 @@
       $('#rightBonusArea span:nth-child(' + (pos + 1) + ')').text(letter)
     })
 
-    socket.on('showTotal', (score) => {
-      $('#p1Score').text(digitGroup(score.p1) + ' GL')
-      $('#p2Score').text(digitGroup(score.p2) + ' GL')
-      $('#p3Score').text(digitGroup(score.p3) + ' GL')
+    socket.on('showScoreboard', () => {
+      $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
+        'top': '15px'
+      }, 500, 'swing')
+    })
+    socket.on('hideScoreboard', () => {
+      $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({
+        'top': '-200px'
+      }, 500, 'swing')
     })
     socket.on('showSt', () => {
       $('#p1ScoreContainer, #p2ScoreContainer, #p3ScoreContainer').animate({

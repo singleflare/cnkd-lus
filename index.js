@@ -69,6 +69,8 @@ let puzzleNumber=-1
 let wheelNumber=1
 let isBonusPrizeWith1m=false
 let messageHistory=[]
+let bigMoneyPrizes=['1,000GL','5,000GL','7,500GL','10,000GL','25,000GL','MẤT ĐIỂM','MẤT LƯỢT','NHÂN ĐÔI']
+let bigMoneyPrizeIndex=0
 
 let wedgesStatus=new Map()
 wedgesStatus.set('obm700', false)
@@ -81,6 +83,7 @@ wedgesStatus.set('phanthuong', false)
 wedgesStatus.set('gl1m', false)
 wedgesStatus.set('themluot', false)
 wedgesStatus.set('mayman', false)
+wedgesStatus.set('bigMoney', false)
 
 function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
@@ -176,7 +179,7 @@ io.on('connection',(socket)=>{
   socket.emit('messageHistory', messageHistory)
   socket.emit('puzzleMode',puzzleMode)
   socket.emit('finalSpinMode',isFinalSpin)
-  socket.emit('data', { score,currentRotation,wheelNumber,wedgesStatus:Object.fromEntries(wedgesStatus)})
+  socket.emit('data', { score,currentRotation,wheelNumber,wedgesStatus:Object.fromEntries(wedgesStatus), bigMoneyPrize: bigMoneyPrizes[bigMoneyPrizeIndex] })
   for(let i=0;i<56;i++){
     if(puzzleState[i]==1) socket.emit('reveal',{index:i,state:1})
     else if(puzzleState[i]==2) socket.emit('reveal',{index:i,state:2})
@@ -581,6 +584,8 @@ io.on('connection',(socket)=>{
   }
   socket.on('spinWheel',()=>{
     currentRotation += getRandomInt(1440, 1800)
+    bigMoneyPrizeIndex = getRandomInt(0, bigMoneyPrizes.length)
+    io.emit('changeBigMoneyPrize', bigMoneyPrizes[bigMoneyPrizeIndex])
     if(isFinalSpin){
       io.emit('playSound', '../sounds/finalspin.mp3')
       io.emit('spinWheel', currentRotation,5)
@@ -602,7 +607,7 @@ io.on('connection',(socket)=>{
   socket.on('indicatePlayer', (player) => {
     io.emit('indicatePlayer', player)
   })
-  socket.on('showWheel', round => {
+  socket.on('showWheel', (round,setting) => {
     wheelNumber=round
     if(round=='bonus') io.emit('showWheel', 'bonus')
     else{
@@ -620,29 +625,39 @@ io.on('connection',(socket)=>{
       io.emit('toggleWedge', 'gl12500450300', true)
       io.emit('toggleWedge', 'gl12500350900', true)
       io.emit('toggleWedge', 'phanthuong', true)
-      if(round==1){        
+      if(round==1){      
         wedgesStatus.set('obm700', false)
         wedgesStatus.set('obm300', false)
+        wedgesStatus.set('bigMoney', false)
         wedgesStatus.set('nhandoi', true)
         io.emit('toggleWedge', 'nhandoi', true)
         io.emit('toggleWedge', 'obm700', false)
         io.emit('toggleWedge', 'obm300', false)
+        io.emit('toggleWedge', 'bigMoney', false)
+        if(setting=='bigMoney'){
+          wedgesStatus.set('bigMoney', true)
+          io.emit('toggleWedge', 'bigMoney', true)
+        }  
       }
       else if(round==2){
         wedgesStatus.set('obm700', true)
         wedgesStatus.set('obm300', true)
         wedgesStatus.set('nhandoi', false)
+        wedgesStatus.set('bigMoney', false)
         io.emit('toggleWedge', 'obm700', true)
         io.emit('toggleWedge', 'obm300', true)
         io.emit('toggleWedge', 'nhandoi', false)
+        io.emit('toggleWedge', 'bigMoney', false)
       }
       else if(round==3||round==4||round==5){
         wedgesStatus.set('obm700', false)
         wedgesStatus.set('obm300', false)
         wedgesStatus.set('nhandoi', false)
+        wedgesStatus.set('bigMoney', false)
         io.emit('toggleWedge', 'obm700', false)
         io.emit('toggleWedge', 'obm300', false)
         io.emit('toggleWedge', 'nhandoi', false)
+        io.emit('toggleWedge', 'bigMoney', false)
       }
       io.emit('showWheel', round)
     } 
@@ -704,6 +719,17 @@ io.on('connection',(socket)=>{
   })
   socket.on('hideSt', () => {
     io.emit('hideSt')
+  })
+  socket.on('introBigMoney', () => {
+    let i=0
+    const interval = setInterval(() => {
+      if (i >= bigMoneyPrizes.length) {
+        clearInterval(interval)
+      } else {
+        io.emit('changeBigMoneyPrize', bigMoneyPrizes[i])
+        i++
+      }
+    }, 1000)
   })
   socket.on('setPlayerQualify', (player) => {
     if(player==1){
@@ -771,8 +797,8 @@ io.on('connection',(socket)=>{
   socket.on('chooseCategory', (cat,catName) => {
     io.emit('chooseCategory', cat, catName)
   })
-  socket.on('showBonusGraphics', () => {
-    io.emit('showBonusGraphics')
+  socket.on('showBonusGraphics', (catName) => {
+    io.emit('showBonusGraphics', catName)
   })
   socket.on('hideBonusGraphics', () => {
     io.emit('hideBonusGraphics')

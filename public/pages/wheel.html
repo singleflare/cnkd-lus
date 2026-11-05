@@ -92,6 +92,11 @@
     left: 546px;
     width: 97px;
     transform: rotate(45deg);'>
+    <img src='../gpx/ĐV_1,000GL.png' id='bigMoney' style='position: absolute;opacity: 0;
+    top: 97px;
+    left: 546px;
+    width: 97px;
+    transform: rotate(45deg);'>
     <img src='../gpx/thêm lượt.png' id='themluot' style='position: absolute;
     opacity: 0;
     top: 593px;
@@ -294,6 +299,9 @@
           $('#' + wedge).css('opacity', '0')
         }
       })
+      if (data.bigMoneyPrize) {
+        $('#bigMoney').attr('src', '../gpx/ĐV_' + data.bigMoneyPrize + '.png')
+      }
     })
     function spin(deg, time, wheel) {
       if (wheel == 'bonus') {
@@ -363,11 +371,22 @@
 
     socket.on('toggleWedge', (wedge, status) => {
       if (status) {
+        if (wedge == 'bigMoney') {
+          $('#bigMoney').attr('src', '../gpx/ĐV_1,000GL.png').css('opacity', '1')
+        }
         $('#' + wedge).css('opacity', '1')
       }
       else {
+        if (wedge == 'bigMoney') {
+          $('#bigMoney').attr('src', '../gpx/ĐV_1,000GL.png').css('opacity', '0')
+        }
         $('#' + wedge).css('opacity', '0')
       }
+    })
+
+
+    socket.on('changeBigMoneyPrize', prize => {
+      $('#bigMoney').attr('src', '../gpx/ĐV_' + prize + '.png')
     })
 
     socket.on('revealPrize', (prizeIndex, prize) => {

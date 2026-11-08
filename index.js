@@ -86,6 +86,7 @@ wedgesStatus.set('gl1m', false)
 wedgesStatus.set('themluot', false)
 wedgesStatus.set('mayman', false)
 wedgesStatus.set('bigMoney', false)
+wedgesStatus.set('gl100k', false)
 
 function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {

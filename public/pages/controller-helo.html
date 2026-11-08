@@ -312,6 +312,14 @@
       <button id='toggleMm' style='background:#10336B;color:white'>MM</button>
       <button id='untoggleAll'>Gỡ tất cả</button>
       <hr>
+      <span>Thẻ PT</span>
+      <button id='randomizePtOnWheel'>Ngẫu nhiên 3 thẻ PT</button>
+      <button id='untogglePt1'>Gỡ/Đặt thẻ PT1</button>
+      <button id='untogglePt2'>Gỡ/Đặt thẻ PT2</button>
+      <button id='untogglePt3'>Gỡ/Đặt thẻ PT3</button>
+      <button id='untoggleAllPt'>Gỡ tất cả</button>
+      <span>Vị trí thẻ PT tính theo thứ tự cùng chiều kim đồng hồ, bắt đầu từ ô điểm cao nhất</span>
+      <hr>
       <div id='scoreboard'>
         <div style='margin:0 0 10px 0'>
           <div class='flexContainer'>
@@ -1800,6 +1808,22 @@
         socket.emit('revealPuzzleImmediate')
         socket.emit('openRandomFortuneFrenzy')
       }, 500)
+    })
+
+    $('#randomizePtOnWheel').click(() => {
+      socket.emit('randomizePtOnWheel')
+    })
+    $('#untogglePt1').click(() => {
+      socket.emit('untogglePt', 1)
+    })
+    $('#untogglePt2').click(() => {
+      socket.emit('untogglePt', 2)
+    })
+    $('#untogglePt3').click(() => {
+      socket.emit('untogglePt', 3)
+    })
+    $('#untoggleAllPt').click(() => {
+      socket.emit('untogglePt', 'all')
     })
   </script>
 </body>

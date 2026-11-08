@@ -115,6 +115,15 @@
     left: 49px;
     width: 98px;
     transform: rotate(285deg);'>
+    <img src='../gpx/Phần thưởng.png' id='phanthuong1' style='position: absolute;
+    opacity: 0;
+    width: 98px;'>
+    <img src='../gpx/Phần thưởng.png' id='phanthuong2' style='position: absolute;
+    opacity: 0;
+    width: 98px;'>
+    <img src='../gpx/Phần thưởng.png' id='phanthuong3' style='position: absolute;
+    opacity: 0;
+    width: 98px;'>
     <img src='../gpx/GL 1 Million.png' id='gl1m' style='position: absolute;opacity: 0;
     top: 428px;
     left: 588px;
@@ -438,6 +447,23 @@
         $('#bonusTopFace').css({ transform: 'rotateX(0deg)' })
       }, 500);
       $('#bonusBotFace').attr('src', prize == '1mgl' ? '../gpx/1mgl.png' : '../gpx/' + prize + 'kgl.png')
+    })
+
+    socket.on('randomizePtOnWheel', (coordinates) => {
+      $('#phanthuong1').css({ 'top': coordinates[0][0] + 'px', 'left': coordinates[0][1] + 'px', 'transform': 'rotate(' + coordinates[0][2] + 'deg)', 'opacity': 1 })
+      $('#phanthuong2').css({ 'top': coordinates[1][0] + 'px', 'left': coordinates[1][1] + 'px', 'transform': 'rotate(' + coordinates[1][2] + 'deg)', 'opacity': 1 })
+      $('#phanthuong3').css({ 'top': coordinates[2][0] + 'px', 'left': coordinates[2][1] + 'px', 'transform': 'rotate(' + coordinates[2][2] + 'deg)', 'opacity': 1 })
+    })
+    socket.on('untogglePt', (num, state) => {
+      if (num == 'all') {
+        $('#phanthuong1,#phanthuong2,#phanthuong3').css('opacity', 0)
+      }
+      else if (state == 1) {
+        $('#phanthuong' + num).css('opacity', 0)
+      }
+      else {
+        $('#phanthuong' + num).css('opacity', 1)
+      }
     })
   </script>
 </body>

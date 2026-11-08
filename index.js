@@ -71,6 +71,8 @@ let isBonusPrizeWith1m=false
 let messageHistory=[]
 let bigMoneyPrizes=['1,000GL','5,000GL','7,500GL','10,000GL','25,000GL','MẤT ĐIỂM','MẤT LƯỢT','NHÂN ĐÔI']
 let bigMoneyPrizeIndex=0
+let ptCoordinates=[[102,512,30],[292,657,75],[372,669,90],[596,576,135],[645,514,150],[688,354,180],[646,197,210],[374,38,270],[214,80,300],[102,197,330]]
+let ptState=[0,0,0]
 
 let wedgesStatus=new Map()
 wedgesStatus.set('obm700', false)
@@ -174,6 +176,20 @@ function shuffle(array) {
       array[randomIndex], array[currentIndex]];
   }
 }
+function randomNum(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+function takeRandomInArray(num,arr){
+  let array=[...arr]
+  let res=[]
+  for(let i=1;i<=num;i++){
+    let randIndex=randomNum(0,array.length)
+    res.push(array[randIndex])
+    array.splice(randIndex,1)
+  }
+  return res
+}
+
 
 io.on('connection',(socket)=>{
   socket.emit('messageHistory', messageHistory)
@@ -846,5 +862,21 @@ io.on('connection',(socket)=>{
       }
     },1000)
     io.emit('startTimer')
+  })
+  socket.on('randomizePtOnWheel',()=>{
+    let sortedCoordinates = [...takeRandomInArray(3,ptCoordinates)].sort((a, b) => a[2] - b[2]);
+    console.log('sortedCoordinates', sortedCoordinates)
+    io.emit('randomizePtOnWheel',sortedCoordinates)
+  })
+  socket.on('untogglePt',(num)=>{
+    if(num=='all') {
+      ptState=[0,0,0]
+      io.emit('untogglePt',1,ptState[0])
+      io.emit('untogglePt',2,ptState[1])
+      io.emit('untogglePt',3,ptState[2])
+    }
+    else if(ptState[num]==1) ptState[num]=0
+    else ptState[num]=1
+    io.emit('untogglePt',num,ptState[num])
   })
 })
